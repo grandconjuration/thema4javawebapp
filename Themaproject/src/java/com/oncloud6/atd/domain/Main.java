@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package domain;
+package com.oncloud6.atd.domain;
 
 /**
  *
