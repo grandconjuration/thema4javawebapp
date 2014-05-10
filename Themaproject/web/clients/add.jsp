@@ -18,7 +18,7 @@
         if(msg != null) {
             out.println("<div class=\"alert alert-success\">" + msg + "</div>");
         }%>
-        <form action="UserAdd" method="post">
+        <form action="" method="post">
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Gebruikersnaam" name="username">
