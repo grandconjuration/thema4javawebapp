@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -70,31 +72,55 @@ public class CustomersAddServlet extends HttpServlet {
         MySQLConnection DBConnection = new MySQLConnection();
         try {
             Connection connect = DBConnection.getConnection();
-            PreparedStatement preparedStatement = connect.prepareStatement("INSERT INTO atd.klant (klant_naam, klant_adres, klant_korting, klant_geboortedatum) VALUES (?, ?, ?, ?)");
+
+            // nieuwe user account voorbereiding
+            PreparedStatement preparedStatement1 = connect.prepareStatement("INSERT INTO atd.gebruiker (gebruiker_username, gebruiker_password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+
+            // waardes invullen
+            preparedStatement1.setString(1, username);
+            preparedStatement1.setString(2, password);
+
+            // query uitvoeren
+            preparedStatement1.executeUpdate();
+
+            // generated id ophalen
+            ResultSet tableKeys = preparedStatement1.getGeneratedKeys();
+            tableKeys.next();
+            int userID = tableKeys.getInt(1);
+
+            //nieuwe klant voorbereiding
+            PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_korting, klant_geboortedatum) VALUES (?, ?, ?, ?, ?)");
 
             String naam = request.getParameter("naam");
             String adres = request.getParameter("adres");
             String korting = request.getParameter("korting");
             String geboortedatum = request.getParameter("geboortedatum");
 
-            preparedStatement.setString(1, naam);
-            preparedStatement.setString(2, adres);
-            preparedStatement.setString(3, korting);
+            //waardes invullen
+            preparedStatement2.setInt(1, userID);
+            preparedStatement2.setString(2, naam);
+            preparedStatement2.setString(3, adres);
+            preparedStatement2.setString(4, korting);
 
             // datum string omzetten naar Date object
             Date date = new SimpleDateFormat("dd-MM-yyyy").parse(geboortedatum);
-            
+
             //datum format omzetten om in de database te zetten
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dateFormatted = sdf.format(date);
-            
-            preparedStatement.setString(4, dateFormatted);
-            preparedStatement.executeUpdate();
+
+            preparedStatement2.setString(5, dateFormatted);
+
+            // query uitvoeren
+            preparedStatement2.executeUpdate();
 
             request.setAttribute("msg", "De klant \"" + naam + "\" is succesvol toegevoegd!");
 
             //niet vergeten om alles te sluiten :)
-            preparedStatement.close();
+            preparedStatement2.close();
             connect.close();
 
             RequestDispatcher rd = null;

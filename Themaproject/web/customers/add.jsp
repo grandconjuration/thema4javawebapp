@@ -20,6 +20,14 @@
         <form action="" method="post">
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
+            <input type="text" class="form-control" placeholder="Gebruikersnaam" name="username">
+        </div>
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
+            <input type="password" class="form-control" placeholder="Wachtwoord" name="password">
+        </div>            
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Volledige naam" name="naam">
         </div>
         <div class="input-group input-group-lg">
