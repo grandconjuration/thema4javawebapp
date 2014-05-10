@@ -4,7 +4,7 @@
     Author     : Jelle
 --%>
 <%@page import="java.util.ArrayList;" %>
-<%@page import="com.oncloud6.atd.rights.*;" %>
+<%@page import="com.oncloud6.atd.rights.GroupsList;" %>
 <jsp:include page="../theme/header.jsp" />
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
@@ -15,10 +15,6 @@
 
 <div class="container">
     <div class="row">
-        <% Object msg = request.getAttribute("msg");
-        if(msg != null) {
-            out.println("<div class=\"alert alert-success\">" + msg + "</div>");
-        }%>
         <table class="table">
             <thead>
                 <tr>
