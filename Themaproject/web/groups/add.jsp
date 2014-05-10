@@ -24,6 +24,6 @@
         </div>
             
            <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
-            
+        </form>
     </div>
     <jsp:include page="../theme/footer.jsp" />
