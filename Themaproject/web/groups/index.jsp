@@ -3,8 +3,8 @@
     Created on : May 10, 2014, 5:32:17 PM
     Author     : Jelle
 --%>
-<%@page import="java.util.ArrayList;" %>
-<%@page import="com.oncloud6.atd.rights.GroupsList;" %>
+<%@page import="java.util.ArrayList" %>
+<%@page import="com.oncloud6.atd.rights.GroupsList" %>
 <jsp:include page="../theme/header.jsp" />
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
