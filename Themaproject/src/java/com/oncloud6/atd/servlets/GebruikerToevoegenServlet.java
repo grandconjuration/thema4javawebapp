@@ -3,11 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.oncloud6.atd.servlets;
 
+import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +27,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "GebruikerToevoegenServlet", urlPatterns = {"/UserAdd"})
 public class GebruikerToevoegenServlet extends HttpServlet {
 
-     /**
+    private PreparedStatement preparedStatement;
+
+    /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -49,8 +55,7 @@ public class GebruikerToevoegenServlet extends HttpServlet {
         rd = request.getRequestDispatcher("theme/pages/GebruikerToevoegen.jsp");
         rd.forward(request, response);
     }
-    
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -62,5 +67,35 @@ public class GebruikerToevoegenServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        MySQLConnection DBConnection = new MySQLConnection();
+        try {
+            Connection connect = DBConnection.getConnection();
+            preparedStatement = connect.prepareStatement("INSERT INTO atd.gebruiker (gebruiker_username, gebruiker_password) VALUES (?, ?)");
+
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            preparedStatement.executeUpdate();
+            
+            request.setAttribute("msg", "De gebruiker \"" + username + "\" is succesvol toegevoegd!");
+            
+            
+            //niet vergeten om alles te sluiten :)
+            preparedStatement.close();
+            connect.close();
+
+            RequestDispatcher rd = null;
+            HttpSession session = request.getSession(true);
+
+            rd = request.getRequestDispatcher("theme/pages/GebruikerToevoegen.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception ex) {
+            Logger.getLogger(GebruikerToevoegenServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

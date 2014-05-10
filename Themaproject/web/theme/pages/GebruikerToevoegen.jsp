@@ -14,14 +14,18 @@
 
 <div class="container">
     <div class="row">
+        <% Object msg = request.getAttribute("msg");
+        if(msg != null) {
+            out.println("<div class=\"alert alert-success\">" + msg + "</div>");
+        }%>
         <form action="UserAdd" method="post">
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
-            <input type="text" class="form-control" placeholder="Gebruikersnaam">
+            <input type="text" class="form-control" placeholder="Gebruikersnaam" name="username">
         </div>
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
-            <input type="text" class="form-control" placeholder="Wachtwoord">
+            <input type="password" class="form-control" placeholder="Wachtwoord" name="password">
         </div>
             
            <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
