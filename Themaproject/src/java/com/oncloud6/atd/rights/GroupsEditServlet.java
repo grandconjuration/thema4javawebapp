@@ -56,10 +56,27 @@ public class GroupsEditServlet extends HttpServlet {
                 connect.close();
                 response.sendRedirect("groups");
             }else{
+                request.setAttribute("id", id);
                 request.setAttribute("name", resultSet.getString("groepen_naam"));
                 preparedStatement.close();
-                connect.close();
+                
+                preparedStatement = connect.prepareStatement("SELECT * FROM atd.rechten");
+                resultSet = preparedStatement.executeQuery();
 
+                ArrayList<RightsList> values = new ArrayList<RightsList>();
+
+                while (resultSet.next()) {
+                    RightsList rights = new RightsList();
+                    rights.id = resultSet.getString("rechten_id");
+                    rights.naam = resultSet.getString("rechten_key");
+                    rights.defaultValue = resultSet.getString("rechten_value");
+
+                    values.add(rights);
+                } 
+                request.setAttribute("rightlist", values);
+                preparedStatement.close();
+                connect.close();
+                
                 RequestDispatcher rd = null;
                 HttpSession session = request.getSession(true);
 

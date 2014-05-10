@@ -38,16 +38,27 @@
             <thead>
                 <tr>
                     <th>Naam</th>
-                    <th>Waarde</th>
-                    <th><a href="groupsadd" class="btn btn-succes"><i class="glyphicon glyphicon-plus"></i></a></th>
+                    <th>Inhoud</th>
+                    <th></th>
                 </tr>
-            </thead>
+            </thead>   
             <tbody>
+                <%  
+                // retrieve your list from the request, with casting 
+                ArrayList<RightsList> list = (ArrayList<RightsList>) request.getAttribute("rightlist");
+                String id = (String) request.getAttribute("id");
+
+                // print the information about every category of the list
+                for(RightsList right : list) {
+                    %>
                     <tr>
-                        <td>df</td>
-                        <td>true</td>
-                        <td><a href="groupsrightsedit?id=1" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i> <a href="groupsrightsrestore?id=1" class="btn btn-succes"><i class="glyphicon glyphicon-trash"></i></td>
+                        <td><%=right.naam %></td>
+                        <td><% if(right.value == null) { %><%=right.defaultValue %><% }else{ %><%=right.value %>(<%=right.defaultValue %>)<% } %></td>
+                        <td><a href="groupsrightsedit?id=<%=right.id %>&gid=<%=id %>" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i></a><% if(right.value != null) { %> <a href="groupsrightsrestore?id=<%=right.id %>&gid=<%=id %>" class="btn btn-succes"><i class="glyphicon glyphicon-trash"></i></a><% } %></td>
                     </tr>
+                    <%
+                }
+                %>
             </tbody>
         </table>
     </div>

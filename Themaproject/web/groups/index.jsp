@@ -31,8 +31,8 @@
                 for(GroupsList group : list) {
                     %>
                     <tr>
-                        <td><% out.println(group.naam); %></td>
-                        <td><a href="groupsedit?id=<% out.println(group.id); %>" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i> <a href="groupsdelete?id=<% out.println(group.id); %>" class="btn btn-succes"><i class="glyphicon glyphicon-trash"></i></td>
+                        <td><%=group.naam %></td>
+                        <td><a href="groupsedit?id=<%=group.id %>" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i></a> <a href="groupsdelete?id=<%=group.id %>" class="btn btn-succes"><i class="glyphicon glyphicon-trash"></i><a/></td>
                     </tr>
                     <%
                 }
