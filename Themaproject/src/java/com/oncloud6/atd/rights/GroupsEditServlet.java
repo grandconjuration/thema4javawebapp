@@ -6,8 +6,15 @@
 
 package com.oncloud6.atd.rights;
 
+import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,11 +41,35 @@ public class GroupsEditServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
+        MySQLConnection DBConnection = new MySQLConnection();
+        try {
+            Connection connect = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM atd.groepen WHERE groepen_id = ?");
 
-        rd = request.getRequestDispatcher("groups/edit.jsp");
-        rd.forward(request, response);
+            String id = request.getParameter("id");
+
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            if (!resultSet.next()) {
+                preparedStatement.close();
+                connect.close();
+                response.sendRedirect("groups");
+            }else{
+                request.setAttribute("name", resultSet.getString("groepen_naam"));
+                preparedStatement.close();
+                connect.close();
+
+                RequestDispatcher rd = null;
+                HttpSession session = request.getSession(true);
+
+                rd = request.getRequestDispatcher("groups/edit.jsp");
+                rd.forward(request, response);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(GroupsEditServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -65,7 +96,32 @@ public class GroupsEditServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        MySQLConnection DBConnection = new MySQLConnection();
+        try {
+            Connection connect = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connect.prepareStatement("UPDATE atd.groepen SET groepen_naam = ? WHERE groepen_id = ?");
+
+            String naam = request.getParameter("groupname");
+            String id = request.getParameter("id");
+
+            preparedStatement.setString(1, naam);
+            preparedStatement.setString(2, id);
+            preparedStatement.executeUpdate();
+
+            request.setAttribute("msg", "De groep \"" + naam + "\" is succesvol toegevoegd!");
+
+            //niet vergeten om alles te sluiten :)
+            preparedStatement.close();
+            connect.close();
+
+            RequestDispatcher rd = null;
+            HttpSession session = request.getSession(true);
+
+            processRequest(request, response);
+
+        } catch (Exception ex) {
+            Logger.getLogger(GroupsAddServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

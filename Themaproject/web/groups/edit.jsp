@@ -22,7 +22,12 @@
         <form action="" method="post">
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
-            <input type="text" class="form-control" placeholder="Groep naam" name="groupname">
+            <input type="text" class="form-control" placeholder="Groep naam" name="groupname" value="<%
+            Object name = request.getAttribute("name");
+            if(name != null) {
+                out.println(name);
+            }
+            %>">
         </div>
             
            <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
