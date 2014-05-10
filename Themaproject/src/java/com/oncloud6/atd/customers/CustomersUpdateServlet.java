@@ -149,11 +149,12 @@ public class CustomersUpdateServlet extends HttpServlet {
             RequestDispatcher rd = null;
             HttpSession session = request.getSession(true);
 
-            response.sendRedirect("customersupdate?cid="+CustomerID);
+            doGet(request, response);
 
         } catch (Exception ex) {
             Logger.getLogger(CustomersUpdateServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
+
 }
