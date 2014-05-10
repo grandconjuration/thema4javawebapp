@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.oncloud6.atd.clients;
+package com.oncloud6.atd.users;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
@@ -24,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Simon Whiteley <simonwhiteley@hotmail.com>
  */
-@WebServlet(name = "ClientsAddServlet", urlPatterns = {"/clientsadd"})
-public class ClientsAddServlet extends HttpServlet {
+@WebServlet(name = "UserAddServlet", urlPatterns = {"/useradd"})
+public class UserAddServlet extends HttpServlet {
 
     private PreparedStatement preparedStatement;
 
@@ -52,7 +52,7 @@ public class ClientsAddServlet extends HttpServlet {
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
 
-        rd = request.getRequestDispatcher("clients/add.jsp");
+        rd = request.getRequestDispatcher("users/add.jsp");
         rd.forward(request, response);
     }
 
@@ -90,11 +90,11 @@ public class ClientsAddServlet extends HttpServlet {
             RequestDispatcher rd = null;
             HttpSession session = request.getSession(true);
 
-            rd = request.getRequestDispatcher("clients/add.jsp");
+            rd = request.getRequestDispatcher("users/add.jsp");
             rd.forward(request, response);
 
         } catch (Exception ex) {
-            Logger.getLogger(ClientsAddServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserAddServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

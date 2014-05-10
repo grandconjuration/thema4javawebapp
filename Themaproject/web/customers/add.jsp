@@ -1,14 +1,13 @@
 <%-- 
-    Document   : GebruikerToevoegen
-    Created on : 10-mei-2014, 13:41:39
+    Document   : Klant toevoegen
+    Created on : 10-mei-2014, 16:51:28
     Author     : Simon Whiteley <simonwhiteley@hotmail.com>
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="../theme/header.jsp" />
-<!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
-        <h2>Gebruiker toevoegen</h2>
+        <h2>Klant toevoegen</h2>
     </div>
 </div>
 
@@ -21,13 +20,20 @@
         <form action="" method="post">
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
-            <input type="text" class="form-control" placeholder="Gebruikersnaam" name="username">
+            <input type="text" class="form-control" placeholder="Volledige naam" name="naam">
         </div>
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
-            <input type="password" class="form-control" placeholder="Wachtwoord" name="password">
+            <input type="text" class="form-control" placeholder="Adres" name="adres">
         </div>
-            
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
+            <input type="text" class="form-control" placeholder="Korting" name="korting">
+        </div>   
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
+            <input type="text" class="form-control" placeholder="Geboortedatum" name="geboortedatum">
+        </div>              
            <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
             
     </div>
