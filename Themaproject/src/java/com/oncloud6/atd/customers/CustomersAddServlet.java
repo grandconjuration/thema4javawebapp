@@ -26,8 +26,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Simon Whiteley <simonwhiteley@hotmail.com>
  */
-@WebServlet(name = "CustomerAddServlet", urlPatterns = {"/customeradd"})
-public class CustomerAddServlet extends HttpServlet {
+@WebServlet(name = "CustomersAddServlet", urlPatterns = {"/customersadd"})
+public class CustomersAddServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -104,7 +104,7 @@ public class CustomerAddServlet extends HttpServlet {
             rd.forward(request, response);
 
         } catch (Exception ex) {
-            Logger.getLogger(CustomerAddServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomersAddServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

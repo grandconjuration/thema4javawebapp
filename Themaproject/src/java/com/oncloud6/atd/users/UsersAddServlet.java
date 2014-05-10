@@ -24,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Simon Whiteley <simonwhiteley@hotmail.com>
  */
-@WebServlet(name = "UserAddServlet", urlPatterns = {"/useradd"})
-public class UserAddServlet extends HttpServlet {
+@WebServlet(name = "UsersAddServlet", urlPatterns = {"/usersadd"})
+public class UsersAddServlet extends HttpServlet {
 
     private PreparedStatement preparedStatement;
 
@@ -94,7 +94,7 @@ public class UserAddServlet extends HttpServlet {
             rd.forward(request, response);
 
         } catch (Exception ex) {
-            Logger.getLogger(UserAddServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsersAddServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
