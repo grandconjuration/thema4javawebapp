@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.oncloud6.atd.servlets;
+package com.oncloud6.atd.clients;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
@@ -24,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Simon Whiteley <simonwhiteley@hotmail.com>
  */
-@WebServlet(name = "GebruikerToevoegenServlet", urlPatterns = {"/UserAdd"})
-public class GebruikerToevoegenServlet extends HttpServlet {
+@WebServlet(name = "ClientsAddServlet", urlPatterns = {"/clientsadd"})
+public class ClientsAddServlet extends HttpServlet {
 
     private PreparedStatement preparedStatement;
 
@@ -52,7 +52,7 @@ public class GebruikerToevoegenServlet extends HttpServlet {
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
 
-        rd = request.getRequestDispatcher("theme/pages/GebruikerToevoegen.jsp");
+        rd = request.getRequestDispatcher("clients/add.jsp");
         rd.forward(request, response);
     }
 
@@ -90,11 +90,11 @@ public class GebruikerToevoegenServlet extends HttpServlet {
             RequestDispatcher rd = null;
             HttpSession session = request.getSession(true);
 
-            rd = request.getRequestDispatcher("theme/pages/GebruikerToevoegen.jsp");
+            rd = request.getRequestDispatcher("clients/add.jsp");
             rd.forward(request, response);
 
         } catch (Exception ex) {
-            Logger.getLogger(GebruikerToevoegenServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientsAddServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

@@ -4,7 +4,7 @@
     Author     : Simon Whiteley <simonwhiteley@hotmail.com>
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="../header.jsp" />
+<jsp:include page="../theme/header.jsp" />
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
@@ -31,4 +31,4 @@
            <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
             
     </div>
-    <jsp:include page="../footer.jsp" />
+    <jsp:include page="../theme/footer.jsp" />
