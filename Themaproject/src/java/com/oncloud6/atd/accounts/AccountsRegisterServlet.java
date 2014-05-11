@@ -33,6 +33,21 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "AccountsRegisterServlet", urlPatterns = {"/accountsregister"})
 public class AccountsRegisterServlet extends HttpServlet {
     
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+     protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher rd = null;
+        HttpSession session = request.getSession(true);
+        rd = request.getRequestDispatcher("accounts/register.jsp");
+        rd.forward(request, response);
+    }
     
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -49,8 +64,9 @@ public class AccountsRegisterServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         
         MySQLConnection DBConnection = new MySQLConnection();
-        Connection connect = DBConnection.getConnection();
+        
         try {
+            Connection connect = DBConnection.getConnection();
              
             String name = request.getParameter("username");
             String pass = request.getParameter("password");
