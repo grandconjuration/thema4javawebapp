@@ -116,15 +116,32 @@ public class AccountsRegisterServlet extends HttpServlet {
 
             // query uitvoeren
             preparedStatement2.executeUpdate();
+            
+            ResultSet res = preparedStatement2.executeQuery();
 
-            request.setAttribute("msg", "Welkom, \"" + naam + "\" u bent succesvol geregistreerd!");
+            if (res.next()) {
+                res.getInt("klant_gebruiker_id");
+                String userName = res.getString("gebruiker_username");
+                int groupID = res.getInt("gebruiker_groepen_id");
 
+                session.setAttribute("userID", userID);
+                session.setAttribute("userName", userName);
+                session.setAttribute("groupID", groupID);
+              //  if (name != null || (pass != null && pass.equals(chckpass))) {
+                    response.sendRedirect("/index.jsp");
+                    
+              //  } 
+            }// login niet correct, act accordingly
+            else {
+                response.sendRedirect("");
+
+            }
             //niet vergeten om alles te sluiten :)
+            preparedStatement1.close();
             preparedStatement2.close();
             connect.close();
 
-            rd = request.getRequestDispatcher("accounts/register.jsp");
-            rd.forward(request, response);
+            
         } catch (Exception ex) {
             Logger.getLogger(AccountsRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
