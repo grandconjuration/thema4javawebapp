@@ -58,7 +58,7 @@ public class GroupsRightsRestoreServlet extends HttpServlet {
             RequestDispatcher rd = null;
             HttpSession session = request.getSession(true);
 
-            response.sendRedirect("groupsedit?id=" + id);
+            response.sendRedirect("groupsedit?id=" + gid);
 
         } catch (Exception ex) {
             Logger.getLogger(GroupsRightsRestoreServlet.class.getName()).log(Level.SEVERE, null, ex);

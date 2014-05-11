@@ -148,7 +148,51 @@ public class GroupsRightsEditServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        MySQLConnection DBConnection = new MySQLConnection();
+        try {
+            Connection connect = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connect.prepareStatement("SELECT atd.rechten.rechten_id as id_default, atd.rechten.rechten_key as recht_naam, atd.rechten.rechten_type as recht_type, atd.rechten.rechten_value as value_default, atd.rechten_groepen.rechten_id as id_group, atd.rechten_groepen.rechten_groepen_value as value_group FROM atd.rechten LEFT OUTER JOIN atd.rechten_groepen ON atd.rechten.rechten_id = atd.rechten_groepen.rechten_id AND atd.rechten_groepen.groepen_id = ? WHERE atd.rechten.rechten_id = ? ORDER BY atd.rechten.rechten_key ASC;");
+                    
+            String id = request.getParameter("id");
+            String gid = request.getParameter("gid");
+
+            preparedStatement.setString(1, gid);
+            preparedStatement.setString(2, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            if (!resultSet.next()) {
+                preparedStatement.close();
+                connect.close();
+                response.sendRedirect("groupsedit?id=" + gid);
+            }else{
+                RightsList rights = new RightsList();
+                rights.id = resultSet.getString("id_default");
+                rights.naam = resultSet.getString("recht_naam");
+                rights.type = resultSet.getString("recht_type");
+                rights.defaultValue = resultSet.getString("value_default");
+                rights.value = resultSet.getString("value_group");
+                preparedStatement.close();
+                   
+                if(rights.value != null) {
+                    preparedStatement = connect.prepareStatement("UPDATE atd.rechten_groepen SET rechten_groepen_value = ? WHERE rechten_id = ? AND groepen_id = ?");
+                }else{
+                    preparedStatement = connect.prepareStatement("INSERT INTO atd.rechten_groepen (rechten_groepen_value, rechten_id, groepen_id) VALUES (?,?,?)");
+                }
+                
+                String rightValue = request.getParameter("RightValue");
+
+                preparedStatement.setString(1, rightValue);
+                preparedStatement.setString(2, id);
+                preparedStatement.setString(3, gid);
+                preparedStatement.executeUpdate();
+                
+                response.sendRedirect("groupsedit?id=" + gid);
+                connect.close();
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(GroupsEditServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

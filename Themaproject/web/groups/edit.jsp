@@ -53,7 +53,7 @@
                     %>
                     <tr>
                         <td><%=right.naam %></td>
-                        <td><% if(right.value == null) { %><%=right.defaultValue %><% }else{ %><%=right.value %>(<%=right.defaultValue %>)<% } %></td>
+                        <td><% if(right.value == null) { %><%=right.defaultValue %><% }else{ %><%=right.value %> (<%=right.defaultValue %>)<% } %></td>
                         <td><a href="groupsrightsedit?id=<%=right.id %>&gid=<%=id %>" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i></a><% if(right.value != null) { %> <a href="groupsrightsrestore?id=<%=right.id %>&gid=<%=id %>" class="btn btn-succes"><i class="glyphicon glyphicon-trash"></i></a><% } %></td>
                     </tr>
                     <%
