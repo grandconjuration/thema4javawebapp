@@ -22,13 +22,12 @@ public class Klant {
     public ArrayList<Auto> alleAutos = new ArrayList<>();
 
     
-    private Klant(String kN, String kA, Double kor, Date gD, ArrayList<Factuur> nweF, ArrayList<Auto> nweA){
+    private Klant(String kN, String kA, Double kor, Date gD){
         klantNaam = kN;
         klantAdres = kA;
         korting = kor;
         geboorteDatum = gD;
-        alleFacturen = nweF;
-        alleAutos = nweA;
+      
     }
 
     public ArrayList<Factuur> getAlleFacturen() {

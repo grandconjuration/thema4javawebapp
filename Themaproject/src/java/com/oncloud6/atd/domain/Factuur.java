@@ -23,9 +23,9 @@ public class Factuur {
     public Double subTotaalBedrag;
     public Double btwBedrag;
     public Double totaalBedrag;
-    public ArrayList<FactuurItem> deFactuurItems;
+    public ArrayList<FactuurItem> deFactuurItems = new ArrayList<>();
     
-    public Factuur(int fN, Date fD,Double fK, double sTB, double btwB, double tB, Klant nweK, String kN, String kA,ArrayList<FactuurItem> nweFI){
+    public Factuur(int fN, Date fD,Double fK, double sTB, double btwB, double tB, Klant nweK, String kN, String kA){
         factuurNummer = fN;
         factuurDatum = fD;
         factuurKorting = fK;
@@ -35,7 +35,7 @@ public class Factuur {
         deKlant = nweK;
         klantNaam = kN;
         klantAdres = kA;
-        deFactuurItems = nweFI;
+       
     }
 
     public ArrayList<FactuurItem> getDeFactuurItems() {

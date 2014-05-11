@@ -22,15 +22,9 @@ public class Bedrijf {
     public ArrayList <Groep> deGroepen = new ArrayList<>();
     
     
-    public Bedrijf(String nm, ArrayList<Onderdeel> nweO, ArrayList<Monteur> nweM, ArrayList<Planning> nweP, ArrayList<Klant> nweK, ArrayList<Rechten> nweR, ArrayList<Groep> nweG){
+    public Bedrijf(String nm){
         naam = nm;
-        alleOnderdelen = nweO;
-        alleMonteurs = nweM;
-        allePlanningen = nweP;
-        alleKlanten = nweK;
-        deRechten = nweR;
-        deGroepen = nweG;
-        
+              
     }
 
     public ArrayList<Onderdeel> getAlleOnderdelen() {

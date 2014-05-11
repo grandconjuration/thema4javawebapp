@@ -21,13 +21,12 @@ public class Onderhoud {
     public Auto deAuto;
     public ArrayList <GebruiktOnderdeel> alleGebruikteOnderdelen = new ArrayList<>();
     
-    public Onderhoud(Date dt, String besch, String st, int mu, Auto nweA, ArrayList<GebruiktOnderdeel> nweO){
+    public Onderhoud(Date dt, String besch, String st, int mu){
         datum = dt;
         beschrijving = besch;
         status = st;
         manuur = mu;
-        deAuto = nweA;
-        alleGebruikteOnderdelen = nweO;
+       
     }
 
     public Auto getDeAuto() {

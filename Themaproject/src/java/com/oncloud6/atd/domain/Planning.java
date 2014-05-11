@@ -18,11 +18,10 @@ public class Planning {
     public Onderhoud hetOnderhoud;
     public Monteur deMonteur;
     
-public Planning(Date dS, Date dE, Onderhoud nweO, Monteur nweM){
+public Planning(Date dS, Date dE){
     datumStart = dS;
     datumEind = dE;
-    hetOnderhoud = nweO;
-    deMonteur = nweM;
+   
 }
 
     public Onderhoud getHetOnderhoud() {
