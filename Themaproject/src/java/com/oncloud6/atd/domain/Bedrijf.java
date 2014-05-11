@@ -14,16 +14,23 @@ import java.util.ArrayList;
  */
 public class Bedrijf {
     public String naam;
-    public ArrayList<Onderdeel> alleOnderdelen;
-    public ArrayList <Monteur> alleMonteurs;
-    public ArrayList <Planning> allePlanningen;
-    public ArrayList <Klant> alleKlanten;
-    public ArrayList <Rechten> deRechten;
-    public ArrayList <Groep> deGroepen;
+    public ArrayList<Onderdeel> alleOnderdelen = new ArrayList<>();
+    public ArrayList <Monteur> alleMonteurs = new ArrayList<>();
+    public ArrayList <Planning> allePlanningen = new ArrayList<>();
+    public ArrayList <Klant> alleKlanten = new ArrayList<>();
+    public ArrayList <Rechten> deRechten = new ArrayList<>();
+    public ArrayList <Groep> deGroepen = new ArrayList<>();
     
     
-    public Bedrijf(String nm){
+    public Bedrijf(String nm, ArrayList<Onderdeel> nweO, ArrayList<Monteur> nweM, ArrayList<Planning> nweP, ArrayList<Klant> nweK, ArrayList<Rechten> nweR, ArrayList<Groep> nweG){
         naam = nm;
+        alleOnderdelen = nweO;
+        alleMonteurs = nweM;
+        allePlanningen = nweP;
+        alleKlanten = nweK;
+        deRechten = nweR;
+        deGroepen = nweG;
+        
     }
 
     public ArrayList<Onderdeel> getAlleOnderdelen() {

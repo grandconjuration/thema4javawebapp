@@ -18,15 +18,17 @@ public class Klant {
     public String klantAdres;
     public Double korting;
     public Date geboorteDatum;
-    public ArrayList <Factuur> alleFacturen;
-    public ArrayList<Auto> alleAutos;
+    public ArrayList <Factuur> alleFacturen = new ArrayList<>();
+    public ArrayList<Auto> alleAutos = new ArrayList<>();
 
     
-    private Klant(String kN, String kA, Double kor, Date gD){
+    private Klant(String kN, String kA, Double kor, Date gD, ArrayList<Factuur> nweF, ArrayList<Auto> nweA){
         klantNaam = kN;
         klantAdres = kA;
         korting = kor;
         geboorteDatum = gD;
+        alleFacturen = nweF;
+        alleAutos = nweA;
     }
 
     public ArrayList<Factuur> getAlleFacturen() {

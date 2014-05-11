@@ -14,8 +14,9 @@ public class RechtenGroep {
     public String waarde;
     public Rechten hetRecht;
     
-    public RechtenGroep(String wrd){
+    public RechtenGroep(String wrd, Rechten nweRecht){
         waarde = wrd;
+        hetRecht = nweRecht;
     }
 
     public Rechten getHetRecht() {

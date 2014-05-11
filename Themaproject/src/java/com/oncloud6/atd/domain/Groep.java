@@ -14,20 +14,11 @@ import java.util.ArrayList;
  */
 public class Groep {
     public String groepNaam;
-    public ArrayList<RechtenGroep> deRechten;
-    
+      
     public Groep(String gN){
         groepNaam = gN;
-    }
-
-    public ArrayList<RechtenGroep> getDeRechten() {
-        return deRechten;
-    }
-
-    public void setDeRechten(ArrayList<RechtenGroep> deRechten) {
-        this.deRechten = deRechten;
-    }
-    
+     }
+     
     public String getGroepNaam() {
         return groepNaam;
     }

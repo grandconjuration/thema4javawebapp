@@ -19,9 +19,12 @@ public class Gebruiker {
 
     
     
-    public Gebruiker(String un, String pw){
+    public Gebruiker(String un, String pw, Monteur nweM, Klant nweK, Groep nweG){
        username = un;
        password = pw;
+       deMonteur = nweM;
+       deKlant = nweK;
+       deGroep = nweG;
     }
 
     public Monteur getDeMonteur() {
