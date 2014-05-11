@@ -19,7 +19,7 @@
             out.println(msgs);
         }
         %>
-        <form action="AccountsRegisterServlet" action="post">
+        <form action="accountsregister" method="post">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
                 <input type="text" class="form-control" placeholder="Gebruikersnaam" name="username">
