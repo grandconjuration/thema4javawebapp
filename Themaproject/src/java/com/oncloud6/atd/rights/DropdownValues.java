@@ -10,10 +10,8 @@ package com.oncloud6.atd.rights;
  *
  * @author Jelle
  */
-public class RightsList {
-    public String id;
-    public String naam;
+public class DropdownValues {
+    public String key;
     public String value;
-    public String defaultValue;
-    public String type;
+    public boolean selected;
 }
