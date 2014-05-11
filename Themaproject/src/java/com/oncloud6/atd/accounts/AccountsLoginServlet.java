@@ -6,13 +6,22 @@
 
 package com.oncloud6.atd.accounts;
 
+import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,7 +53,7 @@ public class AccountsLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     /**
@@ -58,17 +67,50 @@ public class AccountsLoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        RequestDispatcher rd = null;
+        HttpSession session = request.getSession(true);
+        
+        MySQLConnection DBConnection = new MySQLConnection();
+        
+        try {
+            Connection connect = null;
+            try {
+                connect = DBConnection.getConnection();
+            } catch (Exception ex) {
+                Logger.getLogger(AccountsLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+            PreparedStatement preparedStatement = connect.prepareStatement("SELECT gebruiker_id, gebruiker_username, gebruiker_groepen_id FROM gebruiker WHERE gebruiker_username = ? AND gebruiker_password = ?");
+            
+            String Username = request.getParameter("username");
+            String Password = request.getParameter("password");
+            
+            preparedStatement.setString(1, Username);
+            preparedStatement.setString(2, Password);
+            
+            ResultSet res = preparedStatement.executeQuery();
+            
+            if(res.next()) {
+                int userID = res.getInt("gebruiker_id");
+                String userName = res.getString("gebruiker_username");
+                int groupID = res.getInt("gebruiker_groepen_id");
+                
+                session.setAttribute("userID", userID);
+                session.setAttribute("userName", userName);
+                session.setAttribute("groupID", groupID);
+                
+                response.sendRedirect("");
+            }
+            else {
+                response.sendRedirect("");
+            }
+            preparedStatement.close();
+            connect.close();
+            
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(AccountsLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

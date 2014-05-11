@@ -46,7 +46,7 @@
                     <a class="navbar-brand" href="#">AutoTotaalDiensten</a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <form action="AccountsLoginServlet" method="post" class="navbar-form navbar-right" role="form">
+                    <form action="accountslogin" method="post" class="navbar-form navbar-right" role="form">
                         <div class="form-group">
                             <input type="text" placeholder="Gebruikersnaam" class="form-control">
                         </div>
@@ -54,7 +54,7 @@
                             <input type="password" placeholder="Wachtwoord" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-success">Inloggen</button>
-                        
+                        <a href="accounts/register" class="btn btn-success">Registreren</a>
                     </form>
                 </div><!--/.navbar-collapse -->
             </div>
