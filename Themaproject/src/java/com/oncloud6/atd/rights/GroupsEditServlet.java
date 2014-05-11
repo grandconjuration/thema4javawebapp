@@ -45,7 +45,7 @@ public class GroupsEditServlet extends HttpServlet {
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM atd.groepen WHERE groepen_id = ?");
-
+                    
             String id = request.getParameter("id");
 
             preparedStatement.setString(1, id);
@@ -60,16 +60,18 @@ public class GroupsEditServlet extends HttpServlet {
                 request.setAttribute("name", resultSet.getString("groepen_naam"));
                 preparedStatement.close();
                 
-                preparedStatement = connect.prepareStatement("SELECT * FROM atd.rechten");
+                preparedStatement = connect.prepareStatement("SELECT atd.rechten.rechten_id as id_default, atd.rechten.rechten_key as name, atd.rechten.rechten_type as type, atd.rechten.rechten_value as value_default, atd.rechten_groepen.rechten_id as id_group, atd.rechten_groepen.rechten_groepen_value as value_group FROM atd.rechten LEFT OUTER JOIN atd.rechten_groepen ON atd.rechten.rechten_id = atd.rechten_groepen.rechten_id AND atd.rechten_groepen.groepen_id = ? ORDER BY atd.rechten.rechten_key ASC;");
+                preparedStatement.setString(1, id);
                 resultSet = preparedStatement.executeQuery();
 
                 ArrayList<RightsList> values = new ArrayList<RightsList>();
 
                 while (resultSet.next()) {
                     RightsList rights = new RightsList();
-                    rights.id = resultSet.getString("rechten_id");
-                    rights.naam = resultSet.getString("rechten_key");
-                    rights.defaultValue = resultSet.getString("rechten_value");
+                    rights.id = resultSet.getString("id_default");
+                    rights.naam = resultSet.getString("name");
+                    rights.defaultValue = resultSet.getString("value_default");
+                    rights.value = resultSet.getString("value_group");
 
                     values.add(rights);
                 } 
