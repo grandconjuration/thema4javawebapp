@@ -46,7 +46,8 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <% if (session.getAttribute("userID") != null) { %>
-                    <p class="navbar-text navbar-right">Ingelogd als <% out.println(session.getAttribute("userName")); %></p>
+                    <p class="navbar-text">Ingelogd als <% out.println(session.getAttribute("userName")); %></p>
+                    <div><a class='btn btn-danger navbar-btn navbar-right' href='accountslogout'>Uitloggen</a></div>
                     <% } else { %>
                     <form action="accountslogin" method="post" class="navbar-form navbar-right" role="form">
                         <div class="form-group">
