@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -29,29 +29,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "AccountsLoginServlet", urlPatterns = {"/accountslogin"})
 public class AccountsLoginServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -61,27 +38,31 @@ public class AccountsLoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // get dispatcher
         RequestDispatcher rd = null;
+        // get session informatie
         HttpSession session = request.getSession(true);
+
+        MySQLConnection DBConnection = new MySQLConnection();
 
         try {
 
-            MySQLConnection DBConnection = new MySQLConnection();
-
             Connection connect = DBConnection.getConnection();
 
+            
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT gebruiker_id, gebruiker_username, gebruiker_groepen_id FROM gebruiker WHERE gebruiker_username = ? AND gebruiker_password = ?");
 
-            String Username = request.getParameter("username");
-            String Password = request.getParameter("password");
+            String GivenUsername = request.getParameter("username");
+            String GivenPassword = request.getParameter("password");
 
-            preparedStatement.setString(1, Username);
-            preparedStatement.setString(2, Password);
+           
+            preparedStatement.setString(1, GivenUsername);
+            preparedStatement.setString(2, GivenPassword);
 
+            
             ResultSet res = preparedStatement.executeQuery();
 
             if (res.next()) {
@@ -93,12 +74,19 @@ public class AccountsLoginServlet extends HttpServlet {
                 session.setAttribute("userName", userName);
                 session.setAttribute("groupID", groupID);
 
-                response.sendRedirect("");
-            } else {
-                response.sendRedirect("");
+                //redirect 
+                response.sendRedirect("test");
+            } // login niet correct, act accordingly
+            else {
+                //LOGIN FAILL
+                response.sendRedirect("fef");
+
             }
+
+            // afsluiten 
             preparedStatement.close();
             connect.close();
+
         } catch (Exception ex) {
             Logger.getLogger(AccountsLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

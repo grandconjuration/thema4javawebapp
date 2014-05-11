@@ -4,8 +4,7 @@
     Author     : Simon Whiteley
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="docroot" value="Thema4/"/> 
+<%@page import="javax.servlet.http.HttpSession" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -46,16 +45,20 @@
                     <a class="navbar-brand" href="#">AutoTotaalDiensten</a>
                 </div>
                 <div class="navbar-collapse collapse">
+                    <% if (session.getAttribute("userID") != null) { %>
+                    <p class="navbar-text navbar-right">Ingelogd als <% out.println(session.getAttribute("userName")); %></p>
+                    <% } else { %>
                     <form action="accountslogin" method="post" class="navbar-form navbar-right" role="form">
                         <div class="form-group">
-                            <input type="text" placeholder="Gebruikersnaam" class="form-control">
+                            <input type="text" name="username" placeholder="Gebruikersnaam" class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type="password" placeholder="Wachtwoord" class="form-control">
+                            <input type="password" name="password" placeholder="Wachtwoord" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-success">Inloggen</button>
                         <a href="accountsregister" class="btn btn-success">Registreren</a>
                     </form>
+                    <% }%>
                 </div><!--/.navbar-collapse -->
             </div>
         </div>
