@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.oncloud6.atd.accounts;
 
 import java.io.IOException;
@@ -22,9 +21,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "AccountsLogoutServlet", urlPatterns = {"/accountslogout"})
 public class AccountsLogoutServlet extends HttpServlet {
 
-
-   
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -38,13 +34,14 @@ public class AccountsLogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
-        System.out.println(session.getAttribute("Username"));
-        try{
-            session.removeAttribute("Username");
+        try {
+            session.removeAttribute("userID");
+            session.removeAttribute("userName");
+            session.removeAttribute("groupID");
             session.invalidate();
-            response.sendRedirect("login");
-        }catch(Exception ex){
-            System.out.println("Error");
+            response.sendRedirect("");
+        } catch (Exception ex) {
+      
         }
     }
 
