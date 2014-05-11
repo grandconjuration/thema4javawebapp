@@ -11,5 +11,15 @@ package com.oncloud6.atd.rights;
  * @author Jelle
  */
 public class RightsControl {
+    public static boolean checkBoolean(String rightName, String reqValue, int userGroupId) {
+        return true;
+    }
     
+    public static boolean checkGroup(String rightName, String reqValue, int userGroupId, int itemGroupId) {
+        return true;
+    }
+    
+    public static String GetRightGroup(String rightName, int userGroupId) {
+        return "own";
+    }
 }
