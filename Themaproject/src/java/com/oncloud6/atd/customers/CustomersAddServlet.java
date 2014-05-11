@@ -120,6 +120,7 @@ public class CustomersAddServlet extends HttpServlet {
             request.setAttribute("msg", "De klant \"" + naam + "\" is succesvol toegevoegd!");
 
             //niet vergeten om alles te sluiten :)
+            preparedStatement1.close();
             preparedStatement2.close();
             connect.close();
 
