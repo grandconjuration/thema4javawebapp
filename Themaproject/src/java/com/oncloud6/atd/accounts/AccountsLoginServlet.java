@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.oncloud6.atd.accounts;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
@@ -39,8 +38,6 @@ public class AccountsLoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -53,7 +50,7 @@ public class AccountsLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**
@@ -67,46 +64,45 @@ public class AccountsLoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
-        
-        MySQLConnection DBConnection = new MySQLConnection();
-        
+
         try {
+
+            MySQLConnection DBConnection = new MySQLConnection();
+
             Connection connect = DBConnection.getConnection();
- 
 
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT gebruiker_id, gebruiker_username, gebruiker_groepen_id FROM gebruiker WHERE gebruiker_username = ? AND gebruiker_password = ?");
-            
+
             String Username = request.getParameter("username");
             String Password = request.getParameter("password");
-            
+
             preparedStatement.setString(1, Username);
             preparedStatement.setString(2, Password);
-            
+
             ResultSet res = preparedStatement.executeQuery();
-            
-            if(res.next()) {
+
+            if (res.next()) {
                 int userID = res.getInt("gebruiker_id");
                 String userName = res.getString("gebruiker_username");
                 int groupID = res.getInt("gebruiker_groepen_id");
-                
+
                 session.setAttribute("userID", userID);
                 session.setAttribute("userName", userName);
                 session.setAttribute("groupID", groupID);
-                
+
                 response.sendRedirect("");
-            }
-            else {
+            } else {
                 response.sendRedirect("");
             }
             preparedStatement.close();
             connect.close();
-            
-        }
-        catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AccountsLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
 }
