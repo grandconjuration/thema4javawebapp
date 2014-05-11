@@ -74,16 +74,13 @@ public class AccountsLoginServlet extends HttpServlet {
                 session.setAttribute("userName", userName);
                 session.setAttribute("groupID", groupID);
 
-                //redirect 
-                response.sendRedirect("test");
+                response.sendRedirect("");
             } // login niet correct, act accordingly
             else {
-                //LOGIN FAILL
-                response.sendRedirect("fef");
+                response.sendRedirect("");
 
             }
 
-            // afsluiten 
             preparedStatement.close();
             connect.close();
 
