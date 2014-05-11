@@ -73,11 +73,11 @@ public class GroupsRightsEditServlet extends HttpServlet {
                 
                 ArrayList<DropdownValues> values = new ArrayList<DropdownValues>();
                 DropdownValues value;
-                if(rights.type == "boolean") {
+                if(rights.type.equals("boolean")) {
                     value = new DropdownValues();
                     value.key = "true";
                     value.value = "true";
-                    if(selected == "true") {
+                    if(selected.equals("true")) {
                         value.selected = true;
                     }else{
                         value.selected = false;
@@ -86,17 +86,17 @@ public class GroupsRightsEditServlet extends HttpServlet {
                     value = new DropdownValues();
                     value.key = "false";
                     value.value = "false";
-                    if(selected == "false") {
+                    if(selected.equals("false")) {
                         value.selected = true;
                     }else{
                         value.selected = false;
                     }
                     values.add(value);
-                } else if (rights.type == "group") {
+                } else if (rights.type.equals("group")) {
                     value = new DropdownValues();
                     value.key = "other";
                     value.value = "other";
-                    if(selected == "other") {
+                    if(selected.equals("other")) {
                         value.selected = true;
                     }else{
                         value.selected = false;
@@ -105,7 +105,7 @@ public class GroupsRightsEditServlet extends HttpServlet {
                     value = new DropdownValues();
                     value.key = "own";
                     value.value = "own";
-                    if(selected == "own") {
+                    if(selected.equals("own")) {
                         value.selected = true;
                     }else{
                         value.selected = false;
@@ -114,7 +114,7 @@ public class GroupsRightsEditServlet extends HttpServlet {
                     value = new DropdownValues();
                     value.key = "false";
                     value.value = "false";
-                    if(selected == "false") {
+                    if(selected.equals("false")) {
                         value.selected = true;
                     }else{
                         value.selected = false;
