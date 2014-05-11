@@ -13,12 +13,6 @@
 </div>
 <div class="container">
     <div class="row">
-        <%
-        Object msgs = request.getAttribute("msgs");
-        if(msgs != null) {
-            out.println(msgs);
-        }
-        %>
         <form action="accountsregister" method="post">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
