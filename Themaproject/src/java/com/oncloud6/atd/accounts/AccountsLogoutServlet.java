@@ -38,11 +38,11 @@ public class AccountsLogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
-        System.out.println(session.getAttribute("userName"));
+        System.out.println(session.getAttribute("Username"));
         try{
-            session.removeAttribute("userName");
+            session.removeAttribute("Username");
             session.invalidate();
-            response.sendRedirect("accountslogin");
+            response.sendRedirect("login");
         }catch(Exception ex){
             System.out.println("Error");
         }
