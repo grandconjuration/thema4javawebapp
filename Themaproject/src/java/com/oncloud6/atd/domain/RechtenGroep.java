@@ -12,10 +12,20 @@ package com.oncloud6.atd.domain;
  */
 public class RechtenGroep {
     public String waarde;
+    public Rechten hetRecht;
     
     public RechtenGroep(String wrd){
         waarde = wrd;
     }
+
+    public Rechten getHetRecht() {
+        return hetRecht;
+    }
+
+    public void setHetRecht(Rechten nweRechten) {
+        hetRecht = nweRechten;
+    }
+    
     
      public String getWaarde() {
         return waarde;

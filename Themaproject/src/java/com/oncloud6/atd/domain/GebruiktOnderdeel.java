@@ -10,10 +10,10 @@ package com.oncloud6.atd.domain;
  *
  * @author Laura
  */
-public class gebruiktOnderdeel {
+public class GebruiktOnderdeel {
     public int hoeveelheid;
     
-    public gebruiktOnderdeel(int hh){
+    public GebruiktOnderdeel(int hh){
         hoeveelheid = hh;
     }
 

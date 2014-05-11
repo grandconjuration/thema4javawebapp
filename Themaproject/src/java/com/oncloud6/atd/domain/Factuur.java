@@ -6,6 +6,7 @@
 
 package com.oncloud6.atd.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -22,6 +23,7 @@ public class Factuur {
     public Double subTotaalBedrag;
     public Double btwBedrag;
     public Double totaalBedrag;
+    public ArrayList<FactuurItem> deFactuurItems;
     
     public Factuur(int fN, Date fD,Double fK, double sTB, double btwB, double tB){
         factuurNummer = fN;
@@ -33,6 +35,16 @@ public class Factuur {
         btwBedrag = btwB;
         totaalBedrag = tB;
     }
+
+    public ArrayList<FactuurItem> getDeFactuurItems() {
+        return deFactuurItems;
+    }
+
+    public void setDeFactuurItems(ArrayList<FactuurItem> deFactuurItems) {
+        this.deFactuurItems = deFactuurItems;
+    }
+
+  
 
     public int getFactuurNummer() {
         return factuurNummer;

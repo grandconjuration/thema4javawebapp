@@ -6,6 +6,7 @@
 
 package com.oncloud6.atd.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -17,6 +18,9 @@ public class Klant {
     public String klantAdres;
     public Double korting;
     public Date geboorteDatum;
+    public ArrayList <Factuur> alleFacturen;
+    public ArrayList<Auto> alleAutos;
+
     
     private Klant(String kN, String kA, Double kor, Date gD){
         klantNaam = kN;
@@ -25,6 +29,24 @@ public class Klant {
         geboorteDatum = gD;
     }
 
+    public ArrayList<Factuur> getAlleFacturen() {
+        return alleFacturen;
+    }
+
+    public void setAlleFacturen(ArrayList<Factuur> alleFacturen) {
+        this.alleFacturen = alleFacturen;
+    }
+
+    public ArrayList<Auto> getAlleAutos() {
+        return alleAutos;
+    }
+
+    public void setAlleAutos(ArrayList<Auto> alleAutos) {
+        this.alleAutos = alleAutos;
+    }
+  
+
+    
     public String getKlantNaam() {
         return klantNaam;
     }

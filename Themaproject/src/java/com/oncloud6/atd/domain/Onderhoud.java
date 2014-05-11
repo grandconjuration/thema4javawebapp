@@ -6,6 +6,7 @@
 
 package com.oncloud6.atd.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -17,6 +18,8 @@ public class Onderhoud {
     public String beschrijving;
     public String status;
     public int manuur;
+    public Auto deAuto;
+    public ArrayList <GebruiktOnderdeel> alleGebruikteOnderdelen;
     
     public Onderhoud(Date dt, String besch, String st, int mu){
         datum = dt;
@@ -24,6 +27,24 @@ public class Onderhoud {
         status = st;
         manuur = mu;
     }
+
+    public Auto getDeAuto() {
+        return deAuto;
+    }
+
+    public void setDeAuto(Auto nweAuto) {
+        deAuto = nweAuto;
+    }
+
+    public ArrayList<GebruiktOnderdeel> getAlleGebruikteOnderdelen() {
+        return alleGebruikteOnderdelen;
+    }
+
+    public void setAlleGebruikteOnderdelen(ArrayList<GebruiktOnderdeel> alleGebruikteOnderdelen) {
+        this.alleGebruikteOnderdelen = alleGebruikteOnderdelen;
+    }
+
+    
 
     public Date getDatum() {
         return datum;
