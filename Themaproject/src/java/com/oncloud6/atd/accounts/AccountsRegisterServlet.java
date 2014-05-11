@@ -32,36 +32,8 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "AccountsRegisterServlet", urlPatterns = {"/accountsregister"})
 public class AccountsRegisterServlet extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
-        rd = request.getRequestDispatcher("accounts/register.jsp");
-        rd.forward(request, response);
-    }
-
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -73,54 +45,78 @@ public class AccountsRegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
          throws ServletException, IOException {
-        RequestDispatcher rd = null;
+         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
         
-        boolean registerSuccess = false;
-        String name = request.getParameter("username");
-        String pass = request.getParameter("password");
-        String chckpass = request.getParameter("chckpassword");
-        String email = request.getParameter("email");
-        if(name != null || pass != null) {
-            PreparedStatement preparedStatement = null;
-            ResultSet resultSet = null;
+        MySQLConnection DBConnection = new MySQLConnection();
+        Connection connect = DBConnection.getConnection();
+        try {
+             
+            String name = request.getParameter("username");
+            String pass = request.getParameter("password");
+            String chckpass = request.getParameter("chckpassword");
+            String email = request.getParameter("email");
+            String surname = request.getParameter("surname");
+            String address = request.getParameter("address");
+            String zip = request.getParameter("zipcode");
+            String bday = request.getParameter("birthdate");
             
-            try {
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                Connection con = DriverManager.getConnection(DatabaseConnectionString.connectionUrl);
-                
-                preparedStatement = con.prepareStatement("SELECT * from dbo.login where username = ?");
-                preparedStatement.setString(1, name);
-                resultSet = preparedStatement.executeQuery();
-                if (!resultSet.isBeforeFirst()) {
-                    preparedStatement = con.prepareStatement("insert into  dbo.login (username, password, email) values (?, ?, ?)");
-                    // "myuser, webpage, datum, summary, COMMENTS from FEEDBACK.COMMENTS");
-                    // parameters start with 1
-                    preparedStatement.setString(1, name);
-                    preparedStatement.setString(2, pass);
-                    preparedStatement.setString(3, email);
-                    preparedStatement.executeUpdate();
-                    registerSuccess = true;
-                }else{
-                    request.setAttribute("msgs", "Username bestaad al!");
-                    registerSuccess = false;
-                }
-            }
-            catch(SQLException e) {
-                request.setAttribute("msgs", "fout met database");
-            }
-            catch(ClassNotFoundException e) {
-                request.setAttribute("msgs", "kan jdbc niet vinden");
-            }
-        }
-        
-        request.setAttribute("name", name);
-        
-        if(registerSuccess) {
-            response.sendRedirect("accountslogin");
-        }else{
+            PreparedStatement preparedStatement1 = connect.prepareStatement("INSERT INTO atd.gebruiker (gebruiker_username, gebruiker_password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+            // waardes invullen
+            preparedStatement1.setString(1, name);
+            preparedStatement1.setString(2, pass);
+            preparedStatement1.setString(3, chckpass);
+            preparedStatement1.setString(4, email);
+            preparedStatement1.setString(5, surname);
+            preparedStatement1.setString(6, address);
+            preparedStatement1.setString(7, zip);
+            preparedStatement1.setString(8, bday);
+
+            // query uitvoeren
+            preparedStatement1.executeUpdate();
+
+            // generated id ophalen
+            ResultSet tableKeys = preparedStatement1.getGeneratedKeys();
+            tableKeys.next();
+            int userID = tableKeys.getInt(1);
+
+            //nieuwe klant voorbereiding
+            PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_korting, klant_geboortedatum) VALUES (?, ?, ?, ?, ?)");
+
+            String naam = request.getParameter("naam");
+            String adres = request.getParameter("adres");
+            String korting = request.getParameter("korting");
+            String geboortedatum = request.getParameter("geboortedatum");
+
+            //waardes invullen
+            preparedStatement2.setInt(1, userID);
+            preparedStatement2.setString(2, naam);
+            preparedStatement2.setString(3, adres);
+            preparedStatement2.setString(4, korting);
+
+            // datum string omzetten naar Date object
+            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(geboortedatum);
+
+            //datum format omzetten om in de database te zetten
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateFormatted = sdf.format(date);
+
+            preparedStatement2.setString(5, dateFormatted);
+
+            // query uitvoeren
+            preparedStatement2.executeUpdate();
+
+            request.setAttribute("msg", "De klant \"" + naam + "\" is succesvol toegevoegd!");
+
+            //niet vergeten om alles te sluiten :)
+            preparedStatement2.close();
+            connect.close();
+
             rd = request.getRequestDispatcher("accounts/register.jsp");
             rd.forward(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(AccountsRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
  }

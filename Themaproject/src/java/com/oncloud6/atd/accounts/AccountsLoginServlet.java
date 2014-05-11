@@ -47,11 +47,8 @@ public class AccountsLoginServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
 
         MySQLConnection DBConnection = new MySQLConnection();
-
+        Connection connect = DBConnection.getConnection();
         try {
-
-            Connection connect = DBConnection.getConnection();
-
             
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT gebruiker_id, gebruiker_username, gebruiker_groepen_id FROM gebruiker WHERE gebruiker_username = ? AND gebruiker_password = ?");
 
