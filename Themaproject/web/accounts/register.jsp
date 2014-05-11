@@ -27,24 +27,28 @@
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
                 <input type="password" class="form-control" placeholder="Wachtwoord" name="password">
-            </div>            
+            </div> 
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
-                <input type="text" class="form-control" placeholder="Volledige naam" name="naam">
+                <input type="password" class="form-control" placeholder="Herhaal wachtwoord" name="chckpassword">
+            </div> 
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">#</span>
+                <input type="text" class="form-control" placeholder="Naam" name="naam">
             </div>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
-                <input type="text" class="form-control" placeholder="Adres" name="adres">
+                <input type="text" class="form-control" placeholder="Adres" name="address">
             </div>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
-                <input type="text" class="form-control" placeholder="Korting" name="korting">
+                <input type="zip" class="form-control" placeholder="Postcode" name="zipcode">
             </div>   
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
-                <input type="text" class="form-control" placeholder="Geboortedatum" name="geboortedatum">
+                <input type="datetime" class="form-control" placeholder="Geboortedatum" name="birthdate">
             </div>              
-               <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
+               <br/> <input type="submit"  class="btn btn-default" value="Registreren" />
         </form>
     </div>
     <jsp:include page="../theme/footer.jsp" />
