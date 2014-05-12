@@ -58,7 +58,6 @@ public class AccountsLoginServlet extends HttpServlet {
             String GivenUsername = request.getParameter("username");
             String GivenPassword = request.getParameter("password");
 
-           
             preparedStatement.setString(1, GivenUsername);
             preparedStatement.setString(2, GivenPassword);
 
