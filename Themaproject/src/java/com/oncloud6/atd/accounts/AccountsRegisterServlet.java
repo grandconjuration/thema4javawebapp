@@ -71,7 +71,6 @@ public class AccountsRegisterServlet extends HttpServlet {
             String name = request.getParameter("username");
             String pass = request.getParameter("password");
             String chckpass = request.getParameter("chckpassword");
-            String email = request.getParameter("email");
             
             if(!pass.equals(chckpass)) {
                 response.sendRedirect("accountsregister");
@@ -92,13 +91,12 @@ public class AccountsRegisterServlet extends HttpServlet {
             ResultSet tableKeys = preparedStatement1.getGeneratedKeys();
             tableKeys.next();
             int userID = tableKeys.getInt(1);
-
+            preparedStatement1.close();
             //nieuwe klant voorbereiding
             PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_geboortedatum) VALUES (?, ?, ?, ?)");
 
             String surname = request.getParameter("surname");
             String address = request.getParameter("address");
-            String zip = request.getParameter("zipcode");
             String bday = request.getParameter("birthdate");
 
             //waardes invullen
@@ -120,7 +118,7 @@ public class AccountsRegisterServlet extends HttpServlet {
             
             
             response.sendRedirect("");
-            preparedStatement1.close();
+           
             preparedStatement2.close();
             connect.close();
 

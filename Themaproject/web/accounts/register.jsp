@@ -33,10 +33,6 @@
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
                 <input type="text" class="form-control" placeholder="Adres" name="address">
-            </div>
-            <div class="input-group input-group-lg">
-                <span class="input-group-addon">#</span>
-                <input type="zip" class="form-control" placeholder="Postcode" name="zipcode">
             </div>   
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">#</span>
