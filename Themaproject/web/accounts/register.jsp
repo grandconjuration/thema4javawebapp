@@ -43,7 +43,7 @@
                 <input type="datetime" class="form-control" placeholder="Geboortedatum" name="birthdate">
             </div>              
                <br/> <input type="submit"  class="btn btn-default" value="Registreren" />
-        
+        </form>
     </div>
     <jsp:include page="../theme/footer.jsp" />
     
