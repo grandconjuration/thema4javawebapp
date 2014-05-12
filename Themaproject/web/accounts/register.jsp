@@ -35,8 +35,8 @@
                 <input type="text" class="form-control" placeholder="Adres" name="address">
             </div>   
             <div class="input-group input-group-lg">
-                <span class="input-group-addon">#</span>
-                <input type="datetime" class="form-control" placeholder="Geboortedatum" name="birthdate">
+                <span class="input-group-addon">Geboortedatum</span>
+                <input type="date" class="form-control" placeholder="Geboortedatum" name="birthdate">
             </div>              
                <br/> <input type="submit"  class="btn btn-default" value="Registreren" />
         </form>
