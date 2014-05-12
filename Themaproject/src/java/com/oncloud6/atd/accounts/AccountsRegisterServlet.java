@@ -73,14 +73,16 @@ public class AccountsRegisterServlet extends HttpServlet {
             String chckpass = request.getParameter("chckpassword");
             String email = request.getParameter("email");
             
+            if(!pass.equals(chckpass)) {
+                response.sendRedirect("accountsregister");
+                return;
+            }
             
             PreparedStatement preparedStatement1 = connect.prepareStatement("INSERT INTO atd.gebruiker (gebruiker_username, gebruiker_password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             // waardes invullen
             preparedStatement1.setString(1, name);
             preparedStatement1.setString(2, pass);
-            preparedStatement1.setString(3, chckpass);
-            preparedStatement1.setString(4, email);
             
 
             // query uitvoeren
@@ -92,7 +94,7 @@ public class AccountsRegisterServlet extends HttpServlet {
             int userID = tableKeys.getInt(1);
 
             //nieuwe klant voorbereiding
-            PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_postcode, klant_geboortedatum) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_geboortedatum) VALUES (?, ?, ?, ?)");
 
             String surname = request.getParameter("surname");
             String address = request.getParameter("address");
@@ -103,7 +105,6 @@ public class AccountsRegisterServlet extends HttpServlet {
             preparedStatement2.setInt(1, userID);
             preparedStatement2.setString(2, surname);
             preparedStatement2.setString(3, address);
-            preparedStatement2.setString(4, zip);
 
             // datum string omzetten naar Date object
             Date date = new SimpleDateFormat("dd-MM-yyyy").parse(bday);
@@ -112,31 +113,13 @@ public class AccountsRegisterServlet extends HttpServlet {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dateFormatted = sdf.format(date);
 
-            preparedStatement2.setString(5, dateFormatted);
+            preparedStatement2.setString(4, dateFormatted);
 
             // query uitvoeren
             preparedStatement2.executeUpdate();
             
-            ResultSet res = preparedStatement2.executeQuery();
-
-            if (res.next()) {
-                res.getInt("klant_gebruiker_id");
-                String userName = res.getString("gebruiker_username");
-                int groupID = res.getInt("gebruiker_groepen_id");
-
-                session.setAttribute("userID", userID);
-                session.setAttribute("userName", userName);
-                session.setAttribute("groupID", groupID);
-              //  if (name != null || (pass != null && pass.equals(chckpass))) {
-                    response.sendRedirect("/index.jsp");
-                    
-              //  } 
-            }// login niet correct, act accordingly
-            else {
-                response.sendRedirect("");
-
-            }
-            //niet vergeten om alles te sluiten :)
+            
+            response.sendRedirect("");
             preparedStatement1.close();
             preparedStatement2.close();
             connect.close();
