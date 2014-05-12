@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="bootstrap/css/main.css">
 
-        <script src="boostrap/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="bootstrap/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>

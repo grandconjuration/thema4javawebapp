@@ -60,7 +60,7 @@ public class AccountsRegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
          throws ServletException, IOException {
-         RequestDispatcher rd = null;
+        RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
         
         MySQLConnection DBConnection = new MySQLConnection();
@@ -76,7 +76,7 @@ public class AccountsRegisterServlet extends HttpServlet {
                 response.sendRedirect("accountsregister");
                 return;
             }
-            
+        if((name != null && !name.equals("")) && (pass != null && !pass.equals(""))) {
             PreparedStatement preparedStatement1 = connect.prepareStatement("INSERT INTO atd.gebruiker (gebruiker_username, gebruiker_password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             // waardes invullen
@@ -92,6 +92,7 @@ public class AccountsRegisterServlet extends HttpServlet {
             tableKeys.next();
             int userID = tableKeys.getInt(1);
             preparedStatement1.close();
+            
             //nieuwe klant voorbereiding
             PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_geboortedatum) VALUES (?, ?, ?, ?)");
 
@@ -121,10 +122,12 @@ public class AccountsRegisterServlet extends HttpServlet {
            
             preparedStatement2.close();
             connect.close();
-
-            
+        }
+        else {
+            response.sendRedirect("accountsregister");
+        }    
         } catch (Exception ex) {
             Logger.getLogger(AccountsRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
- }
+}
