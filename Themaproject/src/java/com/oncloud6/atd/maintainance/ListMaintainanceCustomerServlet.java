@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.oncloud6.atd.users;
+package com.oncloud6.atd.maintainance;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
@@ -35,8 +35,8 @@ import static sun.misc.MessageUtils.where;
  *
  * @author Laura van den Heuvel
  */
-@WebServlet(name = "ListMaintainanceServlet", urlPatterns = {"/listmaintainance"})
-public class ListMaintainanceServlet extends HttpServlet {
+@WebServlet(name = "ListMaintainanceCustomerServlet", urlPatterns = {"/listmaintainancecustomer"})
+public class ListMaintainanceCustomerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,8 +70,14 @@ public class ListMaintainanceServlet extends HttpServlet {
                 Connection connect = DBConnection.getConnection();
 
                 // prepare query
-                PreparedStatement preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud");
+                PreparedStatement preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud, atd.auto WHERE onderhoud_auto_id = auto_id AND auto_klant_id =?");
         
+                
+                int CustomerID = Integer.parseInt(request.getParameter("cid"));
+
+                // waarde invullen
+                preparedStatement.setInt(1, CustomerID);
+                
                 // voer de query uit en get result
                 ResultSet result = preparedStatement.executeQuery();
 
@@ -102,7 +108,7 @@ public class ListMaintainanceServlet extends HttpServlet {
                 preparedStatement.close();
                 connect.close();
 
-                rd = request.getRequestDispatcher("users/ListMaintainance.jsp");
+                rd = request.getRequestDispatcher("maintainance/ListMaintainanceCustomer.jsp");
                 rd.forward(request, response);
 
             } catch (Exception ex) {
