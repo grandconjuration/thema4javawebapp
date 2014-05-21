@@ -81,7 +81,7 @@ public class UsersAddServlet extends HttpServlet {
 		  gebruiker.setUsername(request.getParameter("username"));
 		  gebruiker.setPassword(request.getParameter("password"));
 		  Groep groep = new Groep();
-		  groep.setGroepId(2);
+		  hibernateSession.load(groep, 2);
 		  gebruiker.setGroep(groep);
 		  gebruikerID = (Integer) hibernateSession.save(gebruiker);
 		  tx.commit();
