@@ -77,7 +77,7 @@ public class AccountsRegisterServlet extends HttpServlet {
                rd.forward(request, response);
                return;
             }
-            else if(name == null) {
+            else if(name == null && name.equals("")) {
                request.setAttribute("message", "Het invullen van een gebruikersnaam is verplicht");
                rd.forward(request, response); 
             }
