@@ -1,5 +1,5 @@
 <%-- 
-    Document   : add
+    Document   : addCarCustomer
     Created on : 21-mei-2014, 16:26:48
     Author     : Niels
 --%>
@@ -17,15 +17,15 @@
         <form action="addcarcustomer" method="post">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">merk</span>
-                <input type="text" class="form-control" placeholder="volledige naam" name="surname">
+                <input type="text" class="form-control" name="brand">
             </div>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">type</span>
-                <input type="text" class="form-control" placeholder="adres" name="address">
+                <input type="text" class="form-control" name="type">
             </div>
-            <div>
+            <div class="input-group input-group-lg">
                 <span class="input-group-addon">kenteken</span>
-                <input type="zipcode" class="form-control" placeholder="1234AB" name="zip">
+                <input type="zipcode" class="form-control" name="licenseplate">
             </div>  
                 <p>*Deze gegevens zijn verplicht</p>
                <br/> <input type="submit"  class="btn btn-default" value="Registreren" />    
