@@ -8,10 +8,13 @@ package com.oncloud6.atd.domain;
 import com.oncloud6.atd.domain.Groep;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.domain.Monteur;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -26,18 +29,21 @@ public class Gebruiker {
     @GeneratedValue
     @Column(name = "gebruiker_id")
     private int id;
-    
+
     @Column(name = "gebruiker_username")
     private String username;
-    
+
     @Column(name = "gebruiker_password")
     private String password;
-    
- //   private Klant deKlant;
- //   private Groep deGroep;
- //   private Monteur deMonteur;
-    
-    public Gebruiker(){}
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "gebruiker_groepen_id", nullable = false)
+    private Groep deGroep;
+  //  private Klant deKlant;
+    //   private Monteur deMonteur;
+
+    public Gebruiker() {
+    }
 
     public Gebruiker(String un, String pw) {
 	   username = un;
@@ -45,32 +51,39 @@ public class Gebruiker {
 
     }
 
-  /*  public Monteur getDeMonteur() {
-	   return deMonteur;
-    }
+    /*  public Monteur getDeMonteur() {
+     return deMonteur;
+     }
 
-    public void setDeMonteur(Monteur deMonteur) {
-	   this.deMonteur = deMonteur;
-    }
+     public void setDeMonteur(Monteur deMonteur) {
+     this.deMonteur = deMonteur;
+     }
 
-    public Groep getDeGroep() {
-	   return deGroep;
-    }
+     public Groep getDeGroep() {
+     return deGroep;
+     }
 
-    public void setDeGroep(Groep nweG) {
-	   deGroep = nweG;
-    }
+     public void setDeGroep(Groep nweG) {
+     deGroep = nweG;
+     }
 
-    public Klant getDeKlant() {
-	   return deKlant;
-    }
+     public Klant getDeKlant() {
+     return deKlant;
+     }
 
-    public void setDeKlant(Klant nweK) {
-	   deKlant = nweK;
-    }*/
-    
+     public void setDeKlant(Klant nweK) {
+     deKlant = nweK;
+     }*/
     public int getId() {
 	   return id;
+    }
+    
+    public Groep getGroep(){
+	   return deGroep;
+    }
+    
+    public void setGroep(Groep gr){
+	   deGroep = gr;
     }
 
     public String getUsername() {

@@ -15,8 +15,6 @@ public class HibernateConnector {
     private void buildSessionFactory() {
 	   try {
 		  factory = new AnnotationConfiguration().configure().
-				//hier moet je de Annotated klasse toevoegen via addAnnotatedClass(classname)
-				addAnnotatedClass(Gebruiker.class).
 				buildSessionFactory();
 	   } catch (Throwable ex) {
 		  System.err.println("Failed to create sessionFactory object." + ex);

@@ -6,6 +6,7 @@
 package com.oncloud6.atd.users;
 
 import com.oncloud6.atd.domain.Gebruiker;
+import com.oncloud6.atd.domain.Groep;
 import com.oncloud6.atd.hibernate.HibernateConnector;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -79,6 +80,9 @@ public class UsersAddServlet extends HttpServlet {
 		  Gebruiker gebruiker = new Gebruiker();
 		  gebruiker.setUsername(request.getParameter("username"));
 		  gebruiker.setPassword(request.getParameter("password"));
+		  Groep groep = new Groep();
+		  groep.setGroepId(2);
+		  gebruiker.setGroep(groep);
 		  gebruikerID = (Integer) hibernateSession.save(gebruiker);
 		  tx.commit();
 	   } catch (HibernateException e) {
