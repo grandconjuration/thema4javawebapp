@@ -20,6 +20,22 @@
         }%>
         <form action="accountsregister" method="post">
             <div class="input-group input-group-lg">
+                <span class="input-group-addon">volledige naam*</span>
+                <input type="text" class="form-control" placeholder="volledige naam" name="surname">
+            </div>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">straat en huisnummer*</span>
+                <input type="text" class="form-control" placeholder="adres" name="address">
+                <span class="input-group-addon">postcode</span>
+                <input type="zipcode" class="form-control" placeholder="1234AB" name="zip">
+                <span class="input-group-addon">woonplaats</span>
+                <input type="text" class="form-control" placeholder="bijv. Amsterdam" name="city">
+            </div> 
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">geboortedatum*</span>
+                <input type="date" class="form-control" placeholder="geboortedatum" name="birthdate">
+            </div>
+            <div class="input-group input-group-lg">
                 <span class="input-group-addon">gebruikersnaam*</span>
                 <input type="text" class="form-control" placeholder="gebruikersnaam" name="username">
             </div>
@@ -30,18 +46,6 @@
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">herhaal wachtwoord*</span>
                 <input type="password" class="form-control" placeholder="Herhaal wachtwoord" name="chckpassword">
-            </div> 
-            <div class="input-group input-group-lg">
-                <span class="input-group-addon">volledige naam*</span>
-                <input type="text" class="form-control" placeholder="volledige naam" name="naam">
-            </div>
-            <div class="input-group input-group-lg">
-                <span class="input-group-addon">straat en huisnummer*</span>
-                <input type="text" class="form-control" placeholder="adres" name="address">
-            </div>   
-            <div class="input-group input-group-lg">
-                <span class="input-group-addon">geboortedatum*</span>
-                <input type="date" class="form-control" placeholder="geboortedatum" name="birthdate">
             </div>  
                 <p>*Deze gegevens zijn verplicht</p>
                <br/> <input type="submit"  class="btn btn-default" value="Registreren" />    

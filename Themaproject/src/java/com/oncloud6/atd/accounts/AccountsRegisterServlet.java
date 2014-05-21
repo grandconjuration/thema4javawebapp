@@ -70,12 +70,15 @@ public class AccountsRegisterServlet extends HttpServlet {
             String name = request.getParameter("username");
             String pass = request.getParameter("password");
             String chckpass = request.getParameter("chckpassword");
-            String message = "";
+            //nieuwe klant voorbereiding
+            String surname = request.getParameter("surname");
+            String address = request.getParameter("address");
+            String bday = request.getParameter("birthdate");
             
             if(name == null && pass == null && chckpass == null) {
                request.setAttribute("message", "U heeft geen gegevens ingevuld");
                rd.forward(request, response);
-               return;
+              
             }
             else if(name == null || name.equals("")) {
                request.setAttribute("message", "Het invullen van een gebruikersnaam is verplicht");
@@ -98,13 +101,24 @@ public class AccountsRegisterServlet extends HttpServlet {
                 request.setAttribute("message", "De ingevoerde wachtwoorden komen niet overeen");
                 rd.forward(request, response);
             }
+            else if(surname == null || surname.equals("")) {
+                    request.setAttribute("message", "Het invullen van uw volledige naam is verplicht");
+                    rd.forward(request, response);
+            }
+            else if(address == null) {
+                request.setAttribute("message", "Het invullen van uw woonadres is verplicht");
+                rd.forward(request, response);
+            }
+            else if(bday == null) {
+                request.setAttribute("message", "Het invullen van uw geboortedatum is verplicht");
+                rd.forward(request, response);
+            }
             else {
                 PreparedStatement preparedStatement1 = connect.prepareStatement("INSERT INTO atd.gebruiker (gebruiker_username, gebruiker_password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
                 // waardes invullen
                 preparedStatement1.setString(1, name);
                 preparedStatement1.setString(2, pass);
-                
-                
+ 
                 // query uitvoeren
                 preparedStatement1.executeUpdate();
                 
@@ -113,51 +127,32 @@ public class AccountsRegisterServlet extends HttpServlet {
                 tableKeys.next();
                 int userID = tableKeys.getInt(1);
                 preparedStatement1.close();
-                
-                //nieuwe klant voorbereiding
-                String surname = request.getParameter("surname");
-                String address = request.getParameter("address");
-                String bday = request.getParameter("birthdate");
-                
-                if(surname == null) {
-                    request.setAttribute("message", "Het invullen van uw volledige naam is verplicht");
-                    rd.forward(request, response);
-                }
-                else if(address == null) {
-                    request.setAttribute("message", "Het invullen van uw woonadres is verplicht");
-                    rd.forward(request, response);
-                }
-                else if(bday == null) {
-                    request.setAttribute("message", "Het invullen van uw geboortedatum is verplicht");
-                    rd.forward(request, response);
-                }
-                else {
-                    PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_geboortedatum) VALUES (?, ?, ?, ?)");
+ 
+                PreparedStatement preparedStatement2 = connect.prepareStatement("INSERT INTO atd.klant (klant_gebruiker_id, klant_naam, klant_adres, klant_geboortedatum) VALUES (?, ?, ?, ?)");
 
-                    //waardes invullen
-                    preparedStatement2.setInt(1, userID);
-                    preparedStatement2.setString(2, surname);
-                    preparedStatement2.setString(3, address);
+                //waardes invullen
+                preparedStatement2.setInt(1, userID);
+                preparedStatement2.setString(2, surname);
+                preparedStatement2.setString(3, address);
 
-                    // datum string omzetten naar Date object
-                    Date date = new SimpleDateFormat("dd-MM-yyyy").parse(bday);
+                // datum string omzetten naar Date object
+                Date date = new SimpleDateFormat("dd-MM-yyyy").parse(bday);
 
-                    //datum format omzetten om in de database te zetten
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String dateFormatted = sdf.format(date);
+                //datum format omzetten om in de database te zetten
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateFormatted = sdf.format(date);
 
-                    preparedStatement2.setString(4, dateFormatted);
+                preparedStatement2.setString(4, dateFormatted);
 
-                    // query uitvoeren
-                    preparedStatement2.executeUpdate();
+                // query uitvoeren
+                preparedStatement2.executeUpdate();
 
+                request.setAttribute("message", "U bent succesvol registreerd");
+                preparedStatement2.close(); 
+                connect.close();
 
-
-                    preparedStatement2.close();
-                    connect.close();
-                    request.setAttribute("message", "Je bent succesvol registreerd");
-                    rd.forward(request, response);
-                }
+                rd = request.getRequestDispatcher("accounts/register.jsp");
+                rd.forward(request, response);
             }    
         } catch (Exception ex) {
             Logger.getLogger(AccountsRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
