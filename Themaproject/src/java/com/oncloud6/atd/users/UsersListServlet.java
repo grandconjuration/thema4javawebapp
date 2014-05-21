@@ -5,31 +5,20 @@
  */
 package com.oncloud6.atd.users;
 
-import com.oncloud6.atd.domain.Gebruiker;
-import com.oncloud6.atd.hibernate.HibernateConnector;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
-
 
 /**
  *
- * @author Simon Whiteley <simonwhiteley@hotmail.com>
+ * @author Simon Whiteley
  */
-@WebServlet(name = "UsersAddServlet", urlPatterns = {"/usersadd"})
-public class UsersAddServlet extends HttpServlet {
-
-    private SessionFactory factory;
+@WebServlet(name = "UsersListServlet", urlPatterns = {"/UsersListServlet"})
+public class UsersListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,6 +29,24 @@ public class UsersAddServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+		  throws ServletException, IOException {
+	   response.setContentType("text/html;charset=UTF-8");
+	   try (PrintWriter out = response.getWriter()) {
+		  /* TODO output your page here. You may use following sample code. */
+		  out.println("<!DOCTYPE html>");
+		  out.println("<html>");
+		  out.println("<head>");
+		  out.println("<title>Servlet UsersListServlet</title>");		  
+		  out.println("</head>");
+		  out.println("<body>");
+		  out.println("<h1>Servlet UsersListServlet at " + request.getContextPath() + "</h1>");
+		  out.println("</body>");
+		  out.println("</html>");
+	   }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -51,11 +58,7 @@ public class UsersAddServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		  throws ServletException, IOException {
-	   RequestDispatcher rd = null;
-	   HttpSession session = request.getSession(true);
-
-	   rd = request.getRequestDispatcher("users/add.jsp");
-	   rd.forward(request, response);
+	   processRequest(request, response);
     }
 
     /**
@@ -69,34 +72,17 @@ public class UsersAddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		  throws ServletException, IOException {
-	   
-	   factory = new HibernateConnector().getSessionFactory();
-	   Session hibernateSession = factory.openSession();
-	   Transaction tx = null;
-	   Integer gebruikerID = null;
-	   try {
-		  tx = hibernateSession.beginTransaction();
-		  Gebruiker gebruiker = new Gebruiker();
-		  gebruiker.setUsername(request.getParameter("username"));
-		  gebruiker.setPassword(request.getParameter("password"));
-		  gebruikerID = (Integer) hibernateSession.save(gebruiker);
-		  tx.commit();
-	   } catch (HibernateException e) {
-		  if (tx != null) {
-			 tx.rollback();
-		  }
-		  e.printStackTrace();
-	   } finally {
-		  hibernateSession.close();
-		  factory.close();
-	   }
-
-	   RequestDispatcher rd = null;
-	   HttpSession session = request.getSession(true);
-
-	   rd = request.getRequestDispatcher("users/add.jsp");
-
-	   rd.forward(request, response);
-
+	   processRequest(request, response);
     }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+	   return "Short description";
+    }// </editor-fold>
+
 }
