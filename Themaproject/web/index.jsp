@@ -8,8 +8,8 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
-        <h1>Welkom, klant!</h1>
-        <p>Welkeom bij AutoTotaalDiensten, dé plek om je auto te laten repareren!</p>
+        <h1>Welkom, <% if (session.getAttribute("userID") != null) { out.println(session.getAttribute("userName")); } else {%>klant<%}%></h1>
+        <p>Welkom bij AutoTotaalDiensten, dé plek om je auto te laten repareren!</p>
         <p><a class="btn btn-primary btn-lg" role="button">Ooh yeah &raquo;</a></p>
     </div>
 </div>

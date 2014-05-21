@@ -1,16 +1,17 @@
 <%-- 
-    Document   : ListMaintainancePage
-    Created on : 19-mei-2014, 16:17:56
+    Document   : ListMaintainanceCustomer
+    Created on : 20-mei-2014, 17:24:34
     Author     : Laura
 --%>
 
-<%@page import="com.oncloud6.atd.users.MaintainanceList"%>
+
+<%@page import="com.oncloud6.atd.maintainance.MaintainanceList"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="../theme/header.jsp" />
 <div class="jumbotron">
     <div class="container">
-        <h2>Overzicht onderhouden</h2>
+        <h2>Overzicht onderhouden klant</h2>
     </div>
 </div>
 
@@ -54,3 +55,4 @@
         </table>  
     </div>
     <jsp:include page="../theme/footer.jsp" />
+
