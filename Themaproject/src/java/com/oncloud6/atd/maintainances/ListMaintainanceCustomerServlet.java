@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.oncloud6.atd.maintainance;
+package com.oncloud6.atd.maintainances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
@@ -112,7 +112,7 @@ public class ListMaintainanceCustomerServlet extends HttpServlet {
                 rd.forward(request, response);
 
             } catch (Exception ex) {
-                Logger.getLogger(ListMaintainanceServlet.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -138,7 +138,7 @@ public class ListMaintainanceCustomerServlet extends HttpServlet {
             doGet(request, response);
 
         } catch (Exception ex) {
-            Logger.getLogger(ListMaintainanceServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

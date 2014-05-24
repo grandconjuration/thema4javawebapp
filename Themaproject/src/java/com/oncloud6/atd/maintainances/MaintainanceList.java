@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.oncloud6.atd.maintainance;
+package com.oncloud6.atd.maintainances;
 
 import java.util.Date;
 

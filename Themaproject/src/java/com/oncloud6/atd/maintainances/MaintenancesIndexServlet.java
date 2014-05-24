@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.oncloud6.atd.maintainance;
+package com.oncloud6.atd.maintainances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
@@ -35,8 +35,8 @@ import static sun.misc.MessageUtils.where;
  *
  * @author Laura van den Heuvel
  */
-@WebServlet(name = "ListMaintainanceServlet", urlPatterns = {"/listmaintainance"})
-public class ListMaintainanceServlet extends HttpServlet {
+@WebServlet(name = "MaintenancesIndexServlet", urlPatterns = {"/maintenances"})
+public class MaintenancesIndexServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -104,11 +104,11 @@ public class ListMaintainanceServlet extends HttpServlet {
                 preparedStatement.close();
                 connect.close();
 
-                rd = request.getRequestDispatcher("maintainance/ListMaintainance.jsp");
+                rd = request.getRequestDispatcher("maintainances/index.jsp");
                 rd.forward(request, response);
 
             } catch (Exception ex) {
-                Logger.getLogger(ListMaintainanceServlet.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -134,7 +134,7 @@ public class ListMaintainanceServlet extends HttpServlet {
             doGet(request, response);
 
         } catch (Exception ex) {
-            Logger.getLogger(ListMaintainanceServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
