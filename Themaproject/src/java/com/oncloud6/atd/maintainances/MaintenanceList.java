@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * @author Laura
  */
-public class MaintainanceList {
+public class MaintenanceList {
     public Date datum;
     public String beschrijving;
     public String status;

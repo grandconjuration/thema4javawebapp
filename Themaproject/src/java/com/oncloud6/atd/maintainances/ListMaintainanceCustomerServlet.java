@@ -84,10 +84,10 @@ public class ListMaintainanceCustomerServlet extends HttpServlet {
                 // result int variabelen zetten
                // result.next();
                
-                ArrayList<MaintainanceList> list = new ArrayList<MaintainanceList>();
+                ArrayList<MaintenanceList> list = new ArrayList<MaintenanceList>();
                 
                 while(result.next()){
-                  MaintainanceList maintainances = new MaintainanceList();
+                  MaintenanceList maintainances = new MaintenanceList();
                 maintainances.onderhoudId = result.getInt("onderhoud_id");
                 maintainances.bedrijfsId = result.getInt("onderhoud_bedrijf_id");
                 maintainances.autoId = result.getInt("onderhoud_auto_id");
