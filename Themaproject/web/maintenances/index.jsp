@@ -1,10 +1,10 @@
 <%-- 
-    Document   : ListMaintainancePage
+    Document   : ListmaintenancePage
     Created on : 19-mei-2014, 16:17:56
     Author     : Laura
 --%>
 
-<%@page import="com.oncloud6.atd.maintainance.MaintainanceList"%>
+<%@page import="com.oncloud6.atd.maintenance.MaintenanceList"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="../theme/header.jsp" />
@@ -33,19 +33,19 @@
         
        <%  
                 // retrieve your list from the request, with casting 
-                ArrayList<MaintainanceList> list = (ArrayList<MaintainanceList>) request.getAttribute("list");
+                ArrayList<MaintenanceList> list = (ArrayList<MaintenanceList>) request.getAttribute("list");
 
                 // print the information about every category of the list
-                for(MaintainanceList maintainances : list) {
+                for(MaintenanceList maintenanceList : list) {
                     %>
                     <tr>
-                        <td><%=maintainances.onderhoudId %></td>
-                        <td><%=maintainances.bedrijfsId %></td>
-                        <td><%=maintainances.autoId %></td>
-                        <td><%=maintainances.datum %></td>
-                        <td><%=maintainances.beschrijving %></td>
-                        <td><%=maintainances.status %></td>
-                        <td><%=maintainances.manuur %></td>
+                        <td><%=maintenanceList.onderhoudId %></td>
+                        <td><%=maintenanceList.bedrijfsId %></td>
+                        <td><%=maintenanceList.autoId %></td>
+                        <td><%=maintenanceList.datum %></td>
+                        <td><%=maintenanceList.beschrijving %></td>
+                        <td><%=maintenanceList.status %></td>
+                        <td><%=maintenanceList.manuur %></td>
                     </tr>
                     <%
                 }

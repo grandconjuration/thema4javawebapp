@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.oncloud6.atd.maintenance;
+package com.oncloud6.atd.maintenances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
@@ -35,8 +35,8 @@ import static sun.misc.MessageUtils.where;
  *
  * @author Laura van den Heuvel
  */
-@WebServlet(name = "MaintenancesIndexServlet", urlPatterns = {"/maintenances"})
-public class MaintenancesIndexServlet extends HttpServlet {
+@WebServlet(name = "ListMaintainanceCustomerServlet", urlPatterns = {"/listmaintainancecustomer"})
+public class ListMaintainanceCustomerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,41 +70,45 @@ public class MaintenancesIndexServlet extends HttpServlet {
                 Connection connect = DBConnection.getConnection();
 
                 // prepare query
-                PreparedStatement preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud");
+                PreparedStatement preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud, atd.auto WHERE onderhoud_auto_id = auto_id AND auto_klant_id =?");
         
+                
+                int CustomerID = Integer.parseInt(request.getParameter("cid"));
+
+                // waarde invullen
+                preparedStatement.setInt(1, CustomerID);
+                
                 // voer de query uit en get result
                 ResultSet result = preparedStatement.executeQuery();
 
-             
+                // result int variabelen zetten
+               // result.next();
                
                 ArrayList<MaintenanceList> list = new ArrayList<MaintenanceList>();
                 
                 while(result.next()){
-                    
-                    // Waarden ophalen uit de database en plaatsen in de list
-                  MaintenanceList maintenance = new MaintenanceList();
-                maintenance.onderhoudId = result.getInt("onderhoud_id");
-                maintenance.bedrijfsId = result.getInt("onderhoud_bedrijf_id");
-                maintenance.autoId = result.getInt("onderhoud_auto_id");
-                maintenance.datum = result.getDate("onderhoud_datum");
-                maintenance.beschrijving = result.getString("onderhoud_beschrijving");
-                maintenance.status = result.getString("onderhoud_status");
-                maintenance.manuur = result.getInt("onderhoud_manuur");
+                  MaintenanceList maintainances = new MaintenanceList();
+                maintainances.onderhoudId = result.getInt("onderhoud_id");
+                maintainances.bedrijfsId = result.getInt("onderhoud_bedrijf_id");
+                maintainances.autoId = result.getInt("onderhoud_auto_id");
+                maintainances.datum = result.getDate("onderhoud_datum");
+                maintainances.beschrijving = result.getString("onderhoud_beschrijving");
+                maintainances.status = result.getString("onderhoud_status");
+                maintainances.manuur = result.getInt("onderhoud_manuur");
                       
              
-                // toevoegen aan de arraylist
-                list.add(maintenance);
+                list.add(maintainances);
 
-                
+                // request variabelen setten
            
                 }
-              // request variabelen setten
+              
                 request.setAttribute("list", list);
                 // afsluiten 
                 preparedStatement.close();
                 connect.close();
 
-                rd = request.getRequestDispatcher("maintenances/index.jsp");
+                rd = request.getRequestDispatcher("maintainance/ListMaintainanceCustomer.jsp");
                 rd.forward(request, response);
 
             } catch (Exception ex) {
