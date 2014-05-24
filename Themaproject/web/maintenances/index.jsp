@@ -20,6 +20,9 @@
         if(msg != null) {
             out.println("<div class=\"alert alert-success\">" + msg + "</div>");
         }%>
+        <form action="" method="GET">
+        <input type="text" class="form-control" placeholder="Klant id" name="cid">
+        </form>
         <table border="1" style="width:750px">
             <tr>
                 <td>Onderhouds id:</td>

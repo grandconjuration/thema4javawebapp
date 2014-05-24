@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.oncloud6.atd.maintenances;
 
 import com.oncloud6.atd.maintenances.MaintenanceList;
@@ -53,29 +52,42 @@ public class MaintenancesIndexServlet extends HttpServlet {
             throws ServletException, IOException {
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
+        // Controleren of het Customer id veld is ingevuld
+        boolean idSet = false;
+        if (request.getParameter("cid") == null) {
+            idSet = false;
+        } else {
+            idSet = true;
+        }
 
-        
+        // get dbconnection
+        MySQLConnection DBConnection = new MySQLConnection();
+        // try it out
+        try {
+            Connection connect = DBConnection.getConnection();
 
-            // get dbconnection
-            MySQLConnection DBConnection = new MySQLConnection();
-            // try it out
-            try {
-                Connection connect = DBConnection.getConnection();
+            // prepare query
+            PreparedStatement preparedStatement;
+            
+            // Controleren of idSet geset is
+            if (!idSet) {
+                preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud");
+            } else {
+                preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud, atd.auto WHERE onderhoud_auto_id = auto_id AND auto_klant_id =?");
+                int CustomerID = Integer.parseInt(request.getParameter("cid"));
+                preparedStatement.setInt(1, CustomerID);
+            }
+            // voer de query uit en get result
+            ResultSet result = preparedStatement.executeQuery();
+            
+            
 
-                // prepare query
-                PreparedStatement preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud");
-        
-                // voer de query uit en get result
-                ResultSet result = preparedStatement.executeQuery();
+            ArrayList<MaintenanceList> list = new ArrayList<MaintenanceList>();
 
-             
-               
-                ArrayList<MaintenanceList> list = new ArrayList<MaintenanceList>();
-                
-                while(result.next()){
-                    
-                    // Waarden ophalen uit de database en plaatsen in de list
-                  MaintenanceList maintenance = new MaintenanceList();
+            while (result.next()) {
+
+                // Waarden ophalen uit de database en plaatsen in de list
+                MaintenanceList maintenance = new MaintenanceList();
                 maintenance.onderhoudId = result.getInt("onderhoud_id");
                 maintenance.bedrijfsId = result.getInt("onderhoud_bedrijf_id");
                 maintenance.autoId = result.getInt("onderhoud_auto_id");
@@ -83,29 +95,26 @@ public class MaintenancesIndexServlet extends HttpServlet {
                 maintenance.beschrijving = result.getString("onderhoud_beschrijving");
                 maintenance.status = result.getString("onderhoud_status");
                 maintenance.manuur = result.getInt("onderhoud_manuur");
-                      
-             
+
                 // toevoegen aan de arraylist
                 list.add(maintenance);
 
-                
-           
-                }
-              // request variabelen setten
-                request.setAttribute("list", list);
-                // afsluiten 
-                preparedStatement.close();
-                connect.close();
-
-                rd = request.getRequestDispatcher("maintenances/index.jsp");
-                rd.forward(request, response);
-
-            } catch (Exception ex) {
-                Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
+            // request variabelen setten
+            request.setAttribute("list", list);
+            // afsluiten 
+            preparedStatement.close();
 
+            connect.close();
+
+            rd = request.getRequestDispatcher("maintenances/index.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -133,4 +142,3 @@ public class MaintenancesIndexServlet extends HttpServlet {
     }
 
 }
-
