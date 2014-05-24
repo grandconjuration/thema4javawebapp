@@ -6,8 +6,8 @@
 
 package com.oncloud6.atd.maintenances;
 
-import com.oncloud6.atd.maintainances.MaintenanceList;
-import com.oncloud6.atd.maintainances.MaintenanceList;
+import com.oncloud6.atd.maintenances.MaintenanceList;
+import com.oncloud6.atd.maintenances.MaintenanceList;
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
 import java.sql.Connection;

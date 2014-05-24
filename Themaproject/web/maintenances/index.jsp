@@ -4,7 +4,7 @@
     Author     : Laura
 --%>
 
-<%@page import="com.oncloud6.atd.maintenance.MaintenanceList"%>
+<%@page import="com.oncloud6.atd.maintenances.MaintenanceList"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="../theme/header.jsp" />
