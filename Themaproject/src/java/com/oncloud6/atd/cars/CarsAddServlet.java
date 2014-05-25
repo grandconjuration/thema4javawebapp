@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Niels
  */
-@WebServlet(name = "CarsAddServlet", urlPatterns = {"/carsadd"})
+@WebServlet(name = "CarsAddServlet", urlPatterns = {"/carsaddcar"})
 public class CarsAddServlet extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -67,10 +67,7 @@ public class CarsAddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
-        rd = request.getRequestDispatcher("cars/addcar.jsp");
-        
         MySQLConnection DBConnection = new MySQLConnection();
         
         try {
@@ -81,15 +78,10 @@ public class CarsAddServlet extends HttpServlet {
             Object userID = session.getAttribute("userID");
             String licenseplate = request.getParameter("licenseplate");
             
-            PreparedStatement preparedStatement = connect.prepareStatement("INSERT INTO atd.auto (auto_id, auto_merk, auto_type, auto_kenteken) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                // generated id ophalen
-                ResultSet tableKeys = preparedStatement.getGeneratedKeys();
-                tableKeys.next();
-                int carID = tableKeys.getInt(1);
-                
+            PreparedStatement preparedStatement = connect.prepareStatement("INSERT INTO atd.auto (klant_id, auto_merk, auto_type, auto_kenteken) VALUES (?, ?, ?, ?)");
+               
                 // waardes invullen
-                preparedStatement.setInt(1, carID);
-               // preparedStatement.setObject(2, userID);
+                preparedStatement.setObject(1, userID);
                 preparedStatement.setString(2, brand);
                 preparedStatement.setString(3, type);
                 preparedStatement.setString(4, licenseplate);
@@ -97,11 +89,14 @@ public class CarsAddServlet extends HttpServlet {
                 // query uitvoeren
                 preparedStatement.executeUpdate();
                 
+                // confirmatie dat toevoegen is geslaagd
                 request.setAttribute("msg", "U heeft succesvol uw auto \"" + brand + " " + type + "\" toegevoegd"); 
-                //connectie met database sluiten
+                // connectie met database sluiten
                 preparedStatement.close();
                 connect.close();
                 
+                RequestDispatcher rd = null;
+                // forward naar zichzelf, pagina waarop je je al bevindt
                 rd = request.getRequestDispatcher("cars/addcar.jsp");
                 rd.forward(request, response);
                 
