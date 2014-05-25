@@ -109,7 +109,7 @@ public class MaintenancesEditServlet extends HttpServlet {
                 
                 request.setAttribute("status", values);
                 
-                preparedStatement = connect.prepareStatement("select * from onderhoud_onderdeel inner join onderdeel on onderhoud_onderdeel.onderdeel_id = onderdeel.onderdeel_id WHERE onderhoud_id = ? order by onderhoud_naam asc");
+                preparedStatement = connect.prepareStatement("select * from onderhoud_onderdeel inner join onderdeel on onderhoud_onderdeel.onderdeel_id = onderdeel.onderdeel_id WHERE onderhoud_id = ? order by onderdeel_naam asc");
                 preparedStatement.setString(1, id);
                 resultSet = preparedStatement.executeQuery();
 
@@ -117,10 +117,10 @@ public class MaintenancesEditServlet extends HttpServlet {
 
                 while (resultSet.next()) {
                     PartList part = new PartList();
-                    part.id = resultSet.getString("onderhoud_id");
-                    part.naam = resultSet.getString("onderhoud_naam");
+                    part.id = resultSet.getString("onderdeel_id");
+                    part.naam = resultSet.getString("onderdeel_naam");
                     part.hoeveelheid = resultSet.getString("onderhoud_onderdeel_hoeveelheid");
-                    part.prijs = resultSet.getString("onderhoud_prijs");
+                    part.prijs = resultSet.getString("onderdeel_prijs");
 
                     listValues.add(part);
                 } 

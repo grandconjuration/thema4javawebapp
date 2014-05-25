@@ -59,20 +59,22 @@
         </form>
     </div>
     <div class="row">
+        <%
+            String id = (String) request.getAttribute("id");
+        %>
         <table class="table">
             <thead>
                 <tr>
                     <th>Naam</th>
                     <th>Hoeveelheid</th>
                     <th>Prijs per stuk</th>
-                    <th></th>
+                    <th><a href="maintenancesaddpart?id=<%=id %>" class="btn btn-succes"><i class="glyphicon glyphicon-plus"></i></a></th>
                 </tr>
             </thead>   
             <tbody>
                 <%  
                 // retrieve your list from the request, with casting 
                 ArrayList<PartList> list = (ArrayList<PartList>) request.getAttribute("partlist");
-                String id = (String) request.getAttribute("id");
 
                 // print the information about every category of the list
                 for(PartList part : list) {
