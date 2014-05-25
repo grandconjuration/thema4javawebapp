@@ -67,6 +67,7 @@ public class AccountsRegisterServlet extends HttpServlet {
         
         try {
             Connection connect = DBConnection.getConnection(); 
+            
             String name = request.getParameter("username");
             String pass = request.getParameter("password");
             String chckpass = request.getParameter("chckpassword");

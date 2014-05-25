@@ -14,7 +14,11 @@
 </div>
 <div class="container">
     <div class="row">
-        <form action="addcarcustomer" method="post">
+        <% Object msg = request.getAttribute("msg");
+        if(msg != null) {
+            out.println("<div class=\"alert alert-success\">" + msg + "</div>");
+        }%>
+        <form action="carsadd" method="post">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">merk</span>
                 <input type="text" class="form-control" name="brand">
@@ -28,7 +32,7 @@
                 <input type="zipcode" class="form-control" name="licenseplate">
             </div>  
                 <p>*Deze gegevens zijn verplicht</p>
-               <br/> <input type="submit"  class="btn btn-default" value="Registreren" />    
+               <br/> <input type="submit"  class="btn btn-default" value="Auto toevoegen" />    
         </form>
     </div>
     <jsp:include page="../theme/footer.jsp" />
