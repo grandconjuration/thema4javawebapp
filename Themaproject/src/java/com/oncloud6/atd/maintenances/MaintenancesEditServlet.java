@@ -109,24 +109,24 @@ public class MaintenancesEditServlet extends HttpServlet {
                 
                 request.setAttribute("status", values);
                 
-                /*preparedStatement = connect.prepareStatement("SELECT atd.rechten.rechten_id as id_default, atd.rechten.rechten_key as name, atd.rechten.rechten_type as type, atd.rechten.rechten_value as value_default, atd.rechten_groepen.rechten_id as id_group, atd.rechten_groepen.rechten_groepen_value as value_group FROM atd.rechten LEFT OUTER JOIN atd.rechten_groepen ON atd.rechten.rechten_id = atd.rechten_groepen.rechten_id AND atd.rechten_groepen.groepen_id = ? ORDER BY atd.rechten.rechten_key ASC;");
+                preparedStatement = connect.prepareStatement("select * from onderhoud_onderdeel inner join onderdeel on onderhoud_onderdeel.onderdeel_id = onderdeel.onderdeel_id WHERE onderhoud_id = ? order by onderhoud_naam asc");
                 preparedStatement.setString(1, id);
                 resultSet = preparedStatement.executeQuery();
 
-                ArrayList<RightsList> values = new ArrayList<RightsList>();
+                ArrayList<PartList> listValues = new ArrayList<PartList>();
 
                 while (resultSet.next()) {
-                    RightsList rights = new RightsList();
-                    rights.id = resultSet.getString("id_default");
-                    rights.naam = resultSet.getString("name");
-                    rights.defaultValue = resultSet.getString("value_default");
-                    rights.value = resultSet.getString("value_group");
+                    PartList part = new PartList();
+                    part.id = resultSet.getString("onderhoud_id");
+                    part.naam = resultSet.getString("onderhoud_naam");
+                    part.hoeveelheid = resultSet.getString("onderhoud_onderdeel_hoeveelheid");
+                    part.prijs = resultSet.getString("onderhoud_prijs");
 
-                    values.add(rights);
+                    listValues.add(part);
                 } 
-                request.setAttribute("rightlist", values);
+                request.setAttribute("partlist", listValues);
                 preparedStatement.close();
-                connect.close();*/
+                connect.close();
                 
                 RequestDispatcher rd = null;
                 HttpSession session = request.getSession(true);

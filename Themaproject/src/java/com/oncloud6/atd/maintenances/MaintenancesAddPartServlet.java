@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jelle
  */
-@WebServlet(name = "MaintenancesAddPartServlet", urlPatterns = {"/MaintenancesAddPartServlet"})
+@WebServlet(name = "MaintenancesAddPartServlet", urlPatterns = {"/maintenancesaddpart"})
 public class MaintenancesAddPartServlet extends HttpServlet {
 
     /**
