@@ -3,82 +3,119 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.oncloud6.atd.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author Laura
+ * @author Laura, Simon
  */
+@Entity
+@Table(name = "onderhoud")
 public class Onderhoud {
-    public Date datum;
-    public String beschrijving;
-    public String status;
-    public int manuur;
+
+    @Id
+    @GeneratedValue
+    @Column(name = "onderhoud_id")
+    private int id;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "onderhoud_datum")
+    private Date datum;
+
+    @Column(name = "onderhoud_beschrijving")
+    private String beschrijving;
+
+    @Column(name = "onderhoud_status")
+    private String status;
+
+    @Column(name = "onderhoud_manuur")
+    private int manuur;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "onderhoud_auto_id", nullable = false)
     public Auto deAuto;
-    public ArrayList <GebruiktOnderdeel> alleGebruikteOnderdelen = new ArrayList<>();
-    
-    public Onderhoud(Date dt, String besch, String st, int mu){
-        datum = dt;
-        beschrijving = besch;
-        status = st;
-        manuur = mu;
-       
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+		  name = "onderhoud_onderdeel",
+		  joinColumns = @JoinColumn(name = "onderhoud_id"),
+		  inverseJoinColumns = @JoinColumn(name = "onderdeel_id")
+    )
+    public List<GebruiktOnderdeel> alleGebruikteOnderdelen = new ArrayList<GebruiktOnderdeel>();
+
+    public Onderhoud() {
     }
 
-    public Auto getDeAuto() {
-        return deAuto;
+    public Onderhoud(Date dt, String besch, String st, int mu) {
+	   datum = dt;
+	   beschrijving = besch;
+	   status = st;
+	   manuur = mu;
+
     }
 
-    public void setDeAuto(Auto nweAuto) {
-        deAuto = nweAuto;
+    public Auto getAuto() {
+	   return deAuto;
     }
 
-    public ArrayList<GebruiktOnderdeel> getAlleGebruikteOnderdelen() {
-        return alleGebruikteOnderdelen;
+    public void setAuto(Auto newAuto) {
+	   deAuto = newAuto;
     }
 
-    public void setAlleGebruikteOnderdelen(ArrayList<GebruiktOnderdeel> alleGebruikteOnderdelen) {
-        this.alleGebruikteOnderdelen = alleGebruikteOnderdelen;
+    public List<GebruiktOnderdeel> getGebruikteOnderdelen() {
+	   return alleGebruikteOnderdelen;
     }
 
-    
+    public void setGebruikteOnderdelen(List<GebruiktOnderdeel> alleGebruikteOnderdelen) {
+	   this.alleGebruikteOnderdelen = alleGebruikteOnderdelen;
+    }
 
     public Date getDatum() {
-        return datum;
+	   return datum;
     }
 
     public void setDatum(Date dt) {
-        datum = dt;
+	   datum = dt;
     }
 
     public String getBeschrijving() {
-        return beschrijving;
+	   return beschrijving;
     }
 
     public void setBeschrijving(String besch) {
-        beschrijving = besch;
+	   beschrijving = besch;
     }
 
     public String getStatus() {
-        return status;
+	   return status;
     }
 
     public void setStatus(String st) {
-        status = st;
+	   status = st;
     }
 
     public int getManuur() {
-        return manuur;
+	   return manuur;
     }
 
     public void setManuur(int mu) {
-       manuur = mu;
+	   manuur = mu;
     }
-    
-    
-    
+
 }

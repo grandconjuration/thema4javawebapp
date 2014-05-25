@@ -19,7 +19,12 @@
 	   <property name="hibernate.connection.password">
 		  Geheim1@
 	   </property>
+	   <property name="show_sql">true</property>
 	   <mapping class="com.oncloud6.atd.domain.Gebruiker" />
 	   <mapping class="com.oncloud6.atd.domain.Groep" />
+	   <mapping class="com.oncloud6.atd.domain.Onderhoud" />
+	   <mapping class="com.oncloud6.atd.domain.Auto" />
+	   <mapping class="com.oncloud6.atd.domain.Onderdeel" />
+	   <mapping class="com.oncloud6.atd.domain.GebruiktOnderdeel" />
     </session-factory>
 </hibernate-configuration>
