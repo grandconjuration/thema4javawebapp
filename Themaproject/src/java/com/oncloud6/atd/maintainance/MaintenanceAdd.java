@@ -67,7 +67,7 @@ public class MaintenanceAdd extends HttpServlet {
 	//	  hibernateSession.save(gbrOnderdeel);
 
 		 // gebruikteOnderdelen.add(new GebruiktOnderdeel(1, nwOnderdeel));
-		  GebruiktOnderdeel gBO = new GebruiktOnderdeel(1, nwOnderdeel);
+		  GebruiktOnderdeel gBO = new GebruiktOnderdeel(1, nwOnderdeel, onderhoud);
 		//  hibernateSession.save(gBO);
 		//  gebruikteOnderdelen.add(gBO);
 		//  onderhoud.setGebruikteOnderdelen(gebruikteOnderdelen);

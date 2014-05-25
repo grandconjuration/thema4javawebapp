@@ -51,12 +51,7 @@ public class Onderhoud {
     @JoinColumn(name = "onderhoud_auto_id", nullable = false)
     public Auto deAuto;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-		  name = "onderhoud_onderdeel",
-		  joinColumns = @JoinColumn(name = "onderhoud_id"),
-		  inverseJoinColumns = @JoinColumn(name = "onderdeel_id")
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="onderhoud") 
     public List<GebruiktOnderdeel> alleGebruikteOnderdelen = new ArrayList<GebruiktOnderdeel>();
 
     public Onderhoud() {
