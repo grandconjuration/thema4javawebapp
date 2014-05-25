@@ -6,13 +6,20 @@
 
 package com.oncloud6.atd.maintenances;
 
+import com.oncloud6.atd.mysql.MySQLConnection;
+import com.oncloud6.atd.rights.GroupsRightsRestoreServlet;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -20,34 +27,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MaintenancesDeletePartServlet", urlPatterns = {"/maintenancesdeletepart"})
 public class MaintenancesDeletePartServlet extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MaintenancesDeletePartServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet MaintenancesDeletePartServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -59,31 +38,30 @@ public class MaintenancesDeletePartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        MySQLConnection DBConnection = new MySQLConnection();
+        try {
+            Connection connect = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connect.prepareStatement("DELETE FROM atd.onderhoud_onderdeel WHERE onderdeel_id = ? AND onderhoud_id = ?");
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+            String id = request.getParameter("id");
+            String mid = request.getParameter("mid");
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, mid);
+            preparedStatement.executeUpdate();
+
+            //niet vergeten om alles te sluiten :)
+            preparedStatement.close();
+            connect.close();
+
+            RequestDispatcher rd = null;
+            HttpSession session = request.getSession(true);
+
+            response.sendRedirect("maintenancesedit?id=" + mid);
+
+        } catch (Exception ex) {
+            Logger.getLogger(GroupsRightsRestoreServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }
