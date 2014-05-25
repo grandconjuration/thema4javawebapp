@@ -5,6 +5,7 @@
 --%>
 
 <%@page import="com.oncloud6.atd.maintenances.MaintenanceList"%>
+<%@page import="com.oncloud6.atd.maintenances.DropdownValues"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="../theme/header.jsp" />
@@ -16,12 +17,23 @@
 
 <div class="container">
     <div class="row">
-        <% Object msg = request.getAttribute("msg");
-        if(msg != null) {
-            out.println("<div class=\"alert alert-success\">" + msg + "</div>");
-        }%>
-        <form action="" method="GET">
-        <input type="text" class="form-control" placeholder="Klant id" name="cid">
+        <form action="" method="get">
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
+            <select name="cid" class="form-control">
+                <%  
+                // retrieve your list from the request, with casting 
+                ArrayList<DropdownValues> values = (ArrayList<DropdownValues>) request.getAttribute("klantlist");
+                // print the information about every category of the list
+                for(DropdownValues dlist : values) {
+                    %>
+                    <option value="<%=dlist.key %>"<% if(dlist.selected) { out.println(" selected=\"true\"");} %>><%=dlist.value %></option>
+                    <%
+                }
+                %>
+            </select>
+        </div>
+           <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
         </form>
         <table border="1" style="width:750px">
             <tr>

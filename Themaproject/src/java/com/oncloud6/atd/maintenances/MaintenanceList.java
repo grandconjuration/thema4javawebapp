@@ -16,6 +16,9 @@ public class MaintenanceList {
     public Date datum;
     public String beschrijving;
     public String status;
+    public String kenteken;
+    public String merk;
+    public String type;
     public int manuur;
     public int onderhoudId;
     public int autoId;

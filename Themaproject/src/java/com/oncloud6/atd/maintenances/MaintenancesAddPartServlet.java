@@ -8,9 +8,7 @@ package com.oncloud6.atd.maintenances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import com.oncloud6.atd.rights.GroupsEditServlet;
-import com.oncloud6.atd.rights.RightsList;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
