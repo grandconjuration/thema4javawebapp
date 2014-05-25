@@ -35,37 +35,35 @@
         </div>
            <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
         </form>
-        <table border="1" style="width:750px">
-            <tr>
-                <td>Onderhouds id:</td>
-                <td>Bedrijfs id:</td>
-                <td>Auto id:</td>
-                <td>Datum:</td>
-                <td>Beschrijving:</td>
-                <td>Status:</td>
-                <td>Manuur:</td>
-            </tr>
-        
-       <%  
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Merk</th>
+                    <th>Type</th>
+                    <th>Kenteken</th>
+                    <th><a href="maintenancesadd" class="btn btn-succes"><i class="glyphicon glyphicon-plus"></i></a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <%  
                 // retrieve your list from the request, with casting 
                 ArrayList<MaintenanceList> list = (ArrayList<MaintenanceList>) request.getAttribute("list");
 
                 // print the information about every category of the list
-                for(MaintenanceList maintenanceList : list) {
+                for(MaintenanceList maintenance : list) {
                     %>
                     <tr>
-                        <td><%=maintenanceList.onderhoudId %></td>
-                        <td><%=maintenanceList.bedrijfsId %></td>
-                        <td><%=maintenanceList.autoId %></td>
-                        <td><%=maintenanceList.datum %></td>
-                        <td><%=maintenanceList.beschrijving %></td>
-                        <td><%=maintenanceList.status %></td>
-                        <td><%=maintenanceList.manuur %></td>
+                        <td><%=maintenance.merk %></td>
+                        <td><%=maintenance.type %></td>
+                        <td><%=maintenance.kenteken %></td>
+                        <td><a href="maintenancesedit?id=<%=maintenance.onderhoudId %>" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i></a></td>
                     </tr>
                     <%
                 }
                 %>
-        
-        </table>  
+            </tbody>
+        </table>
     </div>
     <jsp:include page="../theme/footer.jsp" />
