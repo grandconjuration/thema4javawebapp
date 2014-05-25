@@ -7,6 +7,8 @@
 package com.oncloud6.atd.maintenances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
+import com.oncloud6.atd.rights.GroupsEditServlet;
+import com.oncloud6.atd.rights.RightsList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -98,7 +100,41 @@ public class MaintenancesAddPartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        MySQLConnection DBConnection = new MySQLConnection();
+        try {
+            Connection connect = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud WHERE onderhoud_id = ?");
+            
+            String id = request.getParameter("id");
+            String part = request.getParameter("part");
+            String amount = request.getParameter("amount");
+
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            if (!resultSet.next()) {
+                preparedStatement.close();
+                connect.close();
+                response.sendRedirect("maintenancesedit?id=" + id);
+            }else{
+                preparedStatement.close();
+                   
+                preparedStatement = connect.prepareStatement("INSERT INTO atd.onderhoud_onderdeel (onderhoud_id, onderdeel_id, onderhoud_onderdeel_hoeveelheid) VALUES (?,?,?)");
+                
+                String rightValue = request.getParameter("RightValue");
+
+                preparedStatement.setString(1, id);
+                preparedStatement.setString(2, part);
+                preparedStatement.setString(3, amount);
+                preparedStatement.executeUpdate();
+                
+                response.sendRedirect("maintenancesedit?id=" + id);
+                connect.close();
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(GroupsEditServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
