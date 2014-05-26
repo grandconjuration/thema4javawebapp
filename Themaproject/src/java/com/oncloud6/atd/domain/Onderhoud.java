@@ -5,6 +5,7 @@
  */
 package com.oncloud6.atd.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "onderhoud")
-public class Onderhoud {
+public class Onderhoud implements Serializable {
 
     @Id
     @GeneratedValue
@@ -63,6 +64,10 @@ public class Onderhoud {
 	   status = st;
 	   manuur = mu;
 
+    }
+    
+    public int getId() {
+        return id;
     }
 
     public Auto getAuto() {

@@ -4,27 +4,29 @@
 
 <hibernate-configuration>
     <session-factory>
-	   <property name="hibernate.dialect">
-		  org.hibernate.dialect.MySQLDialect
-	   </property>
-	   <property name="hibernate.connection.driver_class">
-		  com.mysql.jdbc.Driver
-	   </property>
-	   <property name="hibernate.connection.url">
-		  jdbc:mysql://pma.jelleluteijn.com/atd
-	   </property>
-	   <property name="hibernate.connection.username">
-		  atd
-	   </property>
-	   <property name="hibernate.connection.password">
-		  Geheim1@
-	   </property>
-	   <property name="show_sql">true</property>
-	   <mapping class="com.oncloud6.atd.domain.Gebruiker" />
-	   <mapping class="com.oncloud6.atd.domain.Groep" />
-	   <mapping class="com.oncloud6.atd.domain.Onderhoud" />
-	   <mapping class="com.oncloud6.atd.domain.Auto" />
-	   <mapping class="com.oncloud6.atd.domain.Onderdeel" />
-	   <mapping class="com.oncloud6.atd.domain.GebruiktOnderdeel" />
+        <property name="hibernate.dialect">
+            org.hibernate.dialect.MySQLDialect
+        </property>
+        <property name="hibernate.connection.driver_class">
+            com.mysql.jdbc.Driver
+        </property>
+        <property name="hibernate.connection.url">
+            jdbc:mysql://pma.jelleluteijn.com/atd
+        </property>
+        <property name="hibernate.connection.username">
+            atd
+        </property>
+        <property name="hibernate.connection.password">
+            Geheim1@
+        </property>
+        <property name="show_sql">true</property>
+        <mapping class="com.oncloud6.atd.domain.Gebruiker" />
+        <mapping class="com.oncloud6.atd.domain.Groep" />
+        <mapping class="com.oncloud6.atd.domain.Onderhoud" />
+        <mapping class="com.oncloud6.atd.domain.Auto" />
+        <mapping class="com.oncloud6.atd.domain.Onderdeel" />
+        <mapping class="com.oncloud6.atd.domain.GebruiktOnderdeel" />
+        <mapping class="com.oncloud6.atd.domain.Planning" />
+        <mapping class="com.oncloud6.atd.domain.Monteur" />
     </session-factory>
 </hibernate-configuration>

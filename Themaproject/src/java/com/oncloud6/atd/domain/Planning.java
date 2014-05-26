@@ -3,43 +3,75 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.oncloud6.atd.domain;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author Laura
+ * @author Laura, Simon
  */
-public class Planning {
-    public Date datumStart;
-    public Date datumEind;
-    public Onderhoud hetOnderhoud;
-    public Monteur deMonteur;
-    
-public Planning(Date dS, Date dE){
-    datumStart = dS;
-    datumEind = dE;
-   
-}
+@Entity
+@Table(name = "planning")
+public class Planning implements Serializable {
 
-    public Onderhoud getHetOnderhoud() {
+    @Id
+    @GeneratedValue
+    @Column(name = "planning_id")
+    private int id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "planning_datum_start")
+    private Date datumStart;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "planning_datum_eind")
+    private Date datumEind;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "planning_onderhoud_id")
+    private Onderhoud hetOnderhoud;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "planning_monteur_id")
+    private Monteur deMonteur;
+
+    public Planning() {
+    }
+
+    public Planning(Date dS, Date dE) {
+        datumStart = dS;
+        datumEind = dE;
+
+    }
+
+    public Onderhoud getOnderhoud() {
         return hetOnderhoud;
     }
 
-    public void setHetOnderhoud(Onderhoud nweO) {
+    public void setOnderhoud(Onderhoud nweO) {
         hetOnderhoud = nweO;
     }
 
-    public Monteur getDeMonteur() {
+    public Monteur getMonteur() {
         return deMonteur;
     }
 
-    public void setDeMonteur(Monteur nweM) {
+    public void setMonteur(Monteur nweM) {
         deMonteur = nweM;
     }
-
 
     public Date getDatumStart() {
         return datumStart;
@@ -56,6 +88,5 @@ public Planning(Date dS, Date dE){
     public void setDatumEind(Date dE) {
         datumEind = dE;
     }
-    
 
 }

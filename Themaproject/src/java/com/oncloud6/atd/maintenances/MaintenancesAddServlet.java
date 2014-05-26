@@ -34,8 +34,8 @@ import org.hibernate.Transaction;
  *
  * @author Simon Whiteley
  */
-@WebServlet(name = "MaintenancesAdd", urlPatterns = {"/maintenancesadd"})
-public class MaintenancesAdd extends HttpServlet {
+@WebServlet(name = "MaintenancesAddServlet", urlPatterns = {"/maintenancesadd"})
+public class MaintenancesAddServlet extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -91,7 +91,7 @@ public class MaintenancesAdd extends HttpServlet {
             }
             e.printStackTrace();
         } catch (ParseException ex) {
-            Logger.getLogger(MaintenancesAdd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MaintenancesAddServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             hibernateSession.close();
             factory.close();
