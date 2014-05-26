@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.oncloud6.atd.timetable;
+package com.oncloud6.atd.schedules;
 
 import com.oncloud6.atd.domain.Monteur;
 import com.oncloud6.atd.domain.Onderhoud;
@@ -32,8 +32,8 @@ import org.hibernate.Transaction;
  *
  * @author Simon Whiteley <simonwhiteley@hotmail.com>
  */
-@WebServlet(name = "TimetableAddServlet", urlPatterns = {"/timetableadd"})
-public class TimetableAddServlet extends HttpServlet {
+@WebServlet(name = "SchedulesAddServlet", urlPatterns = {"/schedulesadd"})
+public class SchedulesAddServlet extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -73,7 +73,7 @@ public class TimetableAddServlet extends HttpServlet {
         request.setAttribute("onderhoudList", onderhoudList);
         request.setAttribute("monteurList", monteurList);
 
-        rd = request.getRequestDispatcher("timetables/add.jsp");
+        rd = request.getRequestDispatcher("schedule/add.jsp");
         rd.forward(request, response);
     }
 
@@ -118,7 +118,7 @@ public class TimetableAddServlet extends HttpServlet {
             }
             e.printStackTrace();
         } catch (ParseException ex) {
-            Logger.getLogger(TimetableAddServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SchedulesAddServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             hibernateSession.close();
             factory.close();
@@ -127,9 +127,7 @@ public class TimetableAddServlet extends HttpServlet {
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
 
-        rd = request.getRequestDispatcher("timetable/add.jsp");
-
-        rd.forward(request, response);
+        doGet(request, response);
 
     }
 }
