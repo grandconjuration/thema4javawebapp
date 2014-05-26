@@ -8,6 +8,7 @@ package com.oncloud6.atd.domain;
 import com.oncloud6.atd.domain.Groep;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.domain.Monteur;
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "gebruiker")
-public class Gebruiker {
+public class Gebruiker implements Serializable {
 
     @Id
     @GeneratedValue

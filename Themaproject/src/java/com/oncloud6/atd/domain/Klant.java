@@ -5,6 +5,7 @@
  */
 package com.oncloud6.atd.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.Column;
@@ -19,86 +20,85 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "klant")
-public class Klant {
+public class Klant implements Serializable {
 
     @Id
     @GeneratedValue
     @Column(name = "klant_id")
     public int id;
-    
+
     @Column(name = "klant_naam")
     public String klantNaam;
-    
+
     @Column(name = "klant_adres")
     public String klantAdres;
-    
+
     @Column(name = "klant_korting")
     public Double korting;
-    
+
     @Column(name = "klant_geboortedatum")
     public Date geboorteDatum;
-    
+
     public ArrayList<Factuur> alleFacturen = new ArrayList<>();
     public ArrayList<Auto> alleAutos = new ArrayList<>();
-    
-    public Klant(){
-	   
+
+    public Klant() {
     }
 
     private Klant(String kN, String kA, Double kor, Date gD) {
-	   klantNaam = kN;
-	   klantAdres = kA;
-	   korting = kor;
-	   geboorteDatum = gD;
+        klantNaam = kN;
+        klantAdres = kA;
+        korting = kor;
+        geboorteDatum = gD;
 
     }
 
     public ArrayList<Factuur> getAlleFacturen() {
-	   return alleFacturen;
+        return alleFacturen;
     }
 
     public void setAlleFacturen(ArrayList<Factuur> alleFacturen) {
-	   this.alleFacturen = alleFacturen;
+        this.alleFacturen = alleFacturen;
     }
 
     public ArrayList<Auto> getAlleAutos() {
-	   return alleAutos;
+        return alleAutos;
     }
 
     public void setAlleAutos(ArrayList<Auto> alleAutos) {
-	   this.alleAutos = alleAutos;
+        this.alleAutos = alleAutos;
     }
 
     public String getKlantNaam() {
-	   return klantNaam;
+        return klantNaam;
     }
 
     public void setKlantNaam(String kN) {
-	   klantNaam = kN;
+        klantNaam = kN;
     }
 
     public String getKlantAdres() {
-	   return klantAdres;
+        return klantAdres;
     }
 
     public void setKlantAdres(String kA) {
-	   klantAdres = kA;
+        klantAdres = kA;
     }
 
     public Double getKorting() {
-	   return korting;
+        return korting;
     }
 
     public void setKorting(Double kor) {
-	   korting = kor;
+        korting = kor;
     }
 
     public Date getGeboorteDatum() {
-	   return geboorteDatum;
+        return geboorteDatum;
     }
 
     public void setGeboorteDatum(Date gD) {
-	   geboorteDatum = gD;
+        geboorteDatum = gD;
     }
 
 }
