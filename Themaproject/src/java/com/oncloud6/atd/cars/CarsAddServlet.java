@@ -75,13 +75,13 @@ public class CarsAddServlet extends HttpServlet {
             
             String brand = request.getParameter("brand");
             String type = request.getParameter("type");
-            Object userID = session.getAttribute("userID");
+            int userID = (int)session.getAttribute("userID");
             String licenseplate = request.getParameter("licenseplate");
             
             PreparedStatement preparedStatement = connect.prepareStatement("INSERT INTO atd.auto (auto_klant_id, auto_merk, auto_type, auto_kenteken) VALUES (?, ?, ?, ?)");
                
                 // waardes invullen
-                preparedStatement.setObject(1, userID);
+                preparedStatement.setInt(1, userID);
                 preparedStatement.setString(2, brand);
                 preparedStatement.setString(3, type);
                 preparedStatement.setString(4, licenseplate);
