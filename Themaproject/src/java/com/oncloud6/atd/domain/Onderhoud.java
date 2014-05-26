@@ -52,70 +52,70 @@ public class Onderhoud implements Serializable {
     @JoinColumn(name = "onderhoud_auto_id", nullable = false)
     public Auto deAuto;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="onderhoud") 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "onderhoud")
     public List<GebruiktOnderdeel> alleGebruikteOnderdelen = new ArrayList<GebruiktOnderdeel>();
 
     public Onderhoud() {
     }
 
     public Onderhoud(Date dt, String besch, String st, int mu) {
-	   datum = dt;
-	   beschrijving = besch;
-	   status = st;
-	   manuur = mu;
+        datum = dt;
+        beschrijving = besch;
+        status = st;
+        manuur = mu;
 
     }
-    
+
     public int getId() {
         return id;
     }
 
     public Auto getAuto() {
-	   return deAuto;
+        return deAuto;
     }
 
     public void setAuto(Auto newAuto) {
-	   deAuto = newAuto;
+        deAuto = newAuto;
     }
 
     public List<GebruiktOnderdeel> getGebruikteOnderdelen() {
-	   return alleGebruikteOnderdelen;
+        return alleGebruikteOnderdelen;
     }
 
     public void setGebruikteOnderdelen(List<GebruiktOnderdeel> alleGebruikteOnderdelen) {
-	   this.alleGebruikteOnderdelen = alleGebruikteOnderdelen;
+        this.alleGebruikteOnderdelen = alleGebruikteOnderdelen;
     }
 
     public Date getDatum() {
-	   return datum;
+        return datum;
     }
 
     public void setDatum(Date dt) {
-	   datum = dt;
+        datum = dt;
     }
 
     public String getBeschrijving() {
-	   return beschrijving;
+        return beschrijving;
     }
 
     public void setBeschrijving(String besch) {
-	   beschrijving = besch;
+        beschrijving = besch;
     }
 
     public String getStatus() {
-	   return status;
+        return status;
     }
 
     public void setStatus(String st) {
-	   status = st;
+        status = st;
     }
 
     public int getManuur() {
-	   return manuur;
+        return manuur;
     }
 
     public void setManuur(int mu) {
-	   manuur = mu;
+        manuur = mu;
     }
 
 }
