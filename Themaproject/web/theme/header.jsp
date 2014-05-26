@@ -48,7 +48,12 @@
                     <% if (session.getAttribute("userID") != null) { %>
                     <p class="navbar-text">Ingelogd als <% out.println(session.getAttribute("userName")); %></p>
                     <div><a class='btn btn-danger navbar-btn navbar-right' href='accountslogout'>Uitloggen</a></div>
-                    <div><a class='btn btn-danger navbar-btn navbar-bottom' href='carsaddcar'>Auto Toevoegen</a></div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">Opties<span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href='carsaddcar'>Auto Toevoegen</a></li>
+                        </ul>
+                    </div>
                     <% } else { %>
                     <form action="accountslogin" method="post" class="navbar-form navbar-right" role="form">
                         <div class="form-group">

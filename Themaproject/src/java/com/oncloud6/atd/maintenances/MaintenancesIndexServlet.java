@@ -54,7 +54,7 @@ public class MaintenancesIndexServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         // Controleren of het Customer id veld is ingevuld
         boolean idSet = false;
-        if (request.getParameter("cid") == null) {
+        if (request.getParameter("cid") == null || request.getParameter("cid").equals("")) {
             idSet = false;
         } else {
             idSet = true;
@@ -71,9 +71,9 @@ public class MaintenancesIndexServlet extends HttpServlet {
             
             // Controleren of idSet geset is
             if (!idSet) {
-                preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud");
+                preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud INNER JOIN auto ON onderhoud.onderhoud_auto_id = auto.auto_id");
             } else {
-                preparedStatement = connect.prepareStatement("SELECT onderhoud_id, onderhoud_bedrijf_id, onderhoud_auto_id, onderhoud_datum, onderhoud_beschrijving, onderhoud_status, onderhoud_manuur FROM atd.onderhoud, atd.auto WHERE onderhoud_auto_id = auto_id AND auto_klant_id =?");
+                preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud INNER JOIN auto ON onderhoud.onderhoud_auto_id = auto.auto_id AND auto.auto_klant_id =?");
                 int CustomerID = Integer.parseInt(request.getParameter("cid"));
                 preparedStatement.setInt(1, CustomerID);
             }
@@ -91,6 +91,9 @@ public class MaintenancesIndexServlet extends HttpServlet {
                 maintenance.onderhoudId = result.getInt("onderhoud_id");
                 maintenance.bedrijfsId = result.getInt("onderhoud_bedrijf_id");
                 maintenance.autoId = result.getInt("onderhoud_auto_id");
+                maintenance.merk = result.getString("auto_merk");
+                maintenance.type = result.getString("auto_type");
+                maintenance.kenteken = result.getString("auto_kenteken");
                 maintenance.datum = result.getDate("onderhoud_datum");
                 maintenance.beschrijving = result.getString("onderhoud_beschrijving");
                 maintenance.status = result.getString("onderhoud_status");
@@ -104,6 +107,28 @@ public class MaintenancesIndexServlet extends HttpServlet {
             request.setAttribute("list", list);
             // afsluiten 
             preparedStatement.close();
+            
+            preparedStatement = connect.prepareStatement("select * from klant order by klant_naam asc");
+            result = preparedStatement.executeQuery();
+
+            ArrayList<DropdownValues> values = new ArrayList<DropdownValues>();
+            DropdownValues value;
+
+            value = new DropdownValues();
+            value.key = "";
+            value.value = "";
+            value.selected = false;
+            values.add(value);
+            
+            while (result.next()) {
+                value = new DropdownValues();
+                value.key = result.getString("klant_id");
+                value.value = result.getString("klant_naam");
+                value.selected = false;
+                values.add(value);
+            } 
+            request.setAttribute("klantlist", values);
+            preparedStatement.close();
 
             connect.close();
 
@@ -115,30 +140,4 @@ public class MaintenancesIndexServlet extends HttpServlet {
         }
 
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        MySQLConnection DBConnection = new MySQLConnection();
-        try {
-
-            RequestDispatcher rd = null;
-            HttpSession session = request.getSession(true);
-
-            doGet(request, response);
-
-        } catch (Exception ex) {
-            Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
 }
