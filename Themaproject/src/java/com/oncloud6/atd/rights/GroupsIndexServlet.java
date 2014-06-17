@@ -42,6 +42,15 @@ public class GroupsIndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         MySQLConnection DBConnection = new MySQLConnection();
+        HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        RightsControl.initRequest(request, response);
+        int userId = Integer.parseInt(session.getAttribute("groupID").toString());
+        if(!RightsControl.checkBoolean("groups_index", "true", userId)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM atd.groepen");
@@ -60,9 +69,6 @@ public class GroupsIndexServlet extends HttpServlet {
             
             preparedStatement.close();
             connect.close();
-
-            RequestDispatcher rd = null;
-            HttpSession session = request.getSession(true);
 
             rd = request.getRequestDispatcher("groups/home.jsp");
             rd.forward(request, response);

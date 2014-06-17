@@ -39,6 +39,15 @@ public class GroupsDeleteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         MySQLConnection DBConnection = new MySQLConnection();
+        HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        RightsControl.initRequest(request, response);
+        int userId = Integer.parseInt(session.getAttribute("groupID").toString());
+        if(!RightsControl.checkBoolean("groups_delete", "true", userId)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("DELETE FROM atd.groepen WHERE groepen_id = ?");
@@ -51,9 +60,6 @@ public class GroupsDeleteServlet extends HttpServlet {
             //niet vergeten om alles te sluiten :)
             preparedStatement.close();
             connect.close();
-
-            RequestDispatcher rd = null;
-            HttpSession session = request.getSession(true);
 
             response.sendRedirect("groups");
 

@@ -12,12 +12,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Jelle
  */
 public class RightsControl {
+    public static void initRequest(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(true);
+        if(session.getAttribute("groupID") == null) {
+            session.setAttribute("groupID", 4);
+        }
+    }
+    
     public static boolean checkBoolean(String rightName, String reqValue, int userGroupId) {
         boolean returnCode = false;
         MySQLConnection DBConnection = new MySQLConnection();
