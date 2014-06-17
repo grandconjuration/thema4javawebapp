@@ -45,7 +45,7 @@ public class IndexServlet extends HttpServlet {
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
 
-        rd = request.getRequestDispatcher("index.jsp");
+        rd = request.getRequestDispatcher("home.jsp");
         rd.forward(request, response);
         /*
          if(session.getAttribute("Username") != null) {
