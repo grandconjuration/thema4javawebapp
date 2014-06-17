@@ -9,4 +9,8 @@
         <error-code>404</error-code>
         <location>/error/404error.jsp</location>
     </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/403error.jsp</location>
+    </error-page>
 </web-app>
