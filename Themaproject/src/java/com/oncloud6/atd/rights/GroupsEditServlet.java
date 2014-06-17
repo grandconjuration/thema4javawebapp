@@ -44,9 +44,7 @@ public class GroupsEditServlet extends HttpServlet {
         MySQLConnection DBConnection = new MySQLConnection();
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
-        RightsControl.initRequest(request, response);
-        int userId = Integer.parseInt(session.getAttribute("groupID").toString());
-        if(!RightsControl.checkBoolean("groups_edit", "true", userId)) {
+        if(!RightsControl.checkBoolean("groups_edit", "true", session)) {
             rd = request.getRequestDispatcher("error/403error.jsp");
             rd.forward(request, response);
             return;
@@ -124,9 +122,7 @@ public class GroupsEditServlet extends HttpServlet {
         MySQLConnection DBConnection = new MySQLConnection();
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
-        RightsControl.initRequest(request, response);
-        int userId = Integer.parseInt(session.getAttribute("groupID").toString());
-        if(!RightsControl.checkBoolean("groups_edit", "true", userId)) {
+        if(!RightsControl.checkBoolean("groups_edit", "true", session)) {
             rd = request.getRequestDispatcher("error/403error.jsp");
             rd.forward(request, response);
             return;
