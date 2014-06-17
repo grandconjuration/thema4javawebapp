@@ -132,7 +132,7 @@ public class MaintenancesIndexServlet extends HttpServlet {
 
             connect.close();
 
-            rd = request.getRequestDispatcher("maintenances/index.jsp");
+            rd = request.getRequestDispatcher("maintenances/home.jsp");
             rd.forward(request, response);
 
         } catch (Exception ex) {

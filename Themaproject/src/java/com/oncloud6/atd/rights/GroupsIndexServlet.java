@@ -64,7 +64,7 @@ public class GroupsIndexServlet extends HttpServlet {
             RequestDispatcher rd = null;
             HttpSession session = request.getSession(true);
 
-            rd = request.getRequestDispatcher("groups/index.jsp");
+            rd = request.getRequestDispatcher("groups/home.jsp");
             rd.forward(request, response);
 
         } catch (Exception ex) {
