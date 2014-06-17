@@ -21,10 +21,12 @@ import javax.servlet.http.HttpSession;
  * @author Jelle
  */
 public class RightsControl {
+    private static int defaultGroup = 4;
+    
     public static boolean checkBoolean(String rightName, String reqValue, HttpSession session) {
         boolean returnCode = false;
         MySQLConnection DBConnection = new MySQLConnection();
-        int userGroupId = 4;
+        int userGroupId = defaultGroup;
         if(session.getAttribute("groupID") != null) {
             userGroupId = Integer.parseInt(session.getAttribute("groupID").toString());
         }
@@ -67,7 +69,7 @@ public class RightsControl {
     public static boolean checkGroup(String rightName, String reqValue, HttpSession session, int itemGroupId) {
         boolean returnCode = false;
         MySQLConnection DBConnection = new MySQLConnection();
-        int userGroupId = 4;
+        int userGroupId = defaultGroup;
         if(session.getAttribute("groupID") != null) {
             userGroupId = Integer.parseInt(session.getAttribute("groupID").toString());
         }
@@ -114,7 +116,7 @@ public class RightsControl {
     public static String GetRightGroup(String rightName, HttpSession session) {
         String returnCode = "false";
         MySQLConnection DBConnection = new MySQLConnection();
-        int userGroupId = 4;
+        int userGroupId = defaultGroup;
         if(session.getAttribute("groupID") != null) {
             userGroupId = Integer.parseInt(session.getAttribute("groupID").toString());
         }
