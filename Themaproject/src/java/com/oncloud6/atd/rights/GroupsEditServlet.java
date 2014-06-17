@@ -41,7 +41,8 @@ public class GroupsEditServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MySQLConnection DBConnection = new MySQLConnection();HttpSession session = request.getSession(true);
+        MySQLConnection DBConnection = new MySQLConnection();
+        HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
         RightsControl.initRequest(request, response);
         int userId = Integer.parseInt(session.getAttribute("groupID").toString());
@@ -120,7 +121,8 @@ public class GroupsEditServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MySQLConnection DBConnection = new MySQLConnection();HttpSession session = request.getSession(true);
+        MySQLConnection DBConnection = new MySQLConnection();
+        HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
         RightsControl.initRequest(request, response);
         int userId = Integer.parseInt(session.getAttribute("groupID").toString());
