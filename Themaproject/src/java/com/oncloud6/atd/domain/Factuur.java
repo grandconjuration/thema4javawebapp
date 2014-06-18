@@ -3,122 +3,164 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.oncloud6.atd.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author Laura
+ * @author Laura, Simon
  */
-public class Factuur {
-    public int factuurNummer;
-    public Date factuurDatum;
-    public Klant deKlant;
-    public String klantNaam;
-    public String klantAdres;
-    public Double factuurKorting;
-    public Double subTotaalBedrag;
-    public Double btwBedrag;
-    public Double totaalBedrag;
-    public ArrayList<FactuurItem> deFactuurItems = new ArrayList<>();
+@Entity
+@Table(name = "factuur")
+public class Factuur implements Serializable {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "factuur_id")
+    private int id;
+
+    @Column(name = "factuur_nummer")
+    private int factuurNummer;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "factuur_datum")
+    private Date factuurDatum;
     
-    public Factuur(int fN, Date fD,Double fK, double sTB, double btwB, double tB, Klant nweK, String kN, String kA){
-        factuurNummer = fN;
-        factuurDatum = fD;
-        factuurKorting = fK;
-        subTotaalBedrag = sTB;
-        btwBedrag = btwB;
-        totaalBedrag = tB;
-        deKlant = nweK;
-        klantNaam = kN;
-        klantAdres = kA;
-       
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "factuur_klant_id")
+    private Klant klant;
+    
+    @Column(name = "factuur_klant_naam")
+    private String klantNaam;
+    
+    @Column(name = "factuur_klant_adres")
+    private String klantAdres;
+    
+    @Column(name = "factuur_korting")
+    private Double factuurKorting;
+    
+    @Column(name = "factuur_bedrag")
+    private Double subTotaalBedrag;
+    
+    @Column(name = "factuur_bedrag_btw")
+    private Double btwBedrag;
+    
+    @Column(name = "factuur_bedrag_totaal")
+    private Double totaalBedrag;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factuur")
+    private List<FactuurItem> deFactuurItems = new ArrayList<FactuurItem>();
+    
+    public Factuur() {
+	   
     }
 
-    public ArrayList<FactuurItem> getDeFactuurItems() {
-        return deFactuurItems;
+    public Factuur(int fN, Date fD, Double fK, double sTB, double btwB, double tB, Klant nweK, String kN, String kA) {
+	   factuurNummer = fN;
+	   factuurDatum = fD;
+	   factuurKorting = fK;
+	   subTotaalBedrag = sTB;
+	   btwBedrag = btwB;
+	   totaalBedrag = tB;
+	   klant = nweK;
+	   klantNaam = kN;
+	   klantAdres = kA;
+
     }
 
-    public void setDeFactuurItems(ArrayList<FactuurItem> deFactuurItems) {
-        this.deFactuurItems = deFactuurItems;
+    public List<FactuurItem> getDeFactuurItems() {
+	   return deFactuurItems;
     }
 
-  
+    public void setDeFactuurItems(List<FactuurItem> deFactuurItems) {
+	   this.deFactuurItems = deFactuurItems;
+    }
 
     public int getFactuurNummer() {
-        return factuurNummer;
+	   return factuurNummer;
     }
 
     public void setFactuurNummer(int fN) {
-        factuurNummer = fN;
+	   factuurNummer = fN;
     }
 
     public Date getFactuurDatum() {
-        return factuurDatum;
+	   return factuurDatum;
     }
 
     public void setFactuurDatum(Date fD) {
-        factuurDatum = fD;
+	   factuurDatum = fD;
     }
 
     public Klant getDeKlant() {
-        return deKlant;
+	   return klant;
     }
 
     public void setDeKlant(Klant dezeKlant) {
-        deKlant = dezeKlant;
+	   klant = dezeKlant;
     }
 
     public String getKlantNaam() {
-        return klantNaam;
+	   return klantNaam;
     }
 
     public void setKlantNaam(Klant deKlant) {
-        klantNaam = deKlant.getKlantNaam();
+	   klantNaam = deKlant.getKlantNaam();
     }
 
     public String getKlantAdres() {
-        return klantAdres;
+	   return klantAdres;
     }
 
     public void setKlantAdres(Klant deKlant) {
-        klantAdres = deKlant.getKlantAdres();
+	   klantAdres = deKlant.getKlantAdres();
     }
 
     public Double getFactuurKorting() {
-        return factuurKorting;
+	   return factuurKorting;
     }
 
     public void setFactuurKorting(Double fK) {
-        factuurKorting = fK;
+	   factuurKorting = fK;
     }
 
     public Double getSubTotaalBedrag() {
-        return subTotaalBedrag;
+	   return subTotaalBedrag;
     }
 
     public void setSubTotaalBedrag(Double sTB) {
-        subTotaalBedrag = sTB;
+	   subTotaalBedrag = sTB;
     }
 
     public Double getBtwBedrag() {
-        return btwBedrag;
+	   return btwBedrag;
     }
 
     public void setBtwBedrag(Double btwB) {
-        btwBedrag = btwB;
+	   btwBedrag = btwB;
     }
 
     public Double getTotaalBedrag() {
-        return totaalBedrag;
+	   return totaalBedrag;
     }
 
     public void setTotaalBedrag(Double tB) {
-        totaalBedrag = tB;
+	   totaalBedrag = tB;
     }
-    
-    
+
 }
