@@ -5,6 +5,8 @@
  */
 package com.oncloud6.atd.customers;
 
+import com.oncloud6.atd.domain.Klant;
+import com.oncloud6.atd.hibernate.HibernateConnector;
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -25,6 +28,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import static sun.misc.MessageUtils.where;
 
 /**
@@ -33,6 +40,7 @@ import static sun.misc.MessageUtils.where;
  */
 @WebServlet(name = "CustomersUpdateServlet", urlPatterns = {"/customersupdate"})
 public class CustomersUpdateServlet extends HttpServlet {
+     private SessionFactory factory;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,55 +62,51 @@ public class CustomersUpdateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
+       // RequestDispatcher rd = null;
+       // HttpSession session = request.getSession(true);
+        
+        SessionFactory factory = new HibernateConnector().getSessionFactory();
+        Session hibernateSession = factory.openSession();
 
         if (request.getParameter("cid") != null) {
 
-            // get dbconnection
-            MySQLConnection DBConnection = new MySQLConnection();
-            // try it out
+           Transaction tx = null;
+            Klant klant = new Klant();
+            hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
             try {
-                Connection connect = DBConnection.getConnection();
-
-                // prepare query
-                PreparedStatement preparedStatement = connect.prepareStatement("SELECT klant_naam, klant_adres, klant_korting, klant_geboortedatum FROM atd.klant WHERE klant_id = ?");
-
-                int CustomerID = Integer.parseInt(request.getParameter("cid"));
-
-                // waarde invullen
-                preparedStatement.setInt(1, CustomerID);
-
-                // voer de query uit en get result
-                ResultSet result = preparedStatement.executeQuery();
-
-                // result int variabelen zetten
-                result.next();
-                String klantNaam = result.getString("klant_naam");
-                String klantAdres = result.getString("klant_adres");
-                String klantKorting = result.getString("klant_korting");
-                String klantGeboortedatum = result.getString("klant_geboortedatum");
-
-                // request variabelen setten
-                request.setAttribute("klant_naam", klantNaam);
-                request.setAttribute("klant_adres", klantAdres);
-                request.setAttribute("klant_korting", klantKorting);
-                request.setAttribute("klant_geboortedatum", klantGeboortedatum);
-
-                // afsluiten 
-                preparedStatement.close();
-                connect.close();
-
-                rd = request.getRequestDispatcher("customers/update.jsp");
-                rd.forward(request, response);
-
-            } catch (Exception ex) {
-                Logger.getLogger(CustomersUpdateServlet.class.getName()).log(Level.SEVERE, null, ex);
+            tx = hibernateSession.beginTransaction();
+            
+            String klantNaam = klant.getKlantNaam();
+            String klantAdres = klant.getKlantAdres();
+            Double klantKorting = klant.getKorting();
+            Date klantGeboortedatum = klant.getGeboorteDatum();
+            
+            
+            request.setAttribute("klant_naam", klantNaam);
+               request.setAttribute("klant_adres", klantAdres);
+               request.setAttribute("klant_korting", klantKorting);
+               request.setAttribute("klant_geboortedatum", klantGeboortedatum);
+               tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
             }
-
+            e.printStackTrace();
+        } finally {
+            hibernateSession.close();
         }
-    }
 
+        RequestDispatcher rd = null;
+        HttpSession session = request.getSession(true);
+
+         
+            rd = request.getRequestDispatcher("customers/update.jsp");
+            rd.forward(request, response);
+            
+            
+       
+    }
+    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -114,47 +118,75 @@ public class CustomersUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MySQLConnection DBConnection = new MySQLConnection();
-        try {
+        
+        factory = new HibernateConnector().getSessionFactory();
+	   Session hibernateSession = factory.openSession();
+	   Transaction tx = null;
+             try {
+           Klant klant = new Klant();
+            hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
+        //MySQLConnection DBConnection = new MySQLConnection();
+       // try {
 
             //nieuwe connectie
-            Connection connect = DBConnection.getConnection();
+          //  Connection connect = DBConnection.getConnection();
 
             // post variabelen uitzetten
             String customerName = request.getParameter("customername");
-            String customerAddress = request.getParameter("customeraddress");
-            String customerDiscount = request.getParameter("discount");
-            String customerDateofBirth = request.getParameter("dateofbirth");
+            klant.setKlantNaam(customerName);
+         String customerAddress = request.getParameter("customeraddress");
+         klant.setKlantAdres(customerAddress);
+           String customerDiscount = request.getParameter("discount");
+           klant.setKorting(Double.parseDouble(customerDiscount));
+           Date customerDateofBirth = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateofbirth"));
+        
+           klant.setGeboorteDatum(customerDateofBirth);
+             tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+          
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } catch (ParseException ex) {
+             Logger.getLogger(CustomersUpdateServlet.class.getName()).log(Level.SEVERE, null, ex);
+         } finally {
+            hibernateSession.close();
+        }
 
             // get customer ID from url
-            int CustomerID = Integer.parseInt(request.getParameter("cid"));
+           // int CustomerID = Integer.parseInt(request.getParameter("cid"));
 
             //prepare query
-            PreparedStatement preparedStatement = connect.prepareStatement("UPDATE atd.klant SET klant_naam = ?, klant_adres = ?, klant_korting = ?, klant_geboortedatum = ? WHERE klant_id = ?");
+           // PreparedStatement preparedStatement = connect.prepareStatement("UPDATE atd.klant SET klant_naam = ?, klant_adres = ?, klant_korting = ?, klant_geboortedatum = ? WHERE klant_id = ?");
 
             // Waarden invullen
-            preparedStatement.setString(1, customerName);
-            preparedStatement.setString(2, customerAddress);
-            preparedStatement.setString(3, customerDiscount);
-            preparedStatement.setString(4, customerDateofBirth);
-            preparedStatement.setInt(5, CustomerID);
+           // preparedStatement.setString(1, customerName);
+          //  preparedStatement.setString(2, customerAddress);
+          //  preparedStatement.setString(3, customerDiscount);
+          //  preparedStatement.setString(4, customerDateofBirth);
+          //  preparedStatement.setInt(5, CustomerID);
 
             // Query uitvoeren
-            preparedStatement.executeUpdate();
+           // preparedStatement.executeUpdate();
 
             // Afsluiten 
-            preparedStatement.close();
-            connect.close();
+          //  preparedStatement.close();
+          //  connect.close();
 
             RequestDispatcher rd = null;
             HttpSession session = request.getSession(true);
 
             doGet(request, response);
 
-        } catch (Exception ex) {
-            Logger.getLogger(CustomersUpdateServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //} catch (Exception ex) {
+        //    Logger.getLogger(CustomersUpdateServlet.class.getName()).log(Level.SEVERE, null, ex);
+       // }
 
+    }  
     }
 
-}
