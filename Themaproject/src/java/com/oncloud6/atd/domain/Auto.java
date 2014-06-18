@@ -34,8 +34,11 @@ public class Auto implements Serializable {
     @Column(name = "auto_kenteken")
     public String kenteken;
     
-    @Column(name  = "auto_chassis_nummer")
+    @Column(name = "auto_chassis_nummer")
     public String chassisNummer;
+    
+    @Column(name = "auto_klant_id")
+    public Klant klant;
 
     public Auto() {
     }

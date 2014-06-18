@@ -8,10 +8,13 @@ package com.oncloud6.atd.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -25,22 +28,24 @@ public class Klant implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "klant_id")
-    public int id;
+    private int id;
 
     @Column(name = "klant_naam")
-    public String klantNaam;
+    private String klantNaam;
 
     @Column(name = "klant_adres")
-    public String klantAdres;
+    private String klantAdres;
 
     @Column(name = "klant_korting")
-    public Double korting;
+    private Double korting;
 
     @Column(name = "klant_geboortedatum")
-    public Date geboorteDatum;
+    private Date geboorteDatum;
 
-    public ArrayList<Factuur> alleFacturen = new ArrayList<>();
-    public ArrayList<Auto> alleAutos = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "klant")
+    private List<Factuur> alleFacturen = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "klant")
+    private List<Auto> alleAutos = new ArrayList<>();
 
     public Klant() {
     }
@@ -53,7 +58,7 @@ public class Klant implements Serializable {
 
     }
 
-    public ArrayList<Factuur> getAlleFacturen() {
+    public List<Factuur> getAlleFacturen() {
         return alleFacturen;
     }
 
@@ -61,7 +66,7 @@ public class Klant implements Serializable {
         this.alleFacturen = alleFacturen;
     }
 
-    public ArrayList<Auto> getAlleAutos() {
+    public List<Auto> getAlleAutos() {
         return alleAutos;
     }
 
