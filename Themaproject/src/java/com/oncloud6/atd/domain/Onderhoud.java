@@ -58,16 +58,21 @@ public class Onderhoud implements Serializable {
     public Onderhoud() {
     }
 
-    public Onderhoud(Date dt, String besch, String st, int mu) {
+    public Onderhoud(Date dt, String besch, String st, int mu, int i) {
         datum = dt;
         beschrijving = besch;
         status = st;
         manuur = mu;
+        id = i;
 
     }
 
     public int getId() {
         return id;
+    }
+    
+    public void setId(int i){
+        id = i;
     }
 
     public Auto getAuto() {

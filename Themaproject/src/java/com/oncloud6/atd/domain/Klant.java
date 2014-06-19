@@ -57,6 +57,10 @@ public class Klant implements Serializable {
         geboorteDatum = gD;
 
     }
+    
+    public int getId(){
+        return id;
+    }
 
     public List<Factuur> getAlleFacturen() {
         return alleFacturen;

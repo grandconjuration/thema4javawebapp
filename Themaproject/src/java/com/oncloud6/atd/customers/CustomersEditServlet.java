@@ -39,7 +39,7 @@ import static sun.misc.MessageUtils.where;
  *
  * @author Simon Whiteley <simonwhiteley@hotmail.com>
  */
-@WebServlet(name = "CustomersUpdateServlet", urlPatterns = {"/customersupdate"})
+@WebServlet(name = "CustomersEditServlet", urlPatterns = {"/customersedit"})
 public class CustomersEditServlet extends HttpServlet {
 
     /**
@@ -92,7 +92,7 @@ public class CustomersEditServlet extends HttpServlet {
             request.setAttribute("klant_korting", klantKorting);
             request.setAttribute("klant_geboortedatum", klantGeboortedatum);
             
-            
+            hibernateSession.update(klant);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
