@@ -6,14 +6,36 @@
 
 package com.oncloud6.atd.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
- * @author Laura
+ * @author Laura, Simon
  */
+@Entity
+@Table(name = "rechten")
 public class Rechten {
-    public String naam;
-    public String waarde;
-    public String type;
+    @Id
+    @GeneratedValue
+    @Column(name = "rechten_id")
+    private int id;
+    
+    @Column(name = "rechten_key")
+    private String naam;
+    
+    @Column(name = "rechten_value")
+    private String waarde;
+    
+    @Column(name = "rechten_type")
+    private String type;
+    
+    public Rechten() {
+	   
+    }
     
     public Rechten(String nm, String wrd, String tp){
         naam = nm;

@@ -28,8 +28,8 @@
         <mapping class="com.oncloud6.atd.domain.GebruiktOnderdeel" />
         <mapping class="com.oncloud6.atd.domain.Planning" />
         <mapping class="com.oncloud6.atd.domain.Monteur" />
-	   <mapping class="com.oncloud6.atd.domain.Klant" />
-	   <mapping class="com.oncloud6.atd.domain.Factuur" />
-	   <mapping class="com.oncloud6.atd.domain.FactuurItem" />
+        <mapping class="com.oncloud6.atd.domain.Klant" />
+        <mapping class="com.oncloud6.atd.domain.Factuur" />
+        <mapping class="com.oncloud6.atd.domain.FactuurItem" />
     </session-factory>
 </hibernate-configuration>

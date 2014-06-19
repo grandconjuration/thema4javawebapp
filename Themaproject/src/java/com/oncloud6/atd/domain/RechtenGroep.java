@@ -6,17 +6,39 @@
 
 package com.oncloud6.atd.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
 /**
  *
- * @author Laura
+ * @author Laura, Simon
  */
+@Entity
+@Table(name = "rechten_groep")
 public class RechtenGroep {
-    public String waarde;
-    public Rechten hetRecht;
+    
+    @Column(name = "rechten_groepen_value")
+    private String waarde;
+    
+    @JoinColumn(name = "rechten_id")
+    private Rechten hetRecht;
+    
+    @JoinColumn(name = "groepen_id")
+    private Groep groep;
     
     public RechtenGroep(String wrd){
         waarde = wrd;
         
+    }
+    
+    public Groep getGroup() {
+	   return groep;
+    }
+    
+    public void setGroep(Groep group){
+	   groep = group;
     }
 
     public Rechten getHetRecht() {
