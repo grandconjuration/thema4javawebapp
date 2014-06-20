@@ -105,6 +105,7 @@ public class MaintenancesIndexServlet extends HttpServlet {
                         .list();
 
                 Iterator ite = onderhoudList.iterator();
+                List<Onderhoud> newOnderhoudList = new ArrayList<Onderhoud>();
                 while (ite.hasNext()) {
 
                     //deze lijst bevat zowel onderhoud en autos omdat je ze joint
@@ -113,11 +114,13 @@ public class MaintenancesIndexServlet extends HttpServlet {
                     Auto auto = (Auto) objects[1];
                     System.out.println("Onderhoud beschrijving: " + onderhoud.getBeschrijving());
                     System.out.println("Auto merk:" + auto.getMerk());
+                    newOnderhoudList.add(onderhoud);
                 }
+                onderhoudList = newOnderhoudList;
             }
 
-            //     klantList = hibernateSession.createQuery("FROM Klant").list();
-/*
+                 klantList = hibernateSession.createQuery("FROM Klant").list();
+
              values = new ArrayList<DropdownValues>();
              DropdownValues value;
 
@@ -134,7 +137,7 @@ public class MaintenancesIndexServlet extends HttpServlet {
              value.selected = false;
              values.add(value);
              }
-             */
+             
             tx.commit();
 
         } catch (HibernateException e) {
@@ -145,11 +148,11 @@ public class MaintenancesIndexServlet extends HttpServlet {
         } finally {
             hibernateSession.close();
         }
-        /*
+        
          request.setAttribute("list", onderhoudList);
          request.setAttribute("klantlist", values);
          rd = request.getRequestDispatcher("maintenances/home.jsp");
          rd.forward(request, response);
-         */
+         
     }
 }
