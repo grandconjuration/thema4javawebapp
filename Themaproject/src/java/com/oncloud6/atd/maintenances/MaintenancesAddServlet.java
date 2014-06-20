@@ -48,8 +48,27 @@ public class MaintenancesAddServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        SessionFactory factory = new HibernateConnector().getSessionFactory();
+        Session hibernateSession = factory.openSession();
+        Transaction tx = null;
+        List autoList = null;
+        try {
+            tx = hibernateSession.beginTransaction();
+            autoList = hibernateSession.createQuery("FROM Auto").list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            hibernateSession.close();
+        }
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
+
+        request.setAttribute("autoList", autoList);        
 
         rd = request.getRequestDispatcher("maintenances/add.jsp");
         rd.forward(request, response);

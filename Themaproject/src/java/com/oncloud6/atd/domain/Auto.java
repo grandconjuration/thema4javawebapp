@@ -54,6 +54,10 @@ public class Auto implements Serializable {
 	   chassisNummer = cN;
     }
     
+    public int getId() {
+        return id;
+    }
+    
     public void setKlant(Klant kl){
         klant = kl;
     }
