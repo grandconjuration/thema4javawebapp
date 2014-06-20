@@ -27,6 +27,14 @@
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Adres" name="customeraddress" value="<% out.println(request.getAttribute("klant_adres")); %>">
         </div>
+              <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
+            <input type="text" class="form-control" placeholder="Postcode" name="customerpostcode" value="<% out.println(request.getAttribute("klant_postcode")); %>">
+        </div>
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
+            <input type="text" class="form-control" placeholder="Woonplaats" name="customerplace" value="<% out.println(request.getAttribute("klant_woonplaats")); %>">
+        </div>
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Korting" name="discount" value="<% out.println(request.getAttribute("klant_korting")); %>">

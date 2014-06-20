@@ -64,12 +64,16 @@ public class CustomersEditSelf extends HttpServlet {
             hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
             String klantNaam = klant.getKlantNaam();
             String klantAdres = klant.getKlantAdres();
+            String klantPostcode = klant.getPostcode();
+            String klantWoonplaats = klant.getWoonplaats();
             
             Date klantGeboortedatum = klant.getGeboorteDatum();
             
             request.setAttribute("klant_naam", klantNaam);
             request.setAttribute("klant_adres", klantAdres);
             request.setAttribute("klant_geboortedatum", klantGeboortedatum);
+            request.setAttribute("klant_postcode", klantPostcode);
+            request.setAttribute("klant_woonplaats", klantWoonplaats);
             
             hibernateSession.update(klant);
             tx.commit();
@@ -111,12 +115,15 @@ public class CustomersEditSelf extends HttpServlet {
             // post variabelen uitzetten
             String customerName = request.getParameter("customername");
             String customerAddress = request.getParameter("customeraddress");
+            String customerPostcode = request.getParameter("customerpostcode");
+            String customerPlace = request.getParameter("customerplace");
           
             Date customerDateofBirth = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateofbirth"));
 
             klant.setKlantNaam(customerName);
             klant.setKlantAdres(customerAddress);
-           
+           klant.setPostcode(customerPostcode);
+           klant.setWoonplaats(customerPlace);
             klant.setGeboorteDatum(customerDateofBirth);
             
             hibernateSession.update(klant);

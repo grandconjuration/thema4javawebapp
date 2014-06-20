@@ -86,11 +86,15 @@ public class CustomersEditServlet extends HttpServlet {
             String klantAdres = klant.getKlantAdres();
             Double klantKorting = klant.getKorting();
             Date klantGeboortedatum = klant.getGeboorteDatum();
+            String klantPostcode = klant.getPostcode();
+            String klantWoonplaats = klant.getWoonplaats();
             
             request.setAttribute("klant_naam", klantNaam);
             request.setAttribute("klant_adres", klantAdres);
             request.setAttribute("klant_korting", klantKorting);
             request.setAttribute("klant_geboortedatum", klantGeboortedatum);
+             request.setAttribute("klant_postcode", klantPostcode);
+            request.setAttribute("klant_woonplaats", klantWoonplaats);
             
             hibernateSession.update(klant);
             tx.commit();
@@ -146,10 +150,14 @@ public class CustomersEditServlet extends HttpServlet {
             String customerAddress = request.getParameter("customeraddress");
             String customerDiscount = request.getParameter("discount");
             Date customerDateofBirth = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateofbirth"));
+            String customerPostcode = request.getParameter("customerpostcode");
+            String customerPlace = request.getParameter("customerplace");
 
             klant.setKlantNaam(customerName);
             klant.setKlantAdres(customerAddress);
             klant.setKorting(Double.parseDouble(customerDiscount));
+            klant.setGeboorteDatum(customerDateofBirth);
+                 klant.setWoonplaats(customerPlace);
             klant.setGeboorteDatum(customerDateofBirth);
             
 
