@@ -63,12 +63,14 @@ public class MaintenancesIndexServlet extends HttpServlet {
         List onderhoudList = null;
         List<Klant> klantList = null;
         ArrayList<DropdownValues> values = null;
+        
         // Controleren of het Customer id veld is ingevuld
         boolean idSet = false;
         if (request.getParameter("cid") == null || request.getParameter("cid").equals("")) {
             idSet = false;
         } else {
             idSet = true;
+            int customerId = Integer.parseInt(request.getParameter("cid"));
         }
         
          SessionFactory factory = new HibernateConnector().getSessionFactory();
@@ -79,8 +81,14 @@ public class MaintenancesIndexServlet extends HttpServlet {
             tx = hibernateSession.beginTransaction();
             
       
-            
+            if(!idSet){
             onderhoudList = hibernateSession.createQuery("FROM Onderhoud").list();
+            }
+            else{
+                onderhoudList = hibernateSession.createQuery("FROM Onderhoud, Auto WHERE onderhoud_auto_id = auto_id AND klant_id = customerId").list();
+            }
+            
+            
             klantList = hibernateSession.createQuery("FROM Klant").list();
             
             
