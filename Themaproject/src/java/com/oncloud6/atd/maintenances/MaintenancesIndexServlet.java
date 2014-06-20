@@ -79,55 +79,42 @@ public class MaintenancesIndexServlet extends HttpServlet {
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
 
-        int customerId = 0;
+        //    int customerId = 0;
         try {
             tx = hibernateSession.beginTransaction();
 
             if (!idSet) {
                 onderhoudList = (List<Onderhoud>) hibernateSession.createQuery("FROM Onderhoud").list();
+
+                Iterator ite = onderhoudList.iterator();
+                while (ite.hasNext()) {
+
+                    Object object = (Object) ite.next();
+                    Onderhoud onderhoud = (Onderhoud) object;
+                    System.out.println("Onderhoud beschrijving: " + onderhoud.getBeschrijving());
+                    System.out.println("auto merk: " + onderhoud.getAuto().getMerk());                    
+                }
+
             } else {
-                customerId = Integer.parseInt(request.getParameter("cid"));
+                int customerId = Integer.parseInt(request.getParameter("cid"));
                 onderhoudList = (List) hibernateSession.createQuery(""
                         + "FROM Onderhoud AS onderhoud "
                         + "INNER JOIN onderhoud.deAuto AS auto "
                         + "WHERE auto.klant.id = :klantid")
                         .setParameter("klantid", customerId)
                         .list();
-            }
-             Iterator ite = onderhoudList.iterator();
+
+                Iterator ite = onderhoudList.iterator();
                 while (ite.hasNext()) {
+
+                    //deze lijst bevat zowel onderhoud en autos omdat je ze joint
                     Object[] objects = (Object[]) ite.next();
                     Onderhoud onderhoud = (Onderhoud) objects[0];
                     Auto auto = (Auto) objects[1];
                     System.out.println("Onderhoud beschrijving: " + onderhoud.getBeschrijving());
                     System.out.println("Auto merk:" + auto.getMerk());
                 }
-/*
-            int i = 1;
-            for (Object obj : onderhoudList) {
-                System.out.println("onderhoudlist: ");
-                //deze lijst bevat zowel onderhoud en autos omdat je ze joint
-
-                System.out.println("lijst inhoud nummer: " + i);
-                System.out.println("cid" + customerId);
-                System.out.println(obj.getClass().getName());
-
-               
-
-                if (obj instanceof Onderhoud) {
-                    System.out.println("dit object is een onderhoud object:");
-                    Onderhoud ond = (Onderhoud) obj;
-                    System.out.println(ond.getBeschrijving());
-                    System.out.println(ond.getDatum());
-                    System.out.println(ond.getManuur());
-                    System.out.println(ond.getStatus());
-                } else if (obj instanceof Auto) {
-                    Auto aut = (Auto) obj;
-                    System.out.println(aut.getMerk());
-                    System.out.println(aut.getType());
-                }
-                i++;
-            }*/
+            }
 
             //     klantList = hibernateSession.createQuery("FROM Klant").list();
 /*
