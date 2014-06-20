@@ -40,6 +40,9 @@ public class Klant implements Serializable {
     
     @Column(name = "klant_postcode")
     private String klantPostcode;
+    
+    @Column(name = "klant_woonplaats")
+    private String klantWoonplaats;
 
     @Column(name = "klant_korting")
     private Double korting;
@@ -73,6 +76,14 @@ public class Klant implements Serializable {
     
     public void setPostcode(String pc){
         klantPostcode = pc;
+    }
+    
+    public void setWoonplaats(String woon){
+        klantWoonplaats = woon;
+    }
+    
+    public String getWoonplaats(){
+        return klantWoonplaats;
     }
     
     public Gebruiker getGebruiker(){
