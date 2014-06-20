@@ -70,7 +70,7 @@ public class MaintenancesIndexServlet extends HttpServlet {
             idSet = false;
         } else {
             idSet = true;
-            int customerId = Integer.parseInt(request.getParameter("cid"));
+            
         }
         
          SessionFactory factory = new HibernateConnector().getSessionFactory();
@@ -85,7 +85,8 @@ public class MaintenancesIndexServlet extends HttpServlet {
             onderhoudList = hibernateSession.createQuery("FROM Onderhoud").list();
             }
             else{
-                onderhoudList = hibernateSession.createQuery("FROM Onderhoud, Auto WHERE onderhoud_auto_id = auto_id AND klant_id = customerId").list();
+                int customerId = Integer.parseInt(request.getParameter("cid"));
+                onderhoudList = (List) hibernateSession.createQuery("FROM Onderhoud INNER JOIN auto ON onderhoud.onderhoud_auto_id = auto.auto_id AND auto.auto_klant_id=cid");
             }
             
             
