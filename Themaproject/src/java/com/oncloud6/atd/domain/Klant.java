@@ -52,6 +52,7 @@ public class Klant implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "klant")
     private List<Factuur> alleFacturen = new ArrayList<>();
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "klant")
     private List<Auto> alleAutos = new ArrayList<>();
     

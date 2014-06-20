@@ -5,6 +5,7 @@
  */
 package com.oncloud6.atd.maintenances;
 
+import com.oncloud6.atd.domain.Auto;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.domain.Onderhoud;
 import com.oncloud6.atd.hibernate.HibernateConnector;
@@ -16,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,60 +65,91 @@ public class MaintenancesIndexServlet extends HttpServlet {
         List onderhoudList = null;
         List<Klant> klantList = null;
         ArrayList<DropdownValues> values = null;
-        
+
         // Controleren of het Customer id veld is ingevuld
         boolean idSet = false;
         if (request.getParameter("cid") == null || request.getParameter("cid").equals("")) {
             idSet = false;
         } else {
             idSet = true;
-            
+
         }
-        
-         SessionFactory factory = new HibernateConnector().getSessionFactory();
+
+        SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
-           
-             try {
-            tx = hibernateSession.beginTransaction();
-            
-      
-            if(!idSet){
-            onderhoudList = hibernateSession.createQuery("FROM Onderhoud").list();
-            }
-            else{
-                int customerId = Integer.parseInt(request.getParameter("cid"));
-                onderhoudList = (List) hibernateSession.createQuery("FROM Onderhoud INNER JOIN auto ON onderhoud.onderhoud_auto_id = auto.auto_id AND auto.auto_klant_id=cid");
-            }
-            
-            
-            klantList = hibernateSession.createQuery("FROM Klant").list();
-            
-            
-          values = new ArrayList<DropdownValues>();
-            DropdownValues value;
 
-            value = new DropdownValues();
-            value.key = "";
-            value.value = "";
-            value.selected = false;
-            values.add(value);
-            
-            for(Klant klant : klantList) {
-                value = new DropdownValues();
-                value.key = Integer.toString(klant.getId());
-                value.value = klant.getKlantNaam();
-                value.selected = false;
-                values.add(value);
-            } 
-          
-             
-         
-            
-            
+        int customerId = 0;
+        try {
+            tx = hibernateSession.beginTransaction();
+
+            if (!idSet) {
+                onderhoudList = (List<Onderhoud>) hibernateSession.createQuery("FROM Onderhoud").list();
+            } else {
+                customerId = Integer.parseInt(request.getParameter("cid"));
+                onderhoudList = (List) hibernateSession.createQuery(""
+                        + "FROM Onderhoud AS onderhoud "
+                        + "INNER JOIN onderhoud.deAuto AS auto "
+                        + "WHERE auto.klant.id = :klantid")
+                        .setParameter("klantid", customerId)
+                        .list();
+            }
+             Iterator ite = onderhoudList.iterator();
+                while (ite.hasNext()) {
+                    Object[] objects = (Object[]) ite.next();
+                    Onderhoud onderhoud = (Onderhoud) objects[0];
+                    Auto auto = (Auto) objects[1];
+                    System.out.println("Onderhoud beschrijving: " + onderhoud.getBeschrijving());
+                    System.out.println("Auto merk:" + auto.getMerk());
+                }
+/*
+            int i = 1;
+            for (Object obj : onderhoudList) {
+                System.out.println("onderhoudlist: ");
+                //deze lijst bevat zowel onderhoud en autos omdat je ze joint
+
+                System.out.println("lijst inhoud nummer: " + i);
+                System.out.println("cid" + customerId);
+                System.out.println(obj.getClass().getName());
+
+               
+
+                if (obj instanceof Onderhoud) {
+                    System.out.println("dit object is een onderhoud object:");
+                    Onderhoud ond = (Onderhoud) obj;
+                    System.out.println(ond.getBeschrijving());
+                    System.out.println(ond.getDatum());
+                    System.out.println(ond.getManuur());
+                    System.out.println(ond.getStatus());
+                } else if (obj instanceof Auto) {
+                    Auto aut = (Auto) obj;
+                    System.out.println(aut.getMerk());
+                    System.out.println(aut.getType());
+                }
+                i++;
+            }*/
+
+            //     klantList = hibernateSession.createQuery("FROM Klant").list();
+/*
+             values = new ArrayList<DropdownValues>();
+             DropdownValues value;
+
+             value = new DropdownValues();
+             value.key = "";
+             value.value = "";
+             value.selected = false;
+             values.add(value);
+
+             for (Klant klant : klantList) {
+             value = new DropdownValues();
+             value.key = Integer.toString(klant.getId());
+             value.value = klant.getKlantNaam();
+             value.selected = false;
+             values.add(value);
+             }
+             */
             tx.commit();
-            
-             
+
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
@@ -125,10 +158,11 @@ public class MaintenancesIndexServlet extends HttpServlet {
         } finally {
             hibernateSession.close();
         }
-               request.setAttribute("list", onderhoudList);
-               request.setAttribute("klantlist", values);
-               rd = request.getRequestDispatcher("maintenances/home.jsp");
-            rd.forward(request, response);
-        
-        }}
-
+        /*
+         request.setAttribute("list", onderhoudList);
+         request.setAttribute("klantlist", values);
+         rd = request.getRequestDispatcher("maintenances/home.jsp");
+         rd.forward(request, response);
+         */
+    }
+}
