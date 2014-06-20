@@ -6,6 +6,7 @@
 
 package com.oncloud6.atd.domain;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "rechten")
-public class Rechten {
+public class Rechten implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "rechten_id")

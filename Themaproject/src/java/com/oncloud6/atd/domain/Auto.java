@@ -6,10 +6,13 @@
 package com.oncloud6.atd.domain;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -37,7 +40,8 @@ public class Auto implements Serializable {
     @Column(name = "auto_chassis_nummer")
     public String chassisNummer;
     
-    @Column(name = "auto_klant_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "auto_klant_id")
     public Klant klant;
 
     public Auto() {
@@ -48,6 +52,14 @@ public class Auto implements Serializable {
 	   type = tp;
 	   kenteken = kt;
 	   chassisNummer = cN;
+    }
+    
+    public void setKlant(Klant kl){
+        klant = kl;
+    }
+    
+    public Klant getKlant() {
+        return klant;
     }
 
     public String getMerk() {
