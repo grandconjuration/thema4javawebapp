@@ -50,7 +50,7 @@ public class CustomersEditSelf extends HttpServlet {
         
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
-   
+   // Connecten met Hibernate
          SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
@@ -60,7 +60,9 @@ public class CustomersEditSelf extends HttpServlet {
              try {
             tx = hibernateSession.beginTransaction();
             
+             // "Nieuwe" klant aanmaken.
             Klant klant = new Klant();
+            // Klant de gegevens geven van de klant in de database met de parameter CustomerId
             hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
             String klantNaam = klant.getKlantNaam();
             String klantAdres = klant.getKlantAdres();
@@ -68,7 +70,7 @@ public class CustomersEditSelf extends HttpServlet {
             String klantWoonplaats = klant.getWoonplaats();
             
             Date klantGeboortedatum = klant.getGeboorteDatum();
-            
+            // Gegevens klant als attribuut zetten zodat ze in de tekstvelden worden geplaatst
             request.setAttribute("klant_naam", klantNaam);
             request.setAttribute("klant_adres", klantAdres);
             request.setAttribute("klant_geboortedatum", klantGeboortedatum);
@@ -102,7 +104,7 @@ public class CustomersEditSelf extends HttpServlet {
             throws ServletException, IOException {
           HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
-    
+    // Connecten met hibernate
           SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
@@ -110,16 +112,18 @@ public class CustomersEditSelf extends HttpServlet {
             tx = hibernateSession.beginTransaction();
             
             Klant klant = new Klant();
+           // "Nieuwe" klant aanmaken met de gegevens van de klant met parameter CustomerId
             hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
             
             // post variabelen uitzetten
+            
             String customerName = request.getParameter("customername");
             String customerAddress = request.getParameter("customeraddress");
             String customerPostcode = request.getParameter("customerpostcode");
             String customerPlace = request.getParameter("customerplace");
           
             Date customerDateofBirth = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateofbirth"));
-
+        // "Nieuwe" waarden aan de klant geven
             klant.setKlantNaam(customerName);
             klant.setKlantAdres(customerAddress);
            klant.setPostcode(customerPostcode);
@@ -127,7 +131,7 @@ public class CustomersEditSelf extends HttpServlet {
             klant.setGeboorteDatum(customerDateofBirth);
             
             hibernateSession.update(klant);
-           
+            // Klant opslaan
             
             
             tx.commit();

@@ -65,22 +65,28 @@ public class CustomersEditServlet extends HttpServlet {
         
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
+        // Rechtencheck, controleren of de persoon op de pagina wel de rechten heeft om op de pagina te zijn.
         if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
             rd = request.getRequestDispatcher("error/403error.jsp");
             rd.forward(request, response);
             return;
         }
    
+        // Connecten met hibernate
          SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
+        
+        // Controleren of er wel een customer is om te editen
 
         if (request.getParameter("cid") != null) {
             
              try {
             tx = hibernateSession.beginTransaction();
             
+            // "Nieuwe" klant aanmaken.
             Klant klant = new Klant();
+            // Klant de gegevens geven van de klant in de database met de parameter CustomerId
             hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
             String klantNaam = klant.getKlantNaam();
             String klantAdres = klant.getKlantAdres();
@@ -88,7 +94,7 @@ public class CustomersEditServlet extends HttpServlet {
             Date klantGeboortedatum = klant.getGeboorteDatum();
             String klantPostcode = klant.getPostcode();
             String klantWoonplaats = klant.getWoonplaats();
-            
+            // Gegevens klant als attribuut zetten zodat ze in de tekstvelden worden geplaatst
             request.setAttribute("klant_naam", klantNaam);
             request.setAttribute("klant_adres", klantAdres);
             request.setAttribute("klant_korting", klantKorting);
@@ -131,11 +137,13 @@ public class CustomersEditServlet extends HttpServlet {
             throws ServletException, IOException {
           HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
+        // Controleren of de persoon op de pagina de rechten heeft om iets te doen.
         if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
             rd = request.getRequestDispatcher("error/403error.jsp");
             rd.forward(request, response);
             return;
         }
+        // Connecten met hibernate
           SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
@@ -143,6 +151,7 @@ public class CustomersEditServlet extends HttpServlet {
             tx = hibernateSession.beginTransaction();
             
             Klant klant = new Klant();
+            // "Nieuwe" klant aanmaken met de gegevens van de klant met parameter CustomerId
             hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
             
             // post variabelen uitzetten
@@ -152,15 +161,15 @@ public class CustomersEditServlet extends HttpServlet {
             Date customerDateofBirth = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateofbirth"));
             String customerPostcode = request.getParameter("customerpostcode");
             String customerPlace = request.getParameter("customerplace");
-
+            // "Nieuwe" waarden aan de klant geven
             klant.setKlantNaam(customerName);
             klant.setKlantAdres(customerAddress);
             klant.setKorting(Double.parseDouble(customerDiscount));
             klant.setGeboorteDatum(customerDateofBirth);
                  klant.setWoonplaats(customerPlace);
             klant.setGeboorteDatum(customerDateofBirth);
-            
-
+            // Klant opslaan
+            hibernateSession.update(klant);
            
             
             
