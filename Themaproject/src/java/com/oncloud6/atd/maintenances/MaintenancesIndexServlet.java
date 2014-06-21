@@ -74,15 +74,15 @@ public class MaintenancesIndexServlet extends HttpServlet {
             idSet = true;
 
         }
-
+        // Connecten met hibernate
         SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
 
-        //    int customerId = 0;
+        
         try {
             tx = hibernateSession.beginTransaction();
-
+            // Als er geen klant is geselecteerd krijgt onderhoudsList alle auto's in de tabel onderhoud mee
             if (!idSet) {
                 onderhoudList = (List<Onderhoud>) hibernateSession.createQuery("FROM Onderhoud").list();
 
@@ -91,11 +91,11 @@ public class MaintenancesIndexServlet extends HttpServlet {
 
                     Object object = (Object) ite.next();
                     Onderhoud onderhoud = (Onderhoud) object;
-                    System.out.println("Onderhoud beschrijving: " + onderhoud.getBeschrijving());
-                    System.out.println("auto merk: " + onderhoud.getAuto().getMerk());                    
+                                       
                 }
 
             } else {
+                // Als er wel een klant geselecteerd is, krijgt de onderhoudsList alle auto's in de tabel van die klant mee
                 int customerId = Integer.parseInt(request.getParameter("cid"));
                 onderhoudList = (List) hibernateSession.createQuery(""
                         + "FROM Onderhoud AS onderhoud "
@@ -112,15 +112,14 @@ public class MaintenancesIndexServlet extends HttpServlet {
                     Object[] objects = (Object[]) ite.next();
                     Onderhoud onderhoud = (Onderhoud) objects[0];
                     Auto auto = (Auto) objects[1];
-                    System.out.println("Onderhoud beschrijving: " + onderhoud.getBeschrijving());
-                    System.out.println("Auto merk:" + auto.getMerk());
+                    
                     newOnderhoudList.add(onderhoud);
                 }
                 onderhoudList = newOnderhoudList;
             }
 
                  klantList = hibernateSession.createQuery("FROM Klant").list();
-
+            //Gegevens van alle klanten in de klantList zetten
              values = new ArrayList<DropdownValues>();
              DropdownValues value;
 
@@ -129,7 +128,7 @@ public class MaintenancesIndexServlet extends HttpServlet {
              value.value = "";
              value.selected = false;
              values.add(value);
-
+             // Klantlist doorlopen en voor elke klant in de list het klantId als key zetten en de naam als value, en deze values toevoegen aan de dropdownvalues
              for (Klant klant : klantList) {
              value = new DropdownValues();
              value.key = Integer.toString(klant.getId());
@@ -148,7 +147,7 @@ public class MaintenancesIndexServlet extends HttpServlet {
         } finally {
             hibernateSession.close();
         }
-        
+        // Attribuutgegevens doorgeven
          request.setAttribute("list", onderhoudList);
          request.setAttribute("klantlist", values);
          rd = request.getRequestDispatcher("maintenances/home.jsp");
