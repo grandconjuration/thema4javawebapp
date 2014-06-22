@@ -32,7 +32,7 @@ import org.hibernate.Transaction;
  *
  * @author Laura
  */
-@WebServlet(name = "CustomersEditSelf", urlPatterns = {"/CustomersEditSelf"})
+@WebServlet(name = "CustomersEditSelf", urlPatterns = {"/customerseditself"})
 public class CustomersEditSelf extends HttpServlet {
 
     /**
