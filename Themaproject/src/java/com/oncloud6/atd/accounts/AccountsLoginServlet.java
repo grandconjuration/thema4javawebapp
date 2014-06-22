@@ -5,6 +5,9 @@
  */
 package com.oncloud6.atd.accounts;
 
+import com.oncloud6.atd.domain.Gebruiker;
+import com.oncloud6.atd.domain.Groep;
+import com.oncloud6.atd.hibernate.HibernateConnector;
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,6 +24,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 /**
  *
@@ -29,6 +36,13 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "AccountsLoginServlet", urlPatterns = {"/accountslogin"})
 public class AccountsLoginServlet extends HttpServlet {
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -38,54 +52,95 @@ public class AccountsLoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        // get dispatcher
         RequestDispatcher rd = null;
-        // get session informatie
+        rd = request.getRequestDispatcher("theme/header.jsp");
         HttpSession session = request.getSession(true);
 
-        MySQLConnection DBConnection = new MySQLConnection();
+        String GivenUsername = request.getParameter("username");
+        String GivenPassword = request.getParameter("password");
 
-        try {
+        if ((GivenUsername != null || !"".equals(GivenUsername))&& (GivenPassword != null || !"".equals(GivenPassword))) {
+            SessionFactory factory = new HibernateConnector().getSessionFactory();
+            Session hibernateSession = factory.openSession();
+            Transaction tx = null;
+            Integer GebruikerID = null;
+            try {
+                tx = hibernateSession.beginTransaction();
+                Gebruiker gebruiker = new Gebruiker();
+                hibernateSession.load(gebruiker, GivenUsername);
 
-            Connection connect = DBConnection.getConnection();
+                if (GivenPassword.equals(gebruiker.getPassword())) {
+                    GebruikerID = (Integer)(gebruiker.getId());
+                    String username = gebruiker.getUsername();
+                    Groep GroupID = gebruiker.getGroep();
 
-            
-            PreparedStatement preparedStatement = connect.prepareStatement("SELECT gebruiker_id, gebruiker_username, gebruiker_groepen_id FROM gebruiker WHERE gebruiker_username = ? AND gebruiker_password = ?");
+                    session.setAttribute("userID", GebruikerID);
+                    session.setAttribute("userName", username);
+                    session.setAttribute("groupID", GroupID);
 
-            String GivenUsername = request.getParameter("username");
-            String GivenPassword = request.getParameter("password");
-
-            preparedStatement.setString(1, GivenUsername);
-            preparedStatement.setString(2, GivenPassword);
-
-            
-            ResultSet res = preparedStatement.executeQuery();
-
-            if (res.next()) {
-                int userID = res.getInt("gebruiker_id");
-                String userName = res.getString("gebruiker_username");
-                int groupID = res.getInt("gebruiker_groepen_id");
-
-                session.setAttribute("userID", userID);
-                session.setAttribute("userName", userName);
-                session.setAttribute("groupID", groupID);
-
-                response.sendRedirect("");
-            } // login niet correct, act accordingly
-            else {
-                response.sendRedirect("");
-
+                    hibernateSession.save(gebruiker);
+                    response.sendRedirect("");
+                } else {
+                    session.setAttribute("msgs", "gebruikersnaam en/of wachtwoord komen niet overeen");
+                    response.sendRedirect("");
+                }
+                tx.commit();
+            } catch (HibernateException e) {
+                if (tx != null) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+            } finally {
+                hibernateSession.close();
             }
-
-            preparedStatement.close();
-            connect.close();
-
-        } catch (Exception ex) {
-            Logger.getLogger(AccountsLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            session.setAttribute("msgs", "geen gegevens ingevuld");
+            response.sendRedirect("");
         }
+        /*
+         MySQLConnection DBConnection = new MySQLConnection();
+
+         try {
+
+         Connection connect = DBConnection.getConnection();
+
+            
+         PreparedStatement preparedStatement = connect.prepareStatement("SELECT gebruiker_id, gebruiker_username, gebruiker_groepen_id FROM gebruiker WHERE gebruiker_username = ? AND gebruiker_password = ?");
+
+            
+
+         preparedStatement.setString(1, GivenUsername);
+         preparedStatement.setString(2, GivenPassword);
+
+            
+         ResultSet res = preparedStatement.executeQuery();
+
+         if (res.next()) {
+         int userID = res.getInt("gebruiker_id");
+         String userName = res.getString("gebruiker_username");
+         int groupID = res.getInt("gebruiker_groepen_id");
+
+         session.setAttribute("userID", userID);
+         session.setAttribute("userName", userName);
+         session.setAttribute("groupID", groupID);
+
+         response.sendRedirect("");
+         } // login niet correct, act accordingly
+         else {
+         response.sendRedirect("");
+
+         }
+
+         preparedStatement.close();
+         connect.close();
+
+         } catch (Exception ex) {
+         Logger.getLogger(AccountsLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
 
     }
 
