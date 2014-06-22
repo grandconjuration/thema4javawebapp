@@ -8,7 +8,10 @@ package com.oncloud6.atd.invoices;
 
 import com.oncloud6.atd.domain.Factuur;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -51,7 +54,17 @@ public class InvoicesShowServlet extends HttpServlet {
                 if(gekozenFactuur == null) {
                     response.sendRedirect("invoices");
                 }else{
-                    
+                    Process process = Runtime.getRuntime().exec("c:\\rotativa\\wkhtmltopdf.exe -q -n --disable-smart-shrinking http://localhost/themaproject/invoicessource?id="+request.getParameter("id")+"&secret="+gekozenFactuur.getSecret()+" -");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    OutputStream out = response.getOutputStream();
+                    response.setContentType("application/pdf");
+                    int bytes;
+                    while ((bytes = reader.read()) != -1) {
+                        out.write(bytes);
+                    }
+
+                    reader.close();
+                    out.close();
                 }
             } catch (HibernateException e) {
                 if (tx != null) {
