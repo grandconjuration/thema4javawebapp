@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -43,7 +44,6 @@ public class AccountsLoginServlet extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -55,37 +55,47 @@ public class AccountsLoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
-        rd = request.getRequestDispatcher("theme/header.jsp");
         HttpSession session = request.getSession(true);
 
         String GivenUsername = request.getParameter("username");
         String GivenPassword = request.getParameter("password");
 
-        if ((GivenUsername != null || !"".equals(GivenUsername))&& (GivenPassword != null || !"".equals(GivenPassword))) {
+        if (GivenUsername != null || "".equals(GivenUsername) || GivenPassword != null || "".equals(GivenPassword)) {
             SessionFactory factory = new HibernateConnector().getSessionFactory();
             Session hibernateSession = factory.openSession();
             Transaction tx = null;
             Integer GebruikerID = null;
             try {
                 tx = hibernateSession.beginTransaction();
-                Gebruiker gebruiker = new Gebruiker();
-                hibernateSession.load(gebruiker, GivenUsername);
+                List<Gebruiker> gebruikerList = (List<Gebruiker>) hibernateSession.createQuery("FROM Gebruiker").list();
+                Gebruiker gekozenGebruiker = null;
+                for (Gebruiker gebruiker : gebruikerList) {
+                    if (gebruiker.getUsername().equals(GivenUsername)) {
+                        gekozenGebruiker = gebruiker;
+                    } else {
+                        gekozenGebruiker = null;
+                    }
+                }
+                if (gekozenGebruiker != null) {
+                    if (gekozenGebruiker.getPassword().equals(GivenPassword)) {
+                        GebruikerID = (Integer) (gekozenGebruiker.getId());
+                        String username = gekozenGebruiker.getUsername();
+                        Groep GroupID = gekozenGebruiker.getGroep();
 
-                if (GivenPassword.equals(gebruiker.getPassword())) {
-                    GebruikerID = (Integer)(gebruiker.getId());
-                    String username = gebruiker.getUsername();
-                    Groep GroupID = gebruiker.getGroep();
+                        session.setAttribute("userID", GebruikerID);
+                        session.setAttribute("userName", username);
+                        session.setAttribute("groupID", GroupID);
 
-                    session.setAttribute("userID", GebruikerID);
-                    session.setAttribute("userName", username);
-                    session.setAttribute("groupID", GroupID);
+                        hibernateSession.save(gekozenGebruiker);
+                        response.sendRedirect("");
 
-                    hibernateSession.save(gebruiker);
-                    response.sendRedirect("");
+                    } else {
+                        response.sendRedirect("");
+                        session.setAttribute("msgs", "gebruikersnaam en/of wachtwoord komen niet overeen");
+                    }
                 } else {
-                    session.setAttribute("msgs", "gebruikersnaam en/of wachtwoord komen niet overeen");
                     response.sendRedirect("");
+                    session.setAttribute("msgs", "geen gegevens ingevuld");
                 }
                 tx.commit();
             } catch (HibernateException e) {
@@ -97,9 +107,10 @@ public class AccountsLoginServlet extends HttpServlet {
                 hibernateSession.close();
             }
         } else {
-            session.setAttribute("msgs", "geen gegevens ingevuld");
             response.sendRedirect("");
+            session.setAttribute("msgs", "geen gegevens ingevuld");
         }
+
         /*
          MySQLConnection DBConnection = new MySQLConnection();
 
@@ -141,7 +152,6 @@ public class AccountsLoginServlet extends HttpServlet {
          Logger.getLogger(AccountsLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
          }
          */
-
     }
 
 }

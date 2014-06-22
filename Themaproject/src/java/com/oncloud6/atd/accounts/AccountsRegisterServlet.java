@@ -135,8 +135,8 @@ public class AccountsRegisterServlet extends HttpServlet {
                 newKlant.setWoonplaats(woonplaats);
 
                 hibernateSession.save(newKlant);
-
-                rd.forward(request, response);
+                request.setAttribute("message", "U bent succesvol registreerd");
+                rd.forward(request, response);  
             }
 
             tx.commit();

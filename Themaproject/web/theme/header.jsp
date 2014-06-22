@@ -55,6 +55,10 @@
                         </ul>
                     </div>
                     <% } else { %>
+                    <% Object message = request.getAttribute("msgs");
+                        if (message != null) {
+                            out.println("<div class=\"alert alert-success\">" + message + "</div>");
+                         }%>
                     <form action="accountslogin" method="post" class="navbar-form navbar-right" role="form">
                         <div class="form-group">
                             <input type="text" name="username" placeholder="Gebruikersnaam" class="form-control">
