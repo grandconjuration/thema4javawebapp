@@ -140,7 +140,7 @@ public class AccountsRegisterServlet extends HttpServlet {
 			 newKlant.setKlantAdres(address);
 			 newKlant.setKlantNaam(surname);
 			 // datum string omzetten naar Date object
-			 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(bday);
+			 Date date = new SimpleDateFormat("dd-MM-yyyy").parse(bday);
 			 newKlant.setGeboorteDatum(date);
 			 newKlant.setPostcode(postcode);
 			 newKlant.setGebruiker(newGebruiker);
