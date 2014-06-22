@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,7 +81,7 @@ public class CustomersEditServlet extends HttpServlet {
         
         // Controleren of er wel een customer is om te editen
 
-        if (request.getParameter("cid") != null) {
+        if (request.getParameter("id") != null) {
             
              try {
             tx = hibernateSession.beginTransaction();
@@ -88,20 +89,24 @@ public class CustomersEditServlet extends HttpServlet {
             // "Nieuwe" klant aanmaken.
             Klant klant = new Klant();
             // Klant de gegevens geven van de klant in de database met de parameter CustomerId
-            hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
+            hibernateSession.load(klant, Integer.parseInt(request.getParameter("id")));
             String klantNaam = klant.getKlantNaam();
             String klantAdres = klant.getKlantAdres();
             Double klantKorting = klant.getKorting();
             Date klantGeboortedatum = klant.getGeboorteDatum();
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            String geboorteDatum = df.format(klantGeboortedatum);
             String klantPostcode = klant.getPostcode();
             String klantWoonplaats = klant.getWoonplaats();
+            String klantWachtwoord = klant.getGebruiker().getPassword();
             // Gegevens klant als attribuut zetten zodat ze in de tekstvelden worden geplaatst
             request.setAttribute("klant_naam", klantNaam);
             request.setAttribute("klant_adres", klantAdres);
             request.setAttribute("klant_korting", klantKorting);
-            request.setAttribute("klant_geboortedatum", klantGeboortedatum);
+            request.setAttribute("klant_geboortedatum", geboorteDatum);
              request.setAttribute("klant_postcode", klantPostcode);
             request.setAttribute("klant_woonplaats", klantWoonplaats);
+            request.setAttribute("klant_wachtwoord", klantWachtwoord);
             
             hibernateSession.update(klant);
             tx.commit();
@@ -149,20 +154,26 @@ public class CustomersEditServlet extends HttpServlet {
           SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
+        String customerName = request.getParameter("customername");
+            String customerAddress = request.getParameter("customeraddress");
+            String customerDiscount = request.getParameter("discount");
+            String customerDateofBirth = request.getParameter("dateofbirth");
+            String customerPostcode = request.getParameter("customerpostcode");
+            String customerPlace = request.getParameter("customerplace");
+            String customerPassword = request.getParameter("password");
            try {
             tx = hibernateSession.beginTransaction();
             
-            Klant klant = new Klant();
-            // "Nieuwe" klant aanmaken met de gegevens van de klant met parameter CustomerId
-            hibernateSession.load(klant, Integer.parseInt(request.getParameter("cid")));
+            request.setAttribute("klant_naam", customerName);
+            request.setAttribute("klant_adres", customerAddress);
+            request.setAttribute("klant_korting", customerDiscount);
+            request.setAttribute("klant_geboortedatum", customerDateofBirth);
+             request.setAttribute("klant_postcode", customerPostcode);
+            request.setAttribute("klant_woonplaats", customerPlace);
+            request.setAttribute("klant_wachtwoord", customerPassword);
             
             // post variabelen uitzetten
-            String customerName = request.getParameter("customername");
-            String customerAddress = request.getParameter("customeraddress");
-            String customerDiscount = request.getParameter("discount");
-            Date customerDateofBirth = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateofbirth"));
-            String customerPostcode = request.getParameter("customerpostcode");
-            String customerPlace = request.getParameter("customerplace");
+            
             
                if(customerName== null || customerName.equals("")) {
                request.setAttribute("message", "U heeft geen naam ingevuld!");
@@ -189,21 +200,50 @@ public class CustomersEditServlet extends HttpServlet {
                request.setAttribute("message", "U heeft geen adres ingevuld!");
                rd.forward(request, response); 
             }
+              else if(customerPassword== null || customerPassword.equals("")) {
+               request.setAttribute("message", "U heeft geen wachtwoord ingevuld!");
+               rd.forward(request, response); 
+            }
+             
              else{
+                  Klant klant = new Klant();
+            // "Nieuwe" klant aanmaken met de gegevens van de klant met parameter CustomerId
+            hibernateSession.load(klant, Integer.parseInt(request.getParameter("id")));
             // "Nieuwe" waarden aan de klant geven
             klant.setKlantNaam(customerName);
             klant.setKlantAdres(customerAddress);
             klant.setKorting(Double.parseDouble(customerDiscount));
-            klant.setGeboorteDatum(customerDateofBirth);
+          Date dateofBirth = new SimpleDateFormat("dd-MM-yyyy").parse(customerDateofBirth);
                  klant.setWoonplaats(customerPlace);
-            klant.setGeboorteDatum(customerDateofBirth);
+            klant.setGeboorteDatum(dateofBirth);
+            klant.getGebruiker().setPassword(customerPassword);
             // Klant opslaan
             hibernateSession.update(klant);
+             
+               String klantNaam = klant.getKlantNaam();
+            String klantAdres = klant.getKlantAdres();
+            Double klantKorting = klant.getKorting();
+             Date klantGeboortedatum = klant.getGeboorteDatum();
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+             String geboorteDatum = df.format(klantGeboortedatum);
+            String klantPostcode = klant.getPostcode();
+            String klantWoonplaats = klant.getWoonplaats();
+            String klantWachtwoord = klant.getGebruiker().getPassword();
+            // Gegevens klant als attribuut zetten zodat ze in de tekstvelden worden geplaatst
+            request.setAttribute("klant_naam", klantNaam);
+            request.setAttribute("klant_adres", klantAdres);
+            request.setAttribute("klant_korting", klantKorting);
+            request.setAttribute("klant_geboortedatum", geboorteDatum);
+             request.setAttribute("klant_postcode", klantPostcode);
+            request.setAttribute("klant_woonplaats", klantWoonplaats);
+            request.setAttribute("klant_wachtwoord", klantWachtwoord);
+            
            
+            rd.forward(request, response); 
             
             
-            tx.commit();
              }
+               tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();

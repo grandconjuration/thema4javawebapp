@@ -14,9 +14,9 @@
 
 <div class="container">
     <div class="row">
-        <% Object msg = request.getAttribute("msg");
+        <% Object msg = request.getAttribute("message");
         if(msg != null) {
-            out.println("<div class=\"alert alert-success\">" + msg + "</div>");
+            out.println("<div class=\"alert alert-danger\">" + msg + "</div>");
         }%>
         <form action="" method="post">
         <div class="input-group input-group-lg">
@@ -41,8 +41,12 @@
         </div>   
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
-            <input type="text" class="form-control" placeholder="Geboortedatum" name="dateofbirth" value="<% out.println(request.getAttribute("klant_geboortedatum")); %>">
-        </div>              
+            <input type="date" class="form-control" placeholder="Geboortedatum" data-date-format="dd-MM-yyyy" name="dateofbirth" value="<% out.println(request.getAttribute("klant_geboortedatum")); %>">
+        </div>       
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon">#</span>
+            <input type="password" class="form-control" placeholder="Wachtwoord" name="password" value="<% out.println(request.getAttribute("klant_wachtwoord")); %>">
+        </div> 
            <br/> <input type="submit"  class="btn btn-default" value="Aanpassen" />
             
     </div>
