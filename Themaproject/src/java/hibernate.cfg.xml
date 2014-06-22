@@ -31,5 +31,6 @@
         <mapping class="com.oncloud6.atd.domain.Klant" />
         <mapping class="com.oncloud6.atd.domain.Factuur" />
         <mapping class="com.oncloud6.atd.domain.FactuurItem" />
+	   <mapping class="com.oncloud6.atd.domain.Voorraad" />
     </session-factory>
 </hibernate-configuration>
