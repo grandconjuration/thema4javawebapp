@@ -17,23 +17,28 @@
 <div class="container">
     <div class="row">
         <% Object msg = request.getAttribute("msg");
-            if (msg != null) {
-                out.println("<div class=\"alert alert-success\">" + msg + "</div>");
-            }%>
+		  if (msg != null) {
+			 out.println("<div class=\"alert alert-success\">" + msg + "</div>");
+		  }%>
         <form action="" method="post">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">Kies een klant</span>
                 <select class="form-control" name="klant">
                     <%
-                        List<Klant> klantList = (List<Klant>) request.getAttribute("klantList");
-                        for (Klant klant : klantList) {
+				    List<Klant> klantList = (List<Klant>) request.getAttribute("klantList");
+				    for (Klant klant : klantList) {
                     %>
-                    <option value="<%= klant.getId()%>"><%= klant.getId()%> - <%= klant.getKlantNaam() %></option>
+                    <option value="<%= klant.getId()%>"><%= klant.getId()%> - <%= klant.getKlantNaam()%></option>
                     <% }%>
 			 </select>
             </div>
-			 <% if((Boolean) request.getAttribute("idSet") == true) { %>
-			 <% } %>
+		  <% if ((Boolean) request.getAttribute("idSet") == true) {
+				    Klant gekozenKlant = (Klant) request.getAttribute("gekozenKlant"); %>
+		  <div class="input-group input-group-lg">
+                <span class="input-group-addon">volledige naam</span>
+                <input type="text" class="form-control" placeholder="volledige naam" name="surname" value="<%= gekozenKlant.getKlantNaam() %>">
+            </div>
+		  <% }%>
             <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
 	   </form>
 

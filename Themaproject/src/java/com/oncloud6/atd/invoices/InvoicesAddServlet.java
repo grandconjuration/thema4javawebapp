@@ -63,7 +63,7 @@ public class InvoicesAddServlet extends HttpServlet {
 			 request.setAttribute("klantList", klantList);
 		  } else {
 			 gekozenKlant = new Klant();
-			 hibernateSession.load(gekozenKlant, request.getParameter("cid"));
+			 hibernateSession.load(gekozenKlant, Integer.parseInt(request.getParameter("cid")));
 			 request.setAttribute("gekozenKlant", gekozenKlant);
 		  }
 
