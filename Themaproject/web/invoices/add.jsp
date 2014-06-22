@@ -3,6 +3,8 @@
     Created on : 22-Jun-2014, 12:42:08
     Author     : Simon Whiteley
 --%>
+<%@page import="com.oncloud6.atd.domain.FactuurItem"%>
+<%@page import="com.oncloud6.atd.domain.Factuur"%>
 <%@page import="com.oncloud6.atd.domain.GebruiktOnderdeel"%>
 <%@page import="com.oncloud6.atd.domain.Onderhoud"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -19,7 +21,7 @@
 
 <div class="container">
     <div class="row">
-        <% Object msg = request.getAttribute("msg");
+        <% Object msg = request.getAttribute("message");
             if (msg != null) {
                 out.println("<div class=\"alert alert-success\">" + msg + "</div>");
             }%>
@@ -63,10 +65,10 @@
             <input type="text" class="form-control" placeholder="geboortedatum" name="geboortedatum" value="<% String date = new SimpleDateFormat("dd-MM-yyyy").format(gekozenKlant.getGeboorteDatum());
                 out.print(date); %>" readonly="readonly">                        
         </div>
-        <% if ((Boolean) request.getAttribute("onderhoudIdSet") == false) { %>        
+        <% if ((Boolean) request.getAttribute("onderhoudIdSet") == false) {%>        
         <form action="" method="get">
             <div class="input-group input-group-lg">
-                <input type="hidden" name="id" value="1" >
+                <input type="hidden" name="id" value="<%= gekozenKlant.getId()%>">
                 <span class="input-group-addon">kies het onderhoud</span>
                 <select class="form-control" name="onderhoudId">
                     <%
@@ -82,7 +84,7 @@
         <% } else {
             Onderhoud gekozenOnderhoud = (Onderhoud) request.getAttribute("gekozenOnderhoud");%>
         <br>
-        <h2>Onderhoud van <% String date2 = new SimpleDateFormat("dd-MM-yyyy").format(gekozenOnderhoud.getDatum());
+            <h2>Onderhoud van <% String date2 = new SimpleDateFormat("dd-MM-yyyy").format(gekozenOnderhoud.getDatum());
                 out.print(date2);%></h2>
         <div class="input-group input-group-lg">        
             <span class="input-group-addon">merk auto</span>  
@@ -107,14 +109,69 @@
         <div class="input-group input-group-lg">        
             <span class="input-group-addon">gebruikte onderdelen</span>  
             <div class="form-control">
-            <% for (GebruiktOnderdeel onderdeel : gekozenOnderhoud.getGebruikteOnderdelen()) { %> 
-            Onderdeel: <%= onderdeel.getOnderdeel().getNaam() %> - 
-            Hoeveelheid: <%= onderdeel.getOnderdeel().getHoeveelheid() %>            
-            <% } %>               
+                <% for (GebruiktOnderdeel onderdeel : gekozenOnderhoud.getGebruikteOnderdelen()) {%> 
+                Onderdeel: <%= onderdeel.getOnderdeel().getNaam()%> - 
+                Hoeveelheid: <%= onderdeel.getHoeveelheid()%>
+                <% } %>               
             </div>
+        </div>
+        <br>
+        <h2>Factuur gegevens</h2>
+        <% Factuur factuur = (Factuur) request.getAttribute("factuur"); %>
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">factuur datum</span>  
+                   <input type="text" class="form-control" placeholder="factuurdatum" name="factuurdatum" value="<% String date3 = new SimpleDateFormat("dd-MM-yyyy").format(factuur.getFactuurDatum());
+                out.print(date3);%>" readonly="readonly">
+        </div>
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">factuur klant naam</span>  
+            <input type="text" class="form-control" placeholder="factuurklantnaam" name="factuurklantnaam" value="<%= factuur.getKlantNaam()%>" readonly="readonly">
+        </div>   
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">factuur klant adres</span>  
+            <input type="text" class="form-control" placeholder="factuurklantadres" name="factuurklantadres" value="<%= factuur.getKlantAdres()%>" readonly="readonly">
+        </div>   
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">factuur klant korting</span>  
+            <input type="text" class="form-control" placeholder="factuurklantkorting" name="factuurklantkorting" value="<%= factuur.getFactuurKorting()%>" readonly="readonly">
+        </div>   
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">factuur items:</span>  
+            <div class="form-control">           
+            </div>
+        </div>   
+        <% int i = 1;
+            for (FactuurItem fi : factuur.getDeFactuurItems()) {%> 
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon"><%= i%></span>  
+            <div class="form-control"> 
+                Factuur Item naam: <%= fi.getFactuurItemNaam()%>,
+                Factuur Item hoeveelheid: <%= fi.getFactuurItemHoeveelheid()%>            
+            </div>
+        </div>          
+        <% i++;
+            }%>    
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">subtotaal</span>  
+            <div class="form-control">€<%= factuur.getSubTotaalBedrag()%></div>
+        </div>
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">btw </span>  
+            <div class="form-control"><%= Math.round((factuur.getBtwBedrag() - 1) * 100)%>%</div>
         </div>         
-        <% } %>   
-
-        <% }%>
+        <div class="input-group input-group-lg">        
+            <span class="input-group-addon">totaal</span>  
+            <div class="form-control">€<%= factuur.getTotaalBedrag()%></div>
+        </div>
+        <form action="" method="get">
+            <div class="input-group input-group-lg">
+                <input type="hidden" name="id" value="<%= gekozenKlant.getId()%>">
+                <input type="hidden" name="onderhoudId" value="<%= gekozenOnderhoud.getId()%>" > 
+                <input type="hidden" name="saveInvoice" value="yes" >                
+            </div>
+            <br/> <input type="submit"  class="btn btn-default" value="Factuur opslaan" />
+        </form>           
+        <% }
+            }%>
     </div>
     <jsp:include page="../theme/footer.jsp" />

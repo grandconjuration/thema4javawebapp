@@ -6,12 +6,16 @@
 package com.oncloud6.atd.invoices;
 
 import com.oncloud6.atd.domain.Auto;
+import com.oncloud6.atd.domain.Factuur;
+import com.oncloud6.atd.domain.FactuurItem;
+import com.oncloud6.atd.domain.GebruiktOnderdeel;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.domain.Onderhoud;
 import com.oncloud6.atd.hibernate.HibernateConnector;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -64,8 +68,15 @@ public class InvoicesAddServlet extends HttpServlet {
         } else {
             onderhoudIdSet = true;
         }
+        boolean saveInvoiceSet = false;
+        if (request.getParameter("saveInvoice") == null || request.getParameter("saveInvoice").equals("")) {
+            saveInvoiceSet = false;
+        } else {
+            saveInvoiceSet = true;
+        }
         request.setAttribute("idSet", idSet);
         request.setAttribute("onderhoudIdSet", onderhoudIdSet);
+        request.setAttribute("saveInvoiceSet", saveInvoiceSet);
 
         try {
             tx = hibernateSession.beginTransaction();
@@ -99,12 +110,41 @@ public class InvoicesAddServlet extends HttpServlet {
 
                 Onderhoud gekozenOnderhoud = null;
                 if (onderhoudIdSet) {
+                    double bedrag = 0;
                     for (Onderhoud onderhoud : newOnderhoudList) {
                         if (onderhoud.getId() == Integer.parseInt(request.getParameter("onderhoudId"))) {
                             gekozenOnderhoud = onderhoud;
                         }
                     }
                     request.setAttribute("gekozenOnderhoud", gekozenOnderhoud);
+
+                    Factuur factuur = new Factuur();
+                    Date datum = new Date();
+                    factuur.setFactuurDatum(datum);
+                    factuur.setDeKlant(gekozenKlant);
+                    factuur.setKlantNaam(gekozenKlant);
+                    factuur.setKlantAdres(gekozenKlant);
+                    factuur.setFactuurKorting(gekozenKlant.getKorting());
+                    factuur.setSecret("hoi");
+
+                    List<FactuurItem> factuurItems = new ArrayList<FactuurItem>();
+                    for (GebruiktOnderdeel onderdeel : gekozenOnderhoud.getGebruikteOnderdelen()) {
+                        FactuurItem fi = new FactuurItem();
+                        fi.setFactuurItemHoeveelheid(onderdeel.getHoeveelheid());
+                        fi.setFactuurItemNaam(onderdeel.getOnderdeel().getNaam());
+                        fi.setFactuurItemPrijs(onderdeel.getOnderdeel().getPrijs());
+                        fi.setFactuur(factuur);
+                        factuurItems.add(fi);
+                    }
+                    factuur.setDeFactuurItems(factuurItems);
+                    factuur.berekenTotaalBedrag();
+                    request.setAttribute("factuur", factuur);
+
+                    if (saveInvoiceSet) {
+                        hibernateSession.save(factuur);
+                        request.setAttribute("message", "Factuur is succesvol opgeslagen!");
+                    }
+
                 }
             }
 
