@@ -5,14 +5,20 @@
  */
 package com.oncloud6.atd.maintenances;
 
-import com.oncloud6.atd.maintenances.MaintenanceList;
-import com.oncloud6.atd.maintenances.MaintenanceList;
+import com.oncloud6.atd.domain.Auto;
+import com.oncloud6.atd.domain.Klant;
+import com.oncloud6.atd.domain.Onderhoud;
+import com.oncloud6.atd.hibernate.HibernateConnector;
+
 import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -22,6 +28,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 /**
  *
@@ -52,92 +62,96 @@ public class MaintenancesIndexServlet extends HttpServlet {
             throws ServletException, IOException {
         RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
+        List onderhoudList = null;
+        List<Klant> klantList = null;
+        ArrayList<DropdownValues> values = null;
+
         // Controleren of het Customer id veld is ingevuld
         boolean idSet = false;
         if (request.getParameter("cid") == null || request.getParameter("cid").equals("")) {
             idSet = false;
         } else {
             idSet = true;
-        }
 
-        // get dbconnection
-        MySQLConnection DBConnection = new MySQLConnection();
-        // try it out
+        }
+        // Connecten met hibernate
+        SessionFactory factory = new HibernateConnector().getSessionFactory();
+        Session hibernateSession = factory.openSession();
+        Transaction tx = null;
+
+        
         try {
-            Connection connect = DBConnection.getConnection();
-
-            // prepare query
-            PreparedStatement preparedStatement;
-            
-            // Controleren of idSet geset is
+            tx = hibernateSession.beginTransaction();
+            // Als er geen klant is geselecteerd krijgt onderhoudsList alle auto's in de tabel onderhoud mee
             if (!idSet) {
-                preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud INNER JOIN auto ON onderhoud.onderhoud_auto_id = auto.auto_id");
+                onderhoudList = (List<Onderhoud>) hibernateSession.createQuery("FROM Onderhoud").list();
+
+                Iterator ite = onderhoudList.iterator();
+                while (ite.hasNext()) {
+
+                    Object object = (Object) ite.next();
+                    Onderhoud onderhoud = (Onderhoud) object;
+                                       
+                }
+
             } else {
-                preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud INNER JOIN auto ON onderhoud.onderhoud_auto_id = auto.auto_id AND auto.auto_klant_id =?");
-                int CustomerID = Integer.parseInt(request.getParameter("cid"));
-                preparedStatement.setInt(1, CustomerID);
+                // Als er wel een klant geselecteerd is, krijgt de onderhoudsList alle auto's in de tabel van die klant mee
+                int customerId = Integer.parseInt(request.getParameter("cid"));
+                onderhoudList = (List) hibernateSession.createQuery(""
+                        + "FROM Onderhoud AS onderhoud "
+                        + "INNER JOIN onderhoud.deAuto AS auto "
+                        + "WHERE auto.klant.id = :klantid")
+                        .setParameter("klantid", customerId)
+                        .list();
+
+                Iterator ite = onderhoudList.iterator();
+                List<Onderhoud> newOnderhoudList = new ArrayList<Onderhoud>();
+                while (ite.hasNext()) {
+
+                    //deze lijst bevat zowel onderhoud en autos omdat je ze joint
+                    Object[] objects = (Object[]) ite.next();
+                    Onderhoud onderhoud = (Onderhoud) objects[0];
+                    Auto auto = (Auto) objects[1];
+                    
+                    newOnderhoudList.add(onderhoud);
+                }
+                onderhoudList = newOnderhoudList;
             }
-            // voer de query uit en get result
-            ResultSet result = preparedStatement.executeQuery();
-            
-            
 
-            ArrayList<MaintenanceList> list = new ArrayList<MaintenanceList>();
+                 klantList = hibernateSession.createQuery("FROM Klant").list();
+            //Gegevens van alle klanten in de klantList zetten
+             values = new ArrayList<DropdownValues>();
+             DropdownValues value;
 
-            while (result.next()) {
+             value = new DropdownValues();
+             value.key = "";
+             value.value = "";
+             value.selected = false;
+             values.add(value);
+             // Klantlist doorlopen en voor elke klant in de list het klantId als key zetten en de naam als value, en deze values toevoegen aan de dropdownvalues
+             for (Klant klant : klantList) {
+             value = new DropdownValues();
+             value.key = Integer.toString(klant.getId());
+             value.value = klant.getKlantNaam();
+             value.selected = false;
+             values.add(value);
+             }
+             
+            tx.commit();
 
-                // Waarden ophalen uit de database en plaatsen in de list
-                MaintenanceList maintenance = new MaintenanceList();
-                maintenance.onderhoudId = result.getInt("onderhoud_id");
-                maintenance.bedrijfsId = result.getInt("onderhoud_bedrijf_id");
-                maintenance.autoId = result.getInt("onderhoud_auto_id");
-                maintenance.merk = result.getString("auto_merk");
-                maintenance.type = result.getString("auto_type");
-                maintenance.kenteken = result.getString("auto_kenteken");
-                maintenance.datum = result.getDate("onderhoud_datum");
-                maintenance.beschrijving = result.getString("onderhoud_beschrijving");
-                maintenance.status = result.getString("onderhoud_status");
-                maintenance.manuur = result.getInt("onderhoud_manuur");
-
-                // toevoegen aan de arraylist
-                list.add(maintenance);
-
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
             }
-            // request variabelen setten
-            request.setAttribute("list", list);
-            // afsluiten 
-            preparedStatement.close();
-            
-            preparedStatement = connect.prepareStatement("select * from klant order by klant_naam asc");
-            result = preparedStatement.executeQuery();
-
-            ArrayList<DropdownValues> values = new ArrayList<DropdownValues>();
-            DropdownValues value;
-
-            value = new DropdownValues();
-            value.key = "";
-            value.value = "";
-            value.selected = false;
-            values.add(value);
-            
-            while (result.next()) {
-                value = new DropdownValues();
-                value.key = result.getString("klant_id");
-                value.value = result.getString("klant_naam");
-                value.selected = false;
-                values.add(value);
-            } 
-            request.setAttribute("klantlist", values);
-            preparedStatement.close();
-
-            connect.close();
-
-            rd = request.getRequestDispatcher("maintenances/home.jsp");
-            rd.forward(request, response);
-
-        } catch (Exception ex) {
-            Logger.getLogger(MaintenancesIndexServlet.class.getName()).log(Level.SEVERE, null, ex);
+            e.printStackTrace();
+        } finally {
+            hibernateSession.close();
         }
-
+        // Attribuutgegevens doorgeven
+         request.setAttribute("list", onderhoudList);
+         request.setAttribute("klantlist", values);
+         rd = request.getRequestDispatcher("maintenances/home.jsp");
+         rd.forward(request, response);
+         
     }
 }

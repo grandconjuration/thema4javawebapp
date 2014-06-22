@@ -3,6 +3,8 @@
     Created on : 25-mei-2014, 23:45:07
     Author     : Simon Whiteley <simonwhiteley@hotmail.com>
 --%>
+<%@page import="com.oncloud6.atd.domain.Auto"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="../theme/header.jsp" />
 <!-- Main jumbotron for a primary marketing message or call to action -->
@@ -22,18 +24,18 @@
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">Kies auto</span>
                 <select class="form-control" name="auto">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
+                    <%
+                        List<Auto> autoList = (List<Auto>) request.getAttribute("autoList");
+                        for (Auto auto : autoList) {
+                    %>
+                    <option value="<%= auto.getId()%>"><%= auto.getId()%> - <%= auto.getMerk() %> <%= auto.getType() %> van <%= auto.getKlant().getKlantNaam() %></option>
+                    <% }%>
             </div>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">Datum onderhoud</span>
                 <input type="date" class="form-control" placeholder="Datum onderhoud" name="datum">
             </div>
-<div class="input-group input-group-lg">
+            <div class="input-group input-group-lg">
                 <span class="input-group-addon">Beschrijving</span>
                 <input type="text" class="form-control" placeholder="beschrijving..." name="beschrijving">
             </div>

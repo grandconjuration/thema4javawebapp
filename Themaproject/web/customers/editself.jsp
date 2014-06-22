@@ -1,6 +1,6 @@
 <%-- 
-    Document   : update
-    Created on : 10-mei-2014, 17:51:36
+    Document   : editself
+    Created on : 20-jun-2014, 10:37:08
     Author     : Laura
 --%>
 
@@ -8,7 +8,7 @@
 <jsp:include page="../theme/header.jsp" />
 <div class="jumbotron">
     <div class="container">
-        <h2>Klant aanpassen</h2>
+        <h2>Gegevens aanpassen</h2>
     </div>
 </div>
 
@@ -27,7 +27,7 @@
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Adres" name="customeraddress" value="<% out.println(request.getAttribute("klant_adres")); %>">
         </div>
-              <div class="input-group input-group-lg">
+        <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Postcode" name="customerpostcode" value="<% out.println(request.getAttribute("klant_postcode")); %>">
         </div>
@@ -35,10 +35,7 @@
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Woonplaats" name="customerplace" value="<% out.println(request.getAttribute("klant_woonplaats")); %>">
         </div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">#</span>
-            <input type="text" class="form-control" placeholder="Korting" name="discount" value="<% out.println(request.getAttribute("klant_korting")); %>">
-        </div>   
+        
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Geboortedatum" name="dateofbirth" value="<% out.println(request.getAttribute("klant_geboortedatum")); %>">
@@ -47,3 +44,4 @@
             
     </div>
     <jsp:include page="../theme/footer.jsp" />
+

@@ -5,7 +5,8 @@
 --%>
 
 
-<%@page import="com.oncloud6.atd.maintenances.MaintenanceList"%>
+
+<%@page import="com.oncloud6.atd.domain.Onderhoud"%>
 <%@page import="com.oncloud6.atd.maintenances.DropdownValues"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -31,7 +32,7 @@
                     <option value="<%=dlist.key %>"<% if(dlist.selected) { out.println(" selected=\"true\"");} %>><%=dlist.value %></option>
                     <%
                 }
-                %>
+                %> 
             </select>
         </div>
            <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
@@ -50,16 +51,16 @@
             <tbody>
                 <%  
                 // retrieve your list from the request, with casting 
-                ArrayList<MaintenanceList> list = (ArrayList<MaintenanceList>) request.getAttribute("list");
+                ArrayList<Onderhoud> list = (ArrayList<Onderhoud>) request.getAttribute("list");
 
                 // print the information about every category of the list
-                for(MaintenanceList maintenance : list) {
+                for(Onderhoud maintenance : list) {
                     %>
                     <tr>
-                        <td><%=maintenance.merk %></td>
-                        <td><%=maintenance.type %></td>
-                        <td><%=maintenance.kenteken %></td>
-                        <td><a href="maintenancesedit?id=<%=maintenance.onderhoudId %>" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i></a></td>
+                        <td><%=maintenance.getAuto().getMerk() %></td>
+                        <td><%=maintenance.getAuto().getType() %></td>
+                        <td><%=maintenance.getAuto().getKenteken() %></td>
+                        <td><a href="maintenancesedit?id=<%=maintenance.getId() %>" class="btn btn-succes"><i class="glyphicon glyphicon-edit"></i></a></td>
                     </tr>
                     <%
                 }

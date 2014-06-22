@@ -14,7 +14,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -35,6 +37,12 @@ public class Klant implements Serializable {
 
     @Column(name = "klant_adres")
     private String klantAdres;
+    
+    @Column(name = "klant_postcode")
+    private String klantPostcode;
+    
+    @Column(name = "klant_woonplaats")
+    private String klantWoonplaats;
 
     @Column(name = "klant_korting")
     private Double korting;
@@ -44,9 +52,14 @@ public class Klant implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "klant")
     private List<Factuur> alleFacturen = new ArrayList<>();
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "klant")
     private List<Auto> alleAutos = new ArrayList<>();
-
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "klant_gebruiker_id")
+    private Gebruiker deGebruiker;
+    
     public Klant() {
     }
 
@@ -57,12 +70,40 @@ public class Klant implements Serializable {
         geboorteDatum = gD;
 
     }
+    
+    public String getPostcode(){
+        return klantPostcode;
+    }
+    
+    public void setPostcode(String pc){
+        klantPostcode = pc;
+    }
+    
+    public void setWoonplaats(String woon){
+        klantWoonplaats = woon;
+    }
+    
+    public String getWoonplaats(){
+        return klantWoonplaats;
+    }
+    
+    public Gebruiker getGebruiker(){
+        return deGebruiker;
+    }
+    
+    public void setGebruiker(Gebruiker gebr){
+        deGebruiker = gebr;
+    }
+    
+    public int getId(){
+        return id;
+    }
 
     public List<Factuur> getAlleFacturen() {
         return alleFacturen;
     }
 
-    public void setAlleFacturen(ArrayList<Factuur> alleFacturen) {
+    public void setAlleFacturen(List<Factuur> alleFacturen) {
         this.alleFacturen = alleFacturen;
     }
 
@@ -70,7 +111,7 @@ public class Klant implements Serializable {
         return alleAutos;
     }
 
-    public void setAlleAutos(ArrayList<Auto> alleAutos) {
+    public void setAlleAutos(List<Auto> alleAutos) {
         this.alleAutos = alleAutos;
     }
 
