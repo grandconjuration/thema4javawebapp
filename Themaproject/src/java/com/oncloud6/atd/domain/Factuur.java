@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -40,127 +41,156 @@ public class Factuur implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "factuur_datum")
     private Date factuurDatum;
-    
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "factuur_klant_id")
     private Klant klant;
-    
+
     @Column(name = "factuur_klant_naam")
     private String klantNaam;
-    
+
     @Column(name = "factuur_klant_adres")
     private String klantAdres;
-    
+
     @Column(name = "factuur_korting")
     private Double factuurKorting;
-    
+
     @Column(name = "factuur_bedrag")
     private Double subTotaalBedrag;
-    
+
     @Column(name = "factuur_bedrag_btw")
-    private Double btwBedrag;
-    
+    private Double btwBedrag = 1.21;
+
     @Column(name = "factuur_bedrag_totaal")
     private Double totaalBedrag;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factuur")
+    @Column(name = "factuur_secret")
+    private String secret;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "factuur")
     private List<FactuurItem> deFactuurItems = new ArrayList<FactuurItem>();
-    
+
     public Factuur() {
-	   
     }
 
     public Factuur(int fN, Date fD, Double fK, double sTB, double btwB, double tB, Klant nweK, String kN, String kA) {
-	   factuurNummer = fN;
-	   factuurDatum = fD;
-	   factuurKorting = fK;
-	   subTotaalBedrag = sTB;
-	   btwBedrag = btwB;
-	   totaalBedrag = tB;
-	   klant = nweK;
-	   klantNaam = kN;
-	   klantAdres = kA;
+        factuurNummer = fN;
+        factuurDatum = fD;
+        factuurKorting = fK;
+        subTotaalBedrag = sTB;
+        btwBedrag = btwB;
+        totaalBedrag = tB;
+        klant = nweK;
+        klantNaam = kN;
+        klantAdres = kA;
 
+    }
+    
+    public void setSecret(String s){
+        secret = s;
+    }
+    
+    public String getSecret() {
+        return secret;
     }
 
     public List<FactuurItem> getDeFactuurItems() {
-	   return deFactuurItems;
+        return deFactuurItems;
     }
 
     public void setDeFactuurItems(List<FactuurItem> deFactuurItems) {
-	   this.deFactuurItems = deFactuurItems;
+        this.deFactuurItems = deFactuurItems;
     }
 
     public int getFactuurNummer() {
-	   return factuurNummer;
+        return factuurNummer;
     }
 
     public void setFactuurNummer(int fN) {
-	   factuurNummer = fN;
+        factuurNummer = fN;
     }
 
     public Date getFactuurDatum() {
-	   return factuurDatum;
+        return factuurDatum;
     }
 
     public void setFactuurDatum(Date fD) {
-	   factuurDatum = fD;
+        factuurDatum = fD;
     }
 
     public Klant getDeKlant() {
-	   return klant;
+        return klant;
     }
 
     public void setDeKlant(Klant dezeKlant) {
-	   klant = dezeKlant;
+        klant = dezeKlant;
     }
 
     public String getKlantNaam() {
-	   return klantNaam;
+        return klantNaam;
     }
 
     public void setKlantNaam(Klant deKlant) {
-	   klantNaam = deKlant.getKlantNaam();
+        klantNaam = deKlant.getKlantNaam();
     }
 
     public String getKlantAdres() {
-	   return klantAdres;
+        return klantAdres;
     }
 
     public void setKlantAdres(Klant deKlant) {
-	   klantAdres = deKlant.getKlantAdres();
+        klantAdres = deKlant.getKlantAdres();
     }
 
     public Double getFactuurKorting() {
-	   return factuurKorting;
+        return factuurKorting;
     }
 
     public void setFactuurKorting(Double fK) {
-	   factuurKorting = fK;
+        factuurKorting = fK;
     }
 
     public Double getSubTotaalBedrag() {
-	   return subTotaalBedrag;
+        berekenSubTotaalBedrag();
+        return subTotaalBedrag;
     }
 
     public void setSubTotaalBedrag(Double sTB) {
-	   subTotaalBedrag = sTB;
+        subTotaalBedrag = sTB;
     }
 
     public Double getBtwBedrag() {
-	   return btwBedrag;
+        return btwBedrag;
     }
 
     public void setBtwBedrag(Double btwB) {
-	   btwBedrag = btwB;
+        btwBedrag = btwB;
     }
 
     public Double getTotaalBedrag() {
-	   return totaalBedrag;
+        berekenTotaalBedrag();
+        return totaalBedrag;
     }
 
     public void setTotaalBedrag(Double tB) {
-	   totaalBedrag = tB;
+        totaalBedrag = tB;
+    }
+
+    public void berekenSubTotaalBedrag() {
+        List<FactuurItem> factuurItems = getDeFactuurItems();
+        double bedrag = 0;
+        for (FactuurItem fi : factuurItems) {
+            double prijs = fi.getFactuurItemHoeveelheid() * fi.getFactuurItemPrijs();
+            bedrag = bedrag + prijs;
+        }
+        subTotaalBedrag = bedrag;
+    }
+
+    public void berekenTotaalBedrag() {
+        berekenSubTotaalBedrag();
+        double bedrag = this.getSubTotaalBedrag();
+        double totaal = bedrag * this.getBtwBedrag();
+        totaalBedrag = totaal;
     }
 
 }
