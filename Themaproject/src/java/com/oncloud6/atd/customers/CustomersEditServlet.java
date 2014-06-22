@@ -65,12 +65,13 @@ public class CustomersEditServlet extends HttpServlet {
         
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
+        rd = request.getRequestDispatcher("customers/update.jsp");
         // Rechtencheck, controleren of de persoon op de pagina wel de rechten heeft om op de pagina te zijn.
-        if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
-            rd = request.getRequestDispatcher("error/403error.jsp");
-            rd.forward(request, response);
-            return;
-        }
+      //  if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
+      //      rd = request.getRequestDispatcher("error/403error.jsp");
+    //        rd.forward(request, response);
+      //      return;
+     //   }
    
         // Connecten met hibernate
          SessionFactory factory = new HibernateConnector().getSessionFactory();
@@ -116,7 +117,7 @@ public class CustomersEditServlet extends HttpServlet {
 
         
 
-        rd = request.getRequestDispatcher("customers/update.jsp");
+       
         rd.forward(request, response);
 
            
@@ -137,12 +138,13 @@ public class CustomersEditServlet extends HttpServlet {
             throws ServletException, IOException {
           HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
+           rd = request.getRequestDispatcher("customers/update.jsp");
         // Controleren of de persoon op de pagina de rechten heeft om iets te doen.
-        if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
-            rd = request.getRequestDispatcher("error/403error.jsp");
-            rd.forward(request, response);
-            return;
-        }
+      //  if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
+      //      rd = request.getRequestDispatcher("error/403error.jsp");
+      //      rd.forward(request, response);
+      //      return;
+     //   }
         // Connecten met hibernate
           SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
@@ -161,6 +163,33 @@ public class CustomersEditServlet extends HttpServlet {
             Date customerDateofBirth = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateofbirth"));
             String customerPostcode = request.getParameter("customerpostcode");
             String customerPlace = request.getParameter("customerplace");
+            
+               if(customerName== null || customerName.equals("")) {
+               request.setAttribute("message", "U heeft geen naam ingevuld!");
+               rd.forward(request, response); 
+            }
+            else if(customerPostcode== null || customerPostcode.equals("")) {
+               request.setAttribute("message", "U heeft geen postcode ingevuld!");
+               rd.forward(request, response); 
+            }
+             else if(customerAddress== null || customerAddress.equals("")) {
+               request.setAttribute("message", "U heeft geen adres ingevuld!");
+               rd.forward(request, response); 
+            }
+             else if(customerPlace== null || customerPlace.equals("")) {
+               request.setAttribute("message", "U heeft geen plaatsnaam ingevuld!");
+               rd.forward(request, response); 
+            }
+             else if(customerDiscount== null || customerDiscount.equals("")) {
+               request.setAttribute("message", "U heeft geen username ingevuld!");
+               rd.forward(request, response); 
+            }
+           
+             else if(customerDateofBirth== null || customerDateofBirth.equals("")) {
+               request.setAttribute("message", "U heeft geen adres ingevuld!");
+               rd.forward(request, response); 
+            }
+             else{
             // "Nieuwe" waarden aan de klant geven
             klant.setKlantNaam(customerName);
             klant.setKlantAdres(customerAddress);
@@ -174,6 +203,7 @@ public class CustomersEditServlet extends HttpServlet {
             
             
             tx.commit();
+             }
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
