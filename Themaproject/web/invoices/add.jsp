@@ -21,6 +21,7 @@
 			 out.println("<div class=\"alert alert-success\">" + msg + "</div>");
 		  }%>
         <form action="" method="post">
+		  <% if ((Boolean) request.getAttribute("idSet") == false) { %>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">Kies een klant</span>
                 <select class="form-control" name="klant">
@@ -32,7 +33,7 @@
                     <% }%>
 			 </select>
             </div>
-		  <% if ((Boolean) request.getAttribute("idSet") == true) {
+		  <% } else {
 				    Klant gekozenKlant = (Klant) request.getAttribute("gekozenKlant"); %>
 		  <div class="input-group input-group-lg">
                 <span class="input-group-addon">volledige naam</span>
