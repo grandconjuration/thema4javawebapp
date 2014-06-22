@@ -5,10 +5,14 @@
  */
 package com.oncloud6.atd.invoices;
 
+import com.oncloud6.atd.domain.Auto;
 import com.oncloud6.atd.domain.Klant;
+import com.oncloud6.atd.domain.Onderhoud;
 import com.oncloud6.atd.hibernate.HibernateConnector;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,49 +43,86 @@ public class InvoicesAddServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-		  throws ServletException, IOException {
+            throws ServletException, IOException {
 
-	   SessionFactory factory = new HibernateConnector().getSessionFactory();
-	   Session hibernateSession = factory.openSession();
-	   Transaction tx = null;
-	   List klantList = null;
-	   Klant gekozenKlant = null;
+        SessionFactory factory = new HibernateConnector().getSessionFactory();
+        Session hibernateSession = factory.openSession();
+        Transaction tx = null;
+        List klantList = null;
+        List onderhoudList = null;
+        Klant gekozenKlant = null;
 
-	   boolean idSet = false;
-	   if (request.getParameter("cid") == null || request.getParameter("cid").equals("")) {
-		  idSet = false;
-	   } else {
-		  idSet = true;
-	   }
-	   request.setAttribute("idSet", idSet);
+        boolean idSet = false;
+        if (request.getParameter("id") == null || request.getParameter("id").equals("")) {
+            idSet = false;
+        } else {
+            idSet = true;
+        }
+        boolean onderhoudIdSet = false;
+        if (request.getParameter("onderhoudId") == null || request.getParameter("onderhoudId").equals("")) {
+            onderhoudIdSet = false;
+        } else {
+            onderhoudIdSet = true;
+        }
+        request.setAttribute("idSet", idSet);
+        request.setAttribute("onderhoudIdSet", onderhoudIdSet);
 
-	   try {
-		  tx = hibernateSession.beginTransaction();
+        try {
+            tx = hibernateSession.beginTransaction();
 
-		  if (!idSet) {
-			 klantList = hibernateSession.createQuery("FROM Klant").list();
-			 request.setAttribute("klantList", klantList);
-		  } else {
-			 gekozenKlant = new Klant();
-			 hibernateSession.load(gekozenKlant, Integer.parseInt(request.getParameter("cid")));
-			 request.setAttribute("gekozenKlant", gekozenKlant);
-		  }
+            if (!idSet) {
+                klantList = hibernateSession.createQuery("FROM Klant").list();
+                request.setAttribute("klantList", klantList);
+            } else {
+                gekozenKlant = new Klant();
+                hibernateSession.load(gekozenKlant, Integer.parseInt(request.getParameter("id")));
+                request.setAttribute("gekozenKlant", gekozenKlant);
 
-		  tx.commit();
-	   } catch (HibernateException e) {
-		  if (tx != null) {
-			 tx.rollback();
-		  }
-		  e.printStackTrace();
-	   } finally {
-		  hibernateSession.close();
-	   }
+                onderhoudList = (List<Onderhoud>) hibernateSession.createQuery(""
+                        + "FROM Onderhoud AS onderhoud "
+                        + "INNER JOIN onderhoud.deAuto AS auto "
+                        + "WHERE auto.klant.id = :klantid")
+                        .setParameter("klantid", gekozenKlant.getId())
+                        .list();
 
-	   RequestDispatcher rd = null;
-	   HttpSession session = request.getSession(true);
+                Iterator ite = onderhoudList.iterator();
+                List<Onderhoud> newOnderhoudList = new ArrayList<Onderhoud>();
+                while (ite.hasNext()) {
+                    //deze lijst bevat zowel onderhoud en autos omdat je ze joint
+                    Object[] objects = (Object[]) ite.next();
+                    Onderhoud onderhoud = (Onderhoud) objects[0];
+                    //              Auto auto = (Auto) objects[1];
+                    newOnderhoudList.add(onderhoud);
+                }
+                onderhoudList = newOnderhoudList;
+                request.setAttribute("onderhoudList", onderhoudList);
 
-	   rd = request.getRequestDispatcher("invoices/add.jsp");
-	   rd.forward(request, response);
+                Onderhoud gekozenOnderhoud = null;
+                if (onderhoudIdSet) {
+                    for (Onderhoud onderhoud : newOnderhoudList) {
+                        if (onderhoud.getId() == Integer.parseInt(request.getParameter("onderhoudId"))) {
+                            gekozenOnderhoud = onderhoud;
+                        }
+                    }
+                    request.setAttribute("gekozenOnderhoud", gekozenOnderhoud);
+                }
+            }
+
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            hibernateSession.close();
+        }
+
+        RequestDispatcher rd = null;
+        HttpSession session = request.getSession(true);
+
+        rd = request.getRequestDispatcher("invoices/add.jsp");
+        rd.forward(request, response);
     }
 
 }

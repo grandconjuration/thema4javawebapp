@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -52,7 +53,7 @@ public class Onderhoud implements Serializable {
     @JoinColumn(name = "onderhoud_auto_id", nullable = false)
     public Auto deAuto;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "onderhoud")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "onderhoud")
     public List<GebruiktOnderdeel> alleGebruikteOnderdelen = new ArrayList<GebruiktOnderdeel>();
 
     public Onderhoud() {

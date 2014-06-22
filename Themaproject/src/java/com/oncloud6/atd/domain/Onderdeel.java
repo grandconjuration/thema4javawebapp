@@ -25,9 +25,6 @@ public class Onderdeel implements Serializable {
     @Column(name = "onderdeel_id")
     private int id;
     
- //   @Column(name = "onderdeel_nummer")
- //   private int artikelNummer;
-    
     @Column(name = "onderdeel_naam")
     private String naam;
     
@@ -46,13 +43,28 @@ public class Onderdeel implements Serializable {
 	   hoeveelheid = hoe;
 	   prijs = prijz;
     }
-/*
-    public int getArtikelNummer() {
-	   return artikelNummer;
-    }
 
-    public void setArtikelNummer(int aN) {
-	   artikelNummer = aN;
+    public String getNaam() {
+        return naam;
     }
-*/
+    
+    public void setNaam(String nm){
+        naam = nm;
+    }
+    
+    public int getHoeveelheid() {
+        return hoeveelheid;
+    }
+    
+    public void setHoeveelheid(int hoe){
+        hoeveelheid = hoe;
+    }
+    
+    public double getPrijs() {
+        return prijs;
+    }
+    
+    public void setPrijs(double pr) {
+        prijs = pr;
+    }
 }
