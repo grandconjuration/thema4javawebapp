@@ -68,8 +68,15 @@ public class CustomersEditServlet extends HttpServlet {
         RequestDispatcher rd = null;
         rd = request.getRequestDispatcher("customers/edit.jsp");
        
-      
+        String right = RightsControl.GetRightGroup("customers_edit", session);
    
+        int id = Integer.parseInt(session.getAttribute("userID").toString());
+        if(right.equals("other")) {
+            if (request.getParameter("id") != null) {
+                id = Integer.parseInt(request.getParameter("id").toString());
+            }
+        }
+        
         // Connecten met hibernate
          SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
@@ -77,7 +84,6 @@ public class CustomersEditServlet extends HttpServlet {
         
         // Controleren of er wel een customer is om te editen
 
-        if (request.getParameter("id") != null) {
             
              try {
             tx = hibernateSession.beginTransaction();
@@ -114,7 +120,7 @@ public class CustomersEditServlet extends HttpServlet {
              request.setAttribute("klant_postcode", klantPostcode);
             request.setAttribute("klant_woonplaats", klantWoonplaats);
             request.setAttribute("klant_wachtwoord", klantWachtwoord);
-            request.setAttribute("right", RightsControl.GetRightGroup("customers_edit", session));
+            request.setAttribute("right",right);
             
             hibernateSession.update(klant);
             tx.commit();
@@ -131,7 +137,6 @@ public class CustomersEditServlet extends HttpServlet {
 
            
 
-        }
     }
 
     /**
@@ -156,10 +161,19 @@ public class CustomersEditServlet extends HttpServlet {
            try {
             tx = hibernateSession.beginTransaction();
             
+            String right = RightsControl.GetRightGroup("customers_edit", session);
+   
+        int id = Integer.parseInt(session.getAttribute("userID").toString());
+        if(right.equals("other")) {
+            if (request.getParameter("id") != null) {
+                id = Integer.parseInt(request.getParameter("id").toString());
+            }
+        }
+            
             // "Nieuwe" klant aanmaken.
             Klant klant = new Klant();
             // Klant de gegevens geven van de klant in de database met de parameter CustomerId
-            klant = (Klant)hibernateSession.get(Klant.class, Integer.parseInt(request.getParameter("id")));
+            klant = (Klant)hibernateSession.get(Klant.class, id);
             if(klant == null) {
                 rd = request.getRequestDispatcher("error/404error.jsp");
                 rd.forward(request, response);
@@ -171,7 +185,7 @@ public class CustomersEditServlet extends HttpServlet {
                 return;
             }
             
-            String right = RightsControl.GetRightGroup("customers_edit", session);
+            
             request.setAttribute("right", right);
             
             
