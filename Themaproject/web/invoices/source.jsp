@@ -22,7 +22,7 @@
 <table class="invoiceHeader">
 <tr>
 <td>
- <img src="assets/invoices/images/logo_merenita.png" height="55" style="float:left;" />
+    <h1>AutoTotaalDiensten</h1>
 </td>
 <td style="text-align:right">
  <h2><asp:Label ID="lblInvoiceNumberTop" runat="server" /></h2> 
@@ -34,19 +34,19 @@
 <div class="from">
     <blockquote>
     <p>    <strong>
-    Merenita
+    Auto Totaal diensten B.V.
     </strong>
     </p>
 
     <p>
-    Moerasmos 15<br/> 3904 BV  Veenendaal<br/>the Netherlands
+    Hatseflats 15<br/> 1234 AB  Utrecht<br/>the Netherlands
     </p>
     <p>
-    Telefoon: +31 (0)6 52488458
+    Telefoon: +31 (0)30 1234567
     </p>
 
     <p>
-    info@merenita.com
+    administratie@autototaaldiensten.nl
     </p>
 
     </blockquote>
@@ -110,13 +110,13 @@
     <p>
     Gelieve binnen 30 dagen na dagtekening te voldoen op onze bankrekening,<br />
     Betalings referentie: <asp:Label ID="lblInvoiceNumberBottom" runat="server" /><br />
-    IBAN/SEPA Nummer: NL93RABO0166939455<br />
+    IBAN/SEPA Nummer: NL93RABO0178376287<br />
     BIC Nummer: RABONL2U<br />
-    Ten name van: Merenita<br />
-    Plaats: Veenendaal<br />
+    Ten name van: Auto Totaal Diensten B.V.<br />
+    Plaats: Utrecht<br />
     Bank: Rabobank<br />
-    KVK nummer: 53763238<br />
-    BTW Nummer: NL206883766B02
+    KVK nummer: 26484053<br />
+    BTW Nummer: NL368426852B01
     </p>
     
 
