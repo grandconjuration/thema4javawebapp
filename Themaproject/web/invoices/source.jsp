@@ -87,12 +87,12 @@
     <%
     for(FactuurItem item : factuur.getDeFactuurItems()) {
         %>
-        <tr id='invoiceDetail${item.getFactuurItemId()}'>
-            <td>${item.getFactuurItemNaam()}</td>
-            <td><span style='float:right;'>${item.getFactuurItemHoeveelheid()}</span></td>
-            <td><span style='float:right;'>&euro; ${item.getFactuurItemPrijs()}</span></td>
-            <td><span style='float:right;'>21%</span></td>
-            <td><span style='float:right;'>&euro; ${item.getFactuurItemSubtotaal()}</span></td>
+        <tr id="invoiceDetail<%=item.getFactuurItemId() %>">
+            <td><%=item.getFactuurItemNaam() %></td>
+            <td><span style="float:right;"><%=item.getFactuurItemHoeveelheid() %></span></td>
+            <td><span style="float:right;">&euro; <%=item.getFactuurItemPrijs() %></span></td>
+            <td><span style="float:right;">21%</span></td>
+            <td><span style="float:right;">&euro; <%=item.getFactuurItemSubtotaal() %></span></td>
         </tr>
         <% 
     } %>
