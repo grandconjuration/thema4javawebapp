@@ -133,7 +133,7 @@
         </div>   
         <div class="input-group input-group-lg">        
             <span class="input-group-addon">factuur klant korting</span>  
-            <input type="text" class="form-control" placeholder="factuurklantkorting" name="factuurklantkorting" value="<%= factuur.getFactuurKorting()%>" readonly="readonly">
+            <input type="text" class="form-control" placeholder="factuurklantkorting" name="factuurklantkorting" value="<%= Math.round((factuur.getFactuurKorting()))%>%" readonly="readonly">
         </div>   
         <div class="input-group input-group-lg">        
             <span class="input-group-addon">factuur items:</span>  

@@ -10,6 +10,7 @@ import com.oncloud6.atd.domain.GebruiktOnderdeel;
 import com.oncloud6.atd.domain.Onderdeel;
 import com.oncloud6.atd.domain.Onderhoud;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,31 +48,37 @@ public class MaintenancesAddServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+		  throws ServletException, IOException {
 
-        SessionFactory factory = new HibernateConnector().getSessionFactory();
-        Session hibernateSession = factory.openSession();
-        Transaction tx = null;
-        List autoList = null;
-        try {
-            tx = hibernateSession.beginTransaction();
-            autoList = hibernateSession.createQuery("FROM Auto").list();
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            hibernateSession.close();
-        }
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
+	   SessionFactory factory = new HibernateConnector().getSessionFactory();
+	   Session hibernateSession = factory.openSession();
+	   Transaction tx = null;
+	   List autoList = null;
 
-        request.setAttribute("autoList", autoList);        
+	   HttpSession session = request.getSession(true);
+	   RequestDispatcher rd = null;
+	   if (!RightsControl.checkBoolean("maintenances_add", "true", session)) {
+		  rd = request.getRequestDispatcher("error/403error.jsp");
+		  rd.forward(request, response);
+		  return;
+	   }
+	   try {
+		  tx = hibernateSession.beginTransaction();
+		  autoList = hibernateSession.createQuery("FROM Auto").list();
+		  tx.commit();
+	   } catch (HibernateException e) {
+		  if (tx != null) {
+			 tx.rollback();
+		  }
+		  e.printStackTrace();
+	   } finally {
+		  hibernateSession.close();
+	   }
 
-        rd = request.getRequestDispatcher("maintenances/add.jsp");
-        rd.forward(request, response);
+	   request.setAttribute("autoList", autoList);
+
+	   rd = request.getRequestDispatcher("maintenances/add.jsp");
+	   rd.forward(request, response);
     }
 
     /**
@@ -84,44 +91,44 @@ public class MaintenancesAddServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+		  throws ServletException, IOException {
 
-        SessionFactory factory = new HibernateConnector().getSessionFactory();
-        Session hibernateSession = factory.openSession();
-        Transaction tx = null;
-        Integer onderhoudID = null;
-        try {
-            tx = hibernateSession.beginTransaction();
-            Onderhoud onderhoud = new Onderhoud();
-            Auto auto = new Auto();
-            hibernateSession.load(auto, Integer.parseInt(request.getParameter("auto")));
-            onderhoud.setAuto(auto);
+	   SessionFactory factory = new HibernateConnector().getSessionFactory();
+	   Session hibernateSession = factory.openSession();
+	   Transaction tx = null;
+	   Integer onderhoudID = null;
+	   try {
+		  tx = hibernateSession.beginTransaction();
+		  Onderhoud onderhoud = new Onderhoud();
+		  Auto auto = new Auto();
+		  hibernateSession.load(auto, Integer.parseInt(request.getParameter("auto")));
+		  onderhoud.setAuto(auto);
 
-            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(request.getParameter("datum"));
+		  Date date = new SimpleDateFormat("dd-MM-yyyy").parse(request.getParameter("datum"));
 
-            onderhoud.setDatum(date);
-            onderhoud.setStatus("added");
-            onderhoud.setBeschrijving(request.getParameter("beschrijving"));
-            onderhoudID = (Integer) hibernateSession.save(onderhoud);
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } catch (ParseException ex) {
-            Logger.getLogger(MaintenancesAddServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            hibernateSession.close();
-            factory.close();
-        }
+		  onderhoud.setDatum(date);
+		  onderhoud.setStatus("added");
+		  onderhoud.setBeschrijving(request.getParameter("beschrijving"));
+		  onderhoudID = (Integer) hibernateSession.save(onderhoud);
+		  tx.commit();
+	   } catch (HibernateException e) {
+		  if (tx != null) {
+			 tx.rollback();
+		  }
+		  e.printStackTrace();
+	   } catch (ParseException ex) {
+		  Logger.getLogger(MaintenancesAddServlet.class.getName()).log(Level.SEVERE, null, ex);
+	   } finally {
+		  hibernateSession.close();
+		  factory.close();
+	   }
 
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
+	   RequestDispatcher rd = null;
+	   HttpSession session = request.getSession(true);
 
-        rd = request.getRequestDispatcher("maintenances/add.jsp");
+	   rd = request.getRequestDispatcher("maintenances/add.jsp");
 
-        rd.forward(request, response);
+	   rd.forward(request, response);
 
     }
 }
