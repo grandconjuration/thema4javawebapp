@@ -54,17 +54,13 @@ public class InvoicesShowServlet extends HttpServlet {
                 }else{
                     response.addHeader("Content-Disposition", "attachment; filename=fac"+gekozenFactuur.getFactuurNummer()+".pdf");
                     Process process = Runtime.getRuntime().exec("c:\\rotativa\\wkhtmltopdf.exe -q -n --disable-smart-shrinking http://localhost:8080/Themaproject/invoicessource?id="+request.getParameter("id")+"&secret="+gekozenFactuur.getSecret()+" -");
-                    
-                    System.out.println("1");
+                    response.setContentType("application/pdf");
                     try {
                         IOUtils.copy(process.getInputStream(), response.getOutputStream());
-                    System.out.println("2");
                     } finally {
                         process.getInputStream().close();
                         response.getOutputStream().close();
-                    System.out.println("3");
                     }
-                    System.out.println("4");
                 }
             } catch (HibernateException e) {
                 if (tx != null) {
