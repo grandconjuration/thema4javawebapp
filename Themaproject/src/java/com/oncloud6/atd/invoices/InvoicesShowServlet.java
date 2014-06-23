@@ -8,12 +8,15 @@ package com.oncloud6.atd.invoices;
 
 import com.oncloud6.atd.domain.Factuur;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -52,6 +55,14 @@ public class InvoicesShowServlet extends HttpServlet {
                 if(gekozenFactuur == null) {
                     response.sendRedirect("invoices");
                 }else{
+                    HttpSession session = request.getSession(true);
+                    RequestDispatcher rd = null;
+                    if(!RightsControl.checkGroup("invoices_show", "own", session, gekozenFactuur.getDeKlant().getGebruiker().getId())) {
+                        rd = request.getRequestDispatcher("error/403error.jsp");
+                        rd.forward(request, response);
+                        return;
+                    }
+                    
                     response.addHeader("Content-Disposition", "attachment; filename=fac"+gekozenFactuur.getFactuurNummer()+".pdf");
                     Process process = Runtime.getRuntime().exec("c:\\rotativa\\wkhtmltopdf.exe -q -n --disable-smart-shrinking http://localhost:8080/Themaproject/invoicessource?id="+request.getParameter("id")+"&secret="+gekozenFactuur.getSecret()+" -");
                     response.setContentType("application/pdf");
