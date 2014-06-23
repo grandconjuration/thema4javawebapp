@@ -70,7 +70,7 @@ public class AccountsLoginServlet extends HttpServlet {
                 List<Gebruiker> gebruikerList = (List<Gebruiker>) hibernateSession.createQuery("FROM Gebruiker").list();
                 Gebruiker gekozenGebruiker = null;
                 for (Gebruiker gebruiker : gebruikerList) {
-                    System.out.println(gebruiker.getUsername());
+              //      System.out.println(gebruiker.getUsername());
                     if (gebruiker.getUsername().equals(GivenUsername)) {
                         gekozenGebruiker = gebruiker;
                     }

@@ -130,6 +130,7 @@ public class InvoicesAddServlet extends HttpServlet {
 				
 				Factuur fac = (Factuur) hibernateSession.createQuery(""
 				    + "FROM Factuur fac ORDER BY fac.factuurNummer DESC")
+				    .setMaxResults(1)
 				    .uniqueResult();
 
 				Factuur factuur = new Factuur();
@@ -140,8 +141,11 @@ public class InvoicesAddServlet extends HttpServlet {
 				factuur.setKlantAdres(gekozenKlant);
 				factuur.setFactuurKorting(gekozenKlant.getKorting());
 				factuur.setSecret(UUID.randomUUID().toString());
+				if(fac != null) {
 				factuur.setFactuurNummer(fac.getFactuurNummer()+1);
-
+				} else {
+				    factuur.setFactuurNummer(0);
+				}
 				List<FactuurItem> factuurItems = new ArrayList<FactuurItem>();
 				for (GebruiktOnderdeel onderdeel : gekozenOnderhoud.getGebruikteOnderdelen()) {
 				    FactuurItem fi = new FactuurItem();

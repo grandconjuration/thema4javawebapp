@@ -156,8 +156,8 @@
             <div class="form-control">€<%= factuur.getSubTotaalBedrag()%></div>
         </div>
         <div class="input-group input-group-lg">        
-            <span class="input-group-addon">btw </span>  
-            <div class="form-control"><%= Math.round((factuur.getBtwBedrag() - 1) * 100)%>%</div>
+            <span class="input-group-addon">btw bedrag </span>  
+            <div class="form-control"><%= factuur.getBtwBedrag() %>%</div>
         </div>         
         <div class="input-group input-group-lg">        
             <span class="input-group-addon">totaal</span>  

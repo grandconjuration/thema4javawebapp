@@ -40,6 +40,9 @@ public class FactuurItem {
     @Column(name = "factuur_item_hoeveelheid")
     private int factuurItemHoeveelheid;
     
+    @Column(name = "factuur_item_subtotaal")
+    private Double factuurItemSubtotaal;
+    
     public FactuurItem() {
 	   
     }
@@ -80,6 +83,21 @@ public class FactuurItem {
 
     public void setFactuurItemHoeveelheid(int fIH) {
         factuurItemHoeveelheid = fIH;
+    }
+    
+    public Double getFactuurItemSubtotaal() {
+	   return factuurItemSubtotaal;
+    }
+    
+    public void setFactuurItemSubtotaal(Double fist) {
+	   factuurItemSubtotaal = fist;
+    }
+    
+    public void berekenSubtotaal() {
+	   Double prijs = getFactuurItemPrijs();
+	   int hoeveelheid = getFactuurItemHoeveelheid();
+	   Double subtotaal = hoeveelheid * prijs;
+	   setFactuurItemSubtotaal(subtotaal);
     }
     
     
