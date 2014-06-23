@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.oncloud6.atd.domain.Factuur" %>
+<% Factuur factuur = (Factuur)request.getAttribute("factuur"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,8 +27,8 @@
     <h1>AutoTotaalDiensten</h1>
 </td>
 <td style="text-align:right">
- <h2><asp:Label ID="lblInvoiceNumberTop" runat="server" /></h2> 
- <asp:Label ID="lblLongDateString" runat="server" />
+ <h2>FAC${factuur.getFactuurNummer()}</h2> 
+ ${factuur.getFactuurDatum()}
 </td>
 </tr>
 </table>
@@ -59,29 +61,16 @@
             <blockquote>
             <p>
                 <strong>
-                    <asp:Label ID="lblCustomerName" runat="server" />
-                </strong>
-            </p>
-
-            <p id="pCompanyNumber" runat="server">
-                KVK nummer:
-                <strong>
-                    <asp:Label ID="lblCompanyNumber" runat="server" />
+                    ${factuur.getKlantNaam()}
                 </strong>
             </p>
              <p>
-                <asp:Label ID="lblAddress" runat="server" />
-            </p>
-
-             <p>
-                <asp:Label ID="lblPostCode" runat="server" />,
-                <asp:Label ID="lblCity" runat="server" />
+                ${factuur.getKlantAdres()}
             </p>	      
             </blockquote>
     </td>
     <td>
-        <h3>Dienst :</h3>
-         <asp:Label ID="lblNotes" runat="server" />
+        
     </td>
  </tr>
  </table>

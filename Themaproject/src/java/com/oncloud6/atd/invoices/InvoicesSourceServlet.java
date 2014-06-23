@@ -51,18 +51,20 @@ public class InvoicesSourceServlet extends HttpServlet {
             return;
         }
         
-        List factuur = (List<Factuur>)hibernateSession.createQuery(""
+        List factuurList = (List<Factuur>)hibernateSession.createQuery(""
 				    + "FROM Factuur AS factuur "
 				    + "WHERE factuur.id = :id "
 				    + "AND factuur.secret = :secret")
 				    .setParameter("id", Integer.parseInt(request.getParameter("id")))
 				    .setParameter("secret", request.getParameter("secret"))
 				    .list();
-        Iterator ite = factuur.iterator();
+        Iterator ite = factuurList.iterator();
         if(!ite.hasNext()) {
             out.println("Invoice not found!");
             return;
         }
+        Factuur factuur = (Factuur) ite.next();
+        request.setAttribute("factuur", factuur);
         
         rd = request.getRequestDispatcher("invoices/source.jsp");
         rd.forward(request, response);
