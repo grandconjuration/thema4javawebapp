@@ -62,7 +62,7 @@ public class InvoicesIndexServlet extends HttpServlet {
         } finally {
             hibernateSession.close();
         }
-        rd = request.getRequestDispatcher("invoices/invoicesindex.jsp");
+        rd = request.getRequestDispatcher("invoices/home.jsp");
         rd.forward(request, response);
     }
 }
