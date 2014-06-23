@@ -87,15 +87,15 @@
     </tr>
     <tr>
         <td colspan="5" class="invoiceFooterTitle">SubTotaal:</td>
-        <td width="200" class="invoiceFooterValue">€ ${factuur.getSubTotaalBedrag()}</td>
+        <td width="200" class="invoiceFooterValue">&euro; ${factuur.getSubTotaalBedrag()}</td>
     </tr>
     <tr>
         <td colspan="5" class="invoiceFooterTitle">BTW:</td>
-        <td width="200" class="invoiceFooterValue">€ ${factuur.getBtwBedrag()}</td>
+        <td width="200" class="invoiceFooterValue">&euro; ${factuur.getBtwBedrag()}</td>
     </tr>
     <tr>
         <td colspan="5" class="invoiceFooterTitle">Totaal te betalen: </td>
-        <td class="invoiceFooterValueTotal">€ ${factuur.getTotaalBedrag()}</td>
+        <td class="invoiceFooterValueTotal">&euro; ${factuur.getTotaalBedrag()}</td>
     </tr>
 </table>
 
