@@ -27,13 +27,13 @@
                 <span class="input-group-addon">straat en huisnummer*</span>
                 <input type="text" class="form-control" placeholder="adres" name="address">
                 <span class="input-group-addon">postcode</span>
-                <input type="zipcode" class="form-control" placeholder="1234AB" name="zip">
+                <input type="text" class="form-control" placeholder="1234AB" name="zip">
                 <span class="input-group-addon">woonplaats</span>
                 <input type="text" class="form-control" placeholder="bijv. Amsterdam" name="city">
             </div> 
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">geboortedatum*</span>
-                <input type="date" class="form-control" placeholder="geboortedatum" name="birthdate">
+                <input type="" class="form-control" placeholder="geboortedatum" name="birthdate">
             </div>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">gebruikersnaam*</span>
