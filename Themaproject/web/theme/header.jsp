@@ -53,7 +53,7 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a href='carsaddcar'>Auto Toevoegen</a></li>
                             <li><a href='invoicesindex'>Facturen</a></li>
-                            <li><a href='customeredit'>Gegevens</a></li>
+                            <li><a href='customersedit'>Gegevens</a></li>
                         </ul>
                     </div>
                     <% } else { %>
