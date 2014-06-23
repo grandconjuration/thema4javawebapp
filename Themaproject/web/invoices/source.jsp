@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.oncloud6.atd.domain.Factuur" %>
+<%@page import="com.oncloud6.atd.domain.FactuurItem" %>
 <% Factuur factuur = (Factuur)request.getAttribute("factuur"); %>
 <!DOCTYPE html>
 <html>
@@ -74,11 +75,28 @@
     </td>
  </tr>
  </table>
-   
 
-
- <asp:Label ID="lblProdPlaceholder" runat="server" />
- 
+<table class='zebra-striped'>
+    <thead>
+        <th>Item</th>
+        <th width='40'>Aantal</th>
+        <th width='75'>Prijs</th>
+        <th width='80'>BTW %</th>
+        <th width='80'>SubTotaal</th>
+    </thead>
+    <%
+    for(FactuurItem item : factuur.getDeFactuurItems()) {
+        %>
+        <tr id='invoiceDetail${item.getKlantAdres()}'>
+            <td>${item.getFactuurItemNaam()}</td>
+            <td><span style='float:right;'>${item.getFactuurItemHoeveelheid()}</span></td>
+            <td><span style='float:right;'>&euro; ${item.getFactuurItemPrijs()}</span></td>
+            <td><span style='float:right;'>21%</span></td>
+            <td><span style='float:right;'>&euro; ${item.getFactuurItemSubtotaal()}</span></td>
+        </tr>
+        <% 
+    } %>
+</table>
 
 <table>
     <tr>

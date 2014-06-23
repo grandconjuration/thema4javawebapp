@@ -40,14 +40,18 @@ public class FactuurItem {
     @Column(name = "factuur_item_hoeveelheid")
     private int factuurItemHoeveelheid;
     
+    @Column(name = "factuur_item_subtotaal")
+    private Double factuurItemSubtotaal;
+    
     public FactuurItem() {
 	   
     }
     
-    public FactuurItem(String fIN, Double fIP, int fIH){
+    public FactuurItem(String fIN, Double fIP, int fIH, Double fIS){
         factuurItemNaam = fIN;
         factuurItemPrijs = fIP;
         factuurItemHoeveelheid = fIH;
+        factuurItemSubtotaal = fIS;
     }
     
     public void setFactuur(Factuur fact){
@@ -80,6 +84,14 @@ public class FactuurItem {
 
     public void setFactuurItemHoeveelheid(int fIH) {
         factuurItemHoeveelheid = fIH;
+    }
+
+    public Double getFactuurItemSubtotaal() {
+        return factuurItemSubtotaal;
+    }
+
+    public void setFactuurItemSubtotaal(Double fIS) {
+        factuurItemSubtotaal = fIS;
     }
     
     
