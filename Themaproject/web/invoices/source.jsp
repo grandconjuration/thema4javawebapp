@@ -87,7 +87,7 @@
     <%
     for(FactuurItem item : factuur.getDeFactuurItems()) {
         %>
-        <tr id='invoiceDetail${item.getKlantAdres()}'>
+        <tr id='invoiceDetail${item.getFactuurItemId()}'>
             <td>${item.getFactuurItemNaam()}</td>
             <td><span style='float:right;'>${item.getFactuurItemHoeveelheid()}</span></td>
             <td><span style='float:right;'>&euro; ${item.getFactuurItemPrijs()}</span></td>

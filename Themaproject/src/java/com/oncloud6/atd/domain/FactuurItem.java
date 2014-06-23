@@ -62,6 +62,10 @@ public class FactuurItem {
 	   return factuur;
     }
 
+    public int getFactuurItemId() {
+        return id;
+    }
+
     public String getFactuurItemNaam() {
         return factuurItemNaam;
     }
