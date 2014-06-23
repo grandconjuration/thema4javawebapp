@@ -36,8 +36,8 @@ import org.hibernate.Transaction;
  *
  * @author Simon Whiteley
  */
-@WebServlet(name = "InvoicesAddServlet", urlPatterns = {"/invoicesadd"})
-public class InvoicesAddServlet extends HttpServlet {
+@WebServlet(name = "MaintenanceInvoice", urlPatterns = {"/maintenanceinvoice"})
+public class MaintenanceInvoice extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -155,6 +155,13 @@ public class InvoicesAddServlet extends HttpServlet {
 				    fi.setFactuur(factuur);
 				    factuurItems.add(fi);
 				}
+                                //manuren
+                                FactuurItem manUren = new FactuurItem();
+                                manUren.setFactuurItemPrijs(30.00);
+                                manUren.setFactuurItemHoeveelheid(gekozenOnderhoud.getManuur());
+                                manUren.setFactuurItemNaam("Kosten " + gekozenOnderhoud.getManuur() + " uur arbeid");
+                                factuurItems.add(manUren);
+                                
 				factuur.setDeFactuurItems(factuurItems);
 				factuur.berekenTotaalBedrag();
 				request.setAttribute("factuur", factuur);

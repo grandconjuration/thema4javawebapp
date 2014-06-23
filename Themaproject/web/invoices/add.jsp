@@ -107,6 +107,10 @@
             <input type="text" class="form-control" placeholder="datumonderhoud" name="datumonderhoud" value="<%= date2%>" readonly="readonly">
         </div>   
         <div class="input-group input-group-lg">        
+            <span class="input-group-addon">manuren onderhoud</span>  
+            <input type="text" class="form-control" placeholder="manurenonderhoud" name="manurenonderhoud" value="<%= gekozenOnderhoud.getManuur() %> uur" readonly="readonly">
+        </div>          
+        <div class="input-group input-group-lg">        
             <span class="input-group-addon">gebruikte onderdelen</span>  
             <div class="form-control">
                 <% for (GebruiktOnderdeel onderdeel : gekozenOnderhoud.getGebruikteOnderdelen()) {%> 
@@ -145,8 +149,10 @@
         <div class="input-group input-group-lg">        
             <span class="input-group-addon"><%= i%></span>  
             <div class="form-control"> 
-                Factuur Item naam: <%= fi.getFactuurItemNaam()%>,
-                Factuur Item hoeveelheid: <%= fi.getFactuurItemHoeveelheid()%>            
+                <b>Factuur Item naam:</b> <%= fi.getFactuurItemNaam()%>,
+                <b>Factuur Item hoeveelheid:</b> <%= fi.getFactuurItemHoeveelheid()%>,
+                <b>Prijs per:</b> €<%= fi.getFactuurItemPrijs()  %>,
+                <b>Totaal:</b> €<%= fi.getFactuurItemSubtotaal() %>
             </div>
         </div>          
         <% i++;
@@ -157,11 +163,11 @@
         </div>
         <div class="input-group input-group-lg">        
             <span class="input-group-addon">btw bedrag </span>  
-            <div class="form-control"><%= factuur.getBtwBedrag() %>%</div>
+            <div class="form-control">€<%= Math.round(factuur.getBtwBedrag() * 100.0) / 100.0 %></div>
         </div>         
         <div class="input-group input-group-lg">        
             <span class="input-group-addon">totaal</span>  
-            <div class="form-control">€<%= factuur.getTotaalBedrag()%></div>
+            <div class="form-control">€<%= Math.round(factuur.getTotaalBedrag() * 100.0) / 100.0 %></div>
         </div>
         <form action="" method="get">
             <div class="input-group input-group-lg">
