@@ -83,7 +83,7 @@ public class AccountsLoginServlet extends HttpServlet {
 
                         session.setAttribute("userID", GebruikerID);
                         session.setAttribute("userName", username);
-                        session.setAttribute("groupID", GroupID);
+                        session.setAttribute("groupID", GroupID.getGroepId());
 
                         hibernateSession.save(gekozenGebruiker);
                         response.sendRedirect("");

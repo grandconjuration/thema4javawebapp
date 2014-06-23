@@ -8,15 +8,13 @@ package com.oncloud6.atd.invoices;
 
 import com.oncloud6.atd.domain.Factuur;
 import com.oncloud6.atd.hibernate.HibernateConnector;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -54,17 +52,19 @@ public class InvoicesShowServlet extends HttpServlet {
                 if(gekozenFactuur == null) {
                     response.sendRedirect("invoices");
                 }else{
-                    Process process = Runtime.getRuntime().exec("c:\\rotativa\\wkhtmltopdf.exe -q -n --disable-smart-shrinking http://localhost/themaproject/invoicessource?id="+request.getParameter("id")+"&secret="+gekozenFactuur.getSecret()+" -");
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    OutputStream out = response.getOutputStream();
-                    response.setContentType("application/pdf");
-                    int bytes;
-                    while ((bytes = reader.read()) != -1) {
-                        out.write(bytes);
+                    response.addHeader("Content-Disposition", "attachment; filename=fac"+gekozenFactuur.getFactuurNummer()+".pdf");
+                    Process process = Runtime.getRuntime().exec("c:\\rotativa\\wkhtmltopdf.exe -q -n --disable-smart-shrinking http://localhost:8080/Themaproject/invoicessource?id="+request.getParameter("id")+"&secret="+gekozenFactuur.getSecret()+" -");
+                    
+                    System.out.println("1");
+                    try {
+                        IOUtils.copy(process.getInputStream(), response.getOutputStream());
+                    System.out.println("2");
+                    } finally {
+                        process.getInputStream().close();
+                        response.getOutputStream().close();
+                    System.out.println("3");
                     }
-
-                    reader.close();
-                    out.close();
+                    System.out.println("4");
                 }
             } catch (HibernateException e) {
                 if (tx != null) {

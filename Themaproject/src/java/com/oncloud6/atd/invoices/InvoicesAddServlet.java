@@ -12,12 +12,14 @@ import com.oncloud6.atd.domain.GebruiktOnderdeel;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.domain.Onderhoud;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,122 +49,133 @@ public class InvoicesAddServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+		  throws ServletException, IOException {
 
-        SessionFactory factory = new HibernateConnector().getSessionFactory();
-        Session hibernateSession = factory.openSession();
-        Transaction tx = null;
-        List klantList = null;
-        List onderhoudList = null;
-        Klant gekozenKlant = null;
+	   SessionFactory factory = new HibernateConnector().getSessionFactory();
+	   Session hibernateSession = factory.openSession();
+	   Transaction tx = null;
+	   List klantList = null;
+	   List onderhoudList = null;
+	   Klant gekozenKlant = null;
 
-        boolean idSet = false;
-        if (request.getParameter("id") == null || request.getParameter("id").equals("")) {
-            idSet = false;
-        } else {
-            idSet = true;
-        }
-        boolean onderhoudIdSet = false;
-        if (request.getParameter("onderhoudId") == null || request.getParameter("onderhoudId").equals("")) {
-            onderhoudIdSet = false;
-        } else {
-            onderhoudIdSet = true;
-        }
-        boolean saveInvoiceSet = false;
-        if (request.getParameter("saveInvoice") == null || request.getParameter("saveInvoice").equals("")) {
-            saveInvoiceSet = false;
-        } else {
-            saveInvoiceSet = true;
-        }
-        request.setAttribute("idSet", idSet);
-        request.setAttribute("onderhoudIdSet", onderhoudIdSet);
-        request.setAttribute("saveInvoiceSet", saveInvoiceSet);
+	   HttpSession session = request.getSession(true);
+	   RequestDispatcher rd = null;
+	   if (!RightsControl.checkBoolean("invoices_add", "true", session)) {
+		  rd = request.getRequestDispatcher("error/403error.jsp");
+		  rd.forward(request, response);
+		  return;
+	   }
 
-        try {
-            tx = hibernateSession.beginTransaction();
+	   boolean idSet = false;
+	   if (request.getParameter("id") == null || request.getParameter("id").equals("")) {
+		  idSet = false;
+	   } else {
+		  idSet = true;
+	   }
+	   boolean onderhoudIdSet = false;
+	   if (request.getParameter("onderhoudId") == null || request.getParameter("onderhoudId").equals("")) {
+		  onderhoudIdSet = false;
+	   } else {
+		  onderhoudIdSet = true;
+	   }
+	   boolean saveInvoiceSet = false;
+	   if (request.getParameter("saveInvoice") == null || request.getParameter("saveInvoice").equals("")) {
+		  saveInvoiceSet = false;
+	   } else {
+		  saveInvoiceSet = true;
+	   }
+	   request.setAttribute("idSet", idSet);
+	   request.setAttribute("onderhoudIdSet", onderhoudIdSet);
+	   request.setAttribute("saveInvoiceSet", saveInvoiceSet);
 
-            if (!idSet) {
-                klantList = hibernateSession.createQuery("FROM Klant").list();
-                request.setAttribute("klantList", klantList);
-            } else {
-                gekozenKlant = new Klant();
-                hibernateSession.load(gekozenKlant, Integer.parseInt(request.getParameter("id")));
-                request.setAttribute("gekozenKlant", gekozenKlant);
+	   try {
+		  tx = hibernateSession.beginTransaction();
 
-                onderhoudList = (List<Onderhoud>) hibernateSession.createQuery(""
-                        + "FROM Onderhoud AS onderhoud "
-                        + "INNER JOIN onderhoud.deAuto AS auto "
-                        + "WHERE auto.klant.id = :klantid")
-                        .setParameter("klantid", gekozenKlant.getId())
-                        .list();
+		  if (!idSet) {
+			 klantList = hibernateSession.createQuery("FROM Klant").list();
+			 request.setAttribute("klantList", klantList);
+		  } else {
+			 gekozenKlant = new Klant();
+			 hibernateSession.load(gekozenKlant, Integer.parseInt(request.getParameter("id")));
+			 request.setAttribute("gekozenKlant", gekozenKlant);
 
-                Iterator ite = onderhoudList.iterator();
-                List<Onderhoud> newOnderhoudList = new ArrayList<Onderhoud>();
-                while (ite.hasNext()) {
-                    //deze lijst bevat zowel onderhoud en autos omdat je ze joint
-                    Object[] objects = (Object[]) ite.next();
-                    Onderhoud onderhoud = (Onderhoud) objects[0];
-                    //              Auto auto = (Auto) objects[1];
-                    newOnderhoudList.add(onderhoud);
-                }
-                onderhoudList = newOnderhoudList;
-                request.setAttribute("onderhoudList", onderhoudList);
+			 onderhoudList = (List<Onderhoud>) hibernateSession.createQuery(""
+				    + "FROM Onderhoud AS onderhoud "
+				    + "INNER JOIN onderhoud.deAuto AS auto "
+				    + "WHERE auto.klant.id = :klantid")
+				    .setParameter("klantid", gekozenKlant.getId())
+				    .list();
 
-                Onderhoud gekozenOnderhoud = null;
-                if (onderhoudIdSet) {
-                    double bedrag = 0;
-                    for (Onderhoud onderhoud : newOnderhoudList) {
-                        if (onderhoud.getId() == Integer.parseInt(request.getParameter("onderhoudId"))) {
-                            gekozenOnderhoud = onderhoud;
-                        }
-                    }
-                    request.setAttribute("gekozenOnderhoud", gekozenOnderhoud);
+			 Iterator ite = onderhoudList.iterator();
+			 List<Onderhoud> newOnderhoudList = new ArrayList<Onderhoud>();
+			 while (ite.hasNext()) {
+				//deze lijst bevat zowel onderhoud en autos omdat je ze joint
+				Object[] objects = (Object[]) ite.next();
+				Onderhoud onderhoud = (Onderhoud) objects[0];
+				//              Auto auto = (Auto) objects[1];
+				newOnderhoudList.add(onderhoud);
+			 }
+			 onderhoudList = newOnderhoudList;
+			 request.setAttribute("onderhoudList", onderhoudList);
 
-                    Factuur factuur = new Factuur();
-                    Date datum = new Date();
-                    factuur.setFactuurDatum(datum);
-                    factuur.setDeKlant(gekozenKlant);
-                    factuur.setKlantNaam(gekozenKlant);
-                    factuur.setKlantAdres(gekozenKlant);
-                    factuur.setFactuurKorting(gekozenKlant.getKorting());
-                    factuur.setSecret("hoi");
+			 Onderhoud gekozenOnderhoud = null;
+			 if (onderhoudIdSet) {
+				double bedrag = 0;
+				for (Onderhoud onderhoud : newOnderhoudList) {
+				    if (onderhoud.getId() == Integer.parseInt(request.getParameter("onderhoudId"))) {
+					   gekozenOnderhoud = onderhoud;
+				    }
+				}
+				request.setAttribute("gekozenOnderhoud", gekozenOnderhoud);
+				
+				Factuur fac = (Factuur) hibernateSession.createQuery(""
+				    + "FROM Factuur fac ORDER BY fac.factuurNummer DESC")
+				    .uniqueResult();
 
-                    List<FactuurItem> factuurItems = new ArrayList<FactuurItem>();
-                    for (GebruiktOnderdeel onderdeel : gekozenOnderhoud.getGebruikteOnderdelen()) {
-                        FactuurItem fi = new FactuurItem();
-                        fi.setFactuurItemHoeveelheid(onderdeel.getHoeveelheid());
-                        fi.setFactuurItemNaam(onderdeel.getOnderdeel().getNaam());
-                        fi.setFactuurItemPrijs(onderdeel.getOnderdeel().getPrijs());
-                        fi.setFactuur(factuur);
-                        factuurItems.add(fi);
-                    }
-                    factuur.setDeFactuurItems(factuurItems);
-                    factuur.berekenTotaalBedrag();
-                    request.setAttribute("factuur", factuur);
+				Factuur factuur = new Factuur();
+				Date datum = new Date();
+				factuur.setFactuurDatum(datum);
+				factuur.setDeKlant(gekozenKlant);
+				factuur.setKlantNaam(gekozenKlant);
+				factuur.setKlantAdres(gekozenKlant);
+				factuur.setFactuurKorting(gekozenKlant.getKorting());
+				factuur.setSecret(UUID.randomUUID().toString());
+				factuur.setFactuurNummer(fac.getFactuurNummer()+1);
 
-                    if (saveInvoiceSet) {
-                        hibernateSession.save(factuur);
-                        request.setAttribute("message", "Factuur is succesvol opgeslagen!");
-                    }
+				List<FactuurItem> factuurItems = new ArrayList<FactuurItem>();
+				for (GebruiktOnderdeel onderdeel : gekozenOnderhoud.getGebruikteOnderdelen()) {
+				    FactuurItem fi = new FactuurItem();
+				    fi.setFactuurItemHoeveelheid(onderdeel.getHoeveelheid());
+				    fi.setFactuurItemNaam(onderdeel.getOnderdeel().getNaam());
+				    fi.setFactuurItemPrijs(onderdeel.getOnderdeel().getPrijs());
+				    fi.setFactuur(factuur);
+				    factuurItems.add(fi);
+				}
+				factuur.setDeFactuurItems(factuurItems);
+				factuur.berekenTotaalBedrag();
+				request.setAttribute("factuur", factuur);
 
-                }
-            }
+				if (saveInvoiceSet) {
+				    hibernateSession.save(factuur);
+				    request.setAttribute("message", "Factuur is succesvol opgeslagen!");
+				}
 
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            hibernateSession.close();
-        }
+			 }
+		  }
 
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
+		  tx.commit();
+	   } catch (HibernateException e) {
+		  if (tx != null) {
+			 tx.rollback();
+		  }
+		  e.printStackTrace();
+	   } finally {
+		  hibernateSession.close();
+	   }
 
-        rd = request.getRequestDispatcher("invoices/add.jsp");
-        rd.forward(request, response);
+
+	   rd = request.getRequestDispatcher("invoices/add.jsp");
+	   rd.forward(request, response);
     }
 
 }
