@@ -8,6 +8,7 @@ package com.oncloud6.atd.invoices;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +32,9 @@ public class InvoicesSourceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        RequestDispatcher rd = null;
+        rd = request.getRequestDispatcher("invoices/source.jsp");
+        rd.forward(request, response);
     }
 
 }
