@@ -5,6 +5,7 @@
  */
 package com.oncloud6.atd.customers;
 
+import com.oncloud6.atd.domain.Factuur;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.hibernate.HibernateConnector;
 import com.oncloud6.atd.mysql.MySQLConnection;
@@ -20,6 +21,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -69,18 +72,30 @@ public class CustomersEditServlet extends HttpServlet {
         rd = request.getRequestDispatcher("customers/edit.jsp");
        
         String right = RightsControl.GetRightGroup("customers_edit", session);
-   
-        int id = Integer.parseInt(session.getAttribute("userID").toString());
+        
+        // Connecten met hibernate
+        SessionFactory factory = new HibernateConnector().getSessionFactory();
+        Session hibernateSession = factory.openSession();
+        Transaction tx = null;
+        
+        List klantList = (List<Klant>)hibernateSession.createQuery(""
+				    + "FROM Klant AS klant "
+				    + "WHERE klant.deGebruiker.id = :id")
+				    .setParameter("id", Integer.parseInt(session.getAttribute("userID").toString()))
+				    .list();
+        Iterator ite = klantList.iterator();
+        int id = 0;
+        if(ite.hasNext()) {
+            Klant klantTijdelijk = (Klant) ite.next();
+        
+            id = klantTijdelijk.getId();
+        }
+        
         if(right.equals("other")) {
             if (request.getParameter("id") != null) {
                 id = Integer.parseInt(request.getParameter("id").toString());
             }
         }
-        
-        // Connecten met hibernate
-         SessionFactory factory = new HibernateConnector().getSessionFactory();
-        Session hibernateSession = factory.openSession();
-        Transaction tx = null;
         
         // Controleren of er wel een customer is om te editen
 
@@ -163,7 +178,23 @@ public class CustomersEditServlet extends HttpServlet {
             
             String right = RightsControl.GetRightGroup("customers_edit", session);
    
-        int id = Integer.parseInt(session.getAttribute("userID").toString());
+        List klantList = (List<Klant>)hibernateSession.createQuery(""
+				    + "FROM Klant AS klant "
+				    + "WHERE klant.deGebruiker.id = :id")
+				    .setParameter("id", Integer.parseInt(session.getAttribute("userID").toString()))
+				    .list();
+        Iterator ite = klantList.iterator();
+        int id = 0;
+        if(ite.hasNext()) {
+            Klant klantTijdelijk = (Klant) ite.next();
+        
+            id = klantTijdelijk.getId();
+        }
+        if(right.equals("other")) {
+            if (request.getParameter("id") != null) {
+                id = Integer.parseInt(request.getParameter("id").toString());
+            }
+        }
         if(right.equals("other")) {
             if (request.getParameter("id") != null) {
                 id = Integer.parseInt(request.getParameter("id").toString());
