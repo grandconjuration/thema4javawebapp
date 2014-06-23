@@ -91,7 +91,7 @@ public class CustomersEditServlet extends HttpServlet {
             // "Nieuwe" klant aanmaken.
             Klant klant = new Klant();
             // Klant de gegevens geven van de klant in de database met de parameter CustomerId
-            klant = (Klant)hibernateSession.get(Klant.class, Integer.parseInt(request.getParameter("id")));
+            klant = (Klant)hibernateSession.get(Klant.class, id);
             if(klant == null) {
                 rd = request.getRequestDispatcher("error/404error.jsp");
                 rd.forward(request, response);
