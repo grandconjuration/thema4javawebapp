@@ -82,16 +82,20 @@
 
 <table>
     <tr>
+        <td colspan="5" class="invoiceFooterTitle">Factuur korting</td>
+        <td width="200" class="invoiceFooterValue">${factuur.getFactuurKorting()}%</td>
+    </tr>
+    <tr>
         <td colspan="5" class="invoiceFooterTitle">SubTotaal:</td>
-        <td width="200" class="invoiceFooterValue"><asp:Label ID="lblInvoiceNetTotal" runat="server" style="float: right" /></td>
+        <td width="200" class="invoiceFooterValue">€ ${factuur.getSubTotaalBedrag()}</td>
     </tr>
     <tr>
         <td colspan="5" class="invoiceFooterTitle">BTW:</td>
-        <td width="200" class="invoiceFooterValue"><asp:Label ID="lblInvoiceVATAmount" runat="server" style="float: right" /></td>
+        <td width="200" class="invoiceFooterValue">€ ${factuur.getBtwBedrag()}</td>
     </tr>
     <tr>
         <td colspan="5" class="invoiceFooterTitle">Totaal te betalen: </td>
-        <td class="invoiceFooterValueTotal"><asp:Label ID="lblInvoiceTotalToPay" runat="server" style="float: right" /></td>
+        <td class="invoiceFooterValueTotal">€ ${factuur.getTotaalBedrag()}</td>
     </tr>
 </table>
 
