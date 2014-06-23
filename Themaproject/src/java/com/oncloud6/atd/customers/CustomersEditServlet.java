@@ -153,13 +153,6 @@ public class CustomersEditServlet extends HttpServlet {
           SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
-        String customerName = request.getParameter("customername");
-            String customerAddress = request.getParameter("customeraddress");
-            String customerDiscount = request.getParameter("discount");
-            String customerDateofBirth = request.getParameter("dateofbirth");
-            String customerPostcode = request.getParameter("customerpostcode");
-            String customerPlace = request.getParameter("customerplace");
-            String customerPassword = request.getParameter("password");
            try {
             tx = hibernateSession.beginTransaction();
             
@@ -181,9 +174,23 @@ public class CustomersEditServlet extends HttpServlet {
             String right = RightsControl.GetRightGroup("customers_edit", session);
             request.setAttribute("right", right);
             
+            
+            String customerName = request.getParameter("customername");
+            String customerAddress = request.getParameter("customeraddress");
+            String customerDiscount = "";
+            if(right.equals("other")) {
+                customerDiscount = request.getParameter("discount");
+            }
+            String customerDateofBirth = request.getParameter("dateofbirth");
+            String customerPostcode = request.getParameter("customerpostcode");
+            String customerPlace = request.getParameter("customerplace");
+            String customerPassword = request.getParameter("password");
+            
             request.setAttribute("klant_naam", customerName);
             request.setAttribute("klant_adres", customerAddress);
-            request.setAttribute("klant_korting", customerDiscount);
+            if(right.equals("other")) {
+                request.setAttribute("klant_korting", customerDiscount);
+            }
             request.setAttribute("klant_geboortedatum", customerDateofBirth);
              request.setAttribute("klant_postcode", customerPostcode);
             request.setAttribute("klant_woonplaats", customerPlace);
