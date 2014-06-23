@@ -47,10 +47,11 @@ public class FactuurItem {
 	   
     }
     
-    public FactuurItem(String fIN, Double fIP, int fIH){
+    public FactuurItem(String fIN, Double fIP, int fIH, Double fIS){
         factuurItemNaam = fIN;
         factuurItemPrijs = fIP;
         factuurItemHoeveelheid = fIH;
+        factuurItemSubtotaal = fIS;
     }
     
     public void setFactuur(Factuur fact){
@@ -59,6 +60,10 @@ public class FactuurItem {
     
     public Factuur getFactuur(){
 	   return factuur;
+    }
+
+    public int getFactuurItemId() {
+        return id;
     }
 
     public String getFactuurItemNaam() {
@@ -83,6 +88,14 @@ public class FactuurItem {
 
     public void setFactuurItemHoeveelheid(int fIH) {
         factuurItemHoeveelheid = fIH;
+    }
+
+    public Double getFactuurItemSubtotaal() {
+        return factuurItemSubtotaal;
+    }
+
+    public void setFactuurItemSubtotaal(Double fIS) {
+        factuurItemSubtotaal = fIS;
     }
     
     public Double getFactuurItemSubtotaal() {

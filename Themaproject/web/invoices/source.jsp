@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.oncloud6.atd.domain.Factuur" %>
+<%@page import="com.oncloud6.atd.domain.FactuurItem" %>
+<% Factuur factuur = (Factuur)request.getAttribute("factuur"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,11 +25,11 @@
 <table class="invoiceHeader">
 <tr>
 <td>
- <img src="assets/invoices/images/logo_merenita.png" height="55" style="float:left;" />
+    <h1>AutoTotaalDiensten</h1>
 </td>
 <td style="text-align:right">
- <h2><asp:Label ID="lblInvoiceNumberTop" runat="server" /></h2> 
- <asp:Label ID="lblLongDateString" runat="server" />
+ <h2>FAC${factuur.getFactuurNummer()}</h2> 
+ ${factuur.getFactuurDatum()}
 </td>
 </tr>
 </table>
@@ -34,19 +37,19 @@
 <div class="from">
     <blockquote>
     <p>    <strong>
-    Merenita
+    Auto Totaal diensten B.V.
     </strong>
     </p>
 
     <p>
-    Moerasmos 15<br/> 3904 BV  Veenendaal<br/>the Netherlands
+    Hatseflats 15<br/> 1234 AB  Utrecht<br/>the Netherlands
     </p>
     <p>
-    Telefoon: +31 (0)6 52488458
+    Telefoon: +31 (0)30 1234567
     </p>
 
     <p>
-    info@merenita.com
+    administratie@autototaaldiensten.nl
     </p>
 
     </blockquote>
@@ -59,50 +62,58 @@
             <blockquote>
             <p>
                 <strong>
-                    <asp:Label ID="lblCustomerName" runat="server" />
-                </strong>
-            </p>
-
-            <p id="pCompanyNumber" runat="server">
-                KVK nummer:
-                <strong>
-                    <asp:Label ID="lblCompanyNumber" runat="server" />
+                    ${factuur.getKlantNaam()}
                 </strong>
             </p>
              <p>
-                <asp:Label ID="lblAddress" runat="server" />
-            </p>
-
-             <p>
-                <asp:Label ID="lblPostCode" runat="server" />,
-                <asp:Label ID="lblCity" runat="server" />
+                ${factuur.getKlantAdres()}
             </p>	      
             </blockquote>
     </td>
     <td>
-        <h3>Dienst :</h3>
-         <asp:Label ID="lblNotes" runat="server" />
+        
     </td>
  </tr>
  </table>
-   
 
-
- <asp:Label ID="lblProdPlaceholder" runat="server" />
- 
+<table class='zebra-striped'>
+    <thead>
+        <th>Item</th>
+        <th width='40'>Aantal</th>
+        <th width='75'>Prijs</th>
+        <th width='80'>BTW %</th>
+        <th width='80'>SubTotaal</th>
+    </thead>
+    <%
+    for(FactuurItem item : factuur.getDeFactuurItems()) {
+        %>
+        <tr id="invoiceDetail<%=item.getFactuurItemId() %>">
+            <td><%=item.getFactuurItemNaam() %></td>
+            <td><span style="float:right;"><%=item.getFactuurItemHoeveelheid() %></span></td>
+            <td><span style="float:right;">&euro; <%=item.getFactuurItemPrijs() %></span></td>
+            <td><span style="float:right;">21%</span></td>
+            <td><span style="float:right;">&euro; <%=item.getFactuurItemSubtotaal() %></span></td>
+        </tr>
+        <% 
+    } %>
+</table>
 
 <table>
     <tr>
+        <td colspan="5" class="invoiceFooterTitle">Factuur korting</td>
+        <td width="200" class="invoiceFooterValue">${factuur.getFactuurKorting()}%</td>
+    </tr>
+    <tr>
         <td colspan="5" class="invoiceFooterTitle">SubTotaal:</td>
-        <td width="200" class="invoiceFooterValue"><asp:Label ID="lblInvoiceNetTotal" runat="server" style="float: right" /></td>
+        <td width="200" class="invoiceFooterValue">&euro; ${factuur.getSubTotaalBedrag()}</td>
     </tr>
     <tr>
         <td colspan="5" class="invoiceFooterTitle">BTW:</td>
-        <td width="200" class="invoiceFooterValue"><asp:Label ID="lblInvoiceVATAmount" runat="server" style="float: right" /></td>
+        <td width="200" class="invoiceFooterValue">&euro; ${factuur.getBtwBedrag()}</td>
     </tr>
     <tr>
         <td colspan="5" class="invoiceFooterTitle">Totaal te betalen: </td>
-        <td class="invoiceFooterValueTotal"><asp:Label ID="lblInvoiceTotalToPay" runat="server" style="float: right" /></td>
+        <td class="invoiceFooterValueTotal">&euro; ${factuur.getTotaalBedrag()}</td>
     </tr>
 </table>
 
@@ -110,13 +121,13 @@
     <p>
     Gelieve binnen 30 dagen na dagtekening te voldoen op onze bankrekening,<br />
     Betalings referentie: <asp:Label ID="lblInvoiceNumberBottom" runat="server" /><br />
-    IBAN/SEPA Nummer: NL93RABO0166939455<br />
+    IBAN/SEPA Nummer: NL93RABO0178376287<br />
     BIC Nummer: RABONL2U<br />
-    Ten name van: Merenita<br />
-    Plaats: Veenendaal<br />
+    Ten name van: Auto Totaal Diensten B.V.<br />
+    Plaats: Utrecht<br />
     Bank: Rabobank<br />
-    KVK nummer: 53763238<br />
-    BTW Nummer: NL206883766B02
+    KVK nummer: 26484053<br />
+    BTW Nummer: NL368426852B01
     </p>
     
 

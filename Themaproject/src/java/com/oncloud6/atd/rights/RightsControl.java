@@ -66,12 +66,16 @@ public class RightsControl {
         return returnCode;
     }
     
-    public static boolean checkGroup(String rightName, String reqValue, HttpSession session, int itemGroupId) {
+    public static boolean checkGroup(String rightName, String reqValue, HttpSession session, int itemUserId) {
         boolean returnCode = false;
         MySQLConnection DBConnection = new MySQLConnection();
         int userGroupId = defaultGroup;
+        int userUserId = 0;
         if(session.getAttribute("groupID") != null) {
             userGroupId = Integer.parseInt(session.getAttribute("groupID").toString());
+        }
+        if(session.getAttribute("userID") != null) {
+            userUserId = Integer.parseInt(session.getAttribute("userID").toString());
         }
         try {
             Connection connect = DBConnection.getConnection();
@@ -102,7 +106,7 @@ public class RightsControl {
                 if(selected.equals("other")) {
                     returnCode = true;
                 }
-                else if (selected.equals("own") && selected.equals(reqValue) && userGroupId == itemGroupId)
+                else if (selected.equals("own") && selected.equals(reqValue) && userUserId == itemUserId)
                 {
                     returnCode = true;
                 }

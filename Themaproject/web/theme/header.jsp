@@ -52,17 +52,15 @@
                         <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">Opties<span class="caret"></span></button>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href='carsaddcar'>Auto Toevoegen</a></li>
+                            <li><a href='invoicesindex'>Facturen</a></li>
+                            <li><a href='customersedit'>Gegevens</a></li>
                         </ul>
                     </div>
-
-				<button type="submit" class="btn btn-success">Auto toevoegen</button>
-				<button type="submit" class="btn btn-success">Onderhoud toevoegen</button>
                     <% } else { %>
                     <% Object message = request.getAttribute("msgs");
 				    if (message != null) {
 					   out.println("<div class=\"alert alert-success\">" + message + "</div>");
 				    }%>
-				<button type="submit" class="btn btn-success">Auto toevoegen</button>
                     <form action="accountslogin" method="post" class="navbar-form navbar-right" role="form">
                         <div class="form-group">
                             <input type="text" name="username" placeholder="Gebruikersnaam" class="form-control">
