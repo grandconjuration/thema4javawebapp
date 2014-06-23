@@ -98,14 +98,6 @@ public class FactuurItem {
         factuurItemSubtotaal = fIS;
     }
     
-    public Double getFactuurItemSubtotaal() {
-	   return factuurItemSubtotaal;
-    }
-    
-    public void setFactuurItemSubtotaal(Double fist) {
-	   factuurItemSubtotaal = fist;
-    }
-    
     public void berekenSubtotaal() {
 	   Double prijs = getFactuurItemPrijs();
 	   int hoeveelheid = getFactuurItemHoeveelheid();

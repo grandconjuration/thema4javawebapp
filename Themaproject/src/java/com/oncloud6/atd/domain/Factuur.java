@@ -69,8 +69,8 @@ public class Factuur implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "factuur")
     private List<FactuurItem> deFactuurItems = new ArrayList<FactuurItem>();
-    
-    
+   
+    @Column(name = "factuur_btw_percentage")
     private Double btwpercent = 1.21;
 
     public Factuur() {
@@ -187,7 +187,8 @@ public class Factuur implements Serializable {
         List<FactuurItem> factuurItems = getDeFactuurItems();
         double bedrag = 0;
         for (FactuurItem fi : factuurItems) {
-            double prijs = fi.getFactuurItemHoeveelheid() * fi.getFactuurItemPrijs();
+            fi.berekenSubtotaal();
+            double prijs = fi.getFactuurItemSubtotaal();
             bedrag = bedrag + prijs;
         }
 	   setSubTotaalBedrag(bedrag);
