@@ -67,12 +67,8 @@ public class CustomersEditServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
         rd = request.getRequestDispatcher("customers/update.jsp");
-        // Rechtencheck, controleren of de persoon op de pagina wel de rechten heeft om op de pagina te zijn.
-      //  if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
-      //      rd = request.getRequestDispatcher("error/403error.jsp");
-    //        rd.forward(request, response);
-      //      return;
-     //   }
+       
+      
    
         // Connecten met hibernate
          SessionFactory factory = new HibernateConnector().getSessionFactory();
@@ -99,6 +95,7 @@ public class CustomersEditServlet extends HttpServlet {
             String klantPostcode = klant.getPostcode();
             String klantWoonplaats = klant.getWoonplaats();
             String klantWachtwoord = klant.getGebruiker().getPassword();
+            
             // Gegevens klant als attribuut zetten zodat ze in de tekstvelden worden geplaatst
             request.setAttribute("klant_naam", klantNaam);
             request.setAttribute("klant_adres", klantAdres);
@@ -144,12 +141,7 @@ public class CustomersEditServlet extends HttpServlet {
           HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
            rd = request.getRequestDispatcher("customers/update.jsp");
-        // Controleren of de persoon op de pagina de rechten heeft om iets te doen.
-      //  if(!RightsControl.checkBoolean("customers_edit", "true", session)) {
-      //      rd = request.getRequestDispatcher("error/403error.jsp");
-      //      rd.forward(request, response);
-      //      return;
-     //   }
+      
         // Connecten met hibernate
           SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
