@@ -8,6 +8,7 @@ package com.oncloud6.atd.maintenances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import com.oncloud6.atd.rights.GroupsEditServlet;
+import com.oncloud6.atd.rights.RightsControl;
 import com.oncloud6.atd.rights.RightsList;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,7 +44,13 @@ public class MaintenancesEditServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MySQLConnection DBConnection = new MySQLConnection();
+        MySQLConnection DBConnection = new MySQLConnection();HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("maintenances_edit", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud WHERE onderhoud_id = ?");
@@ -127,9 +134,6 @@ public class MaintenancesEditServlet extends HttpServlet {
                 request.setAttribute("partlist", listValues);
                 preparedStatement.close();
                 connect.close();
-                
-                RequestDispatcher rd = null;
-                HttpSession session = request.getSession(true);
 
                 rd = request.getRequestDispatcher("maintenances/edit.jsp");
                 rd.forward(request, response);
@@ -164,7 +168,13 @@ public class MaintenancesEditServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MySQLConnection DBConnection = new MySQLConnection();
+        MySQLConnection DBConnection = new MySQLConnection();HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("maintenances_edit", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("UPDATE atd.onderhoud SET onderhoud_beschrijving = ?, onderhoud_manuur = ?, onderhoud_status = ? WHERE onderhoud_id = ?");
@@ -185,9 +195,6 @@ public class MaintenancesEditServlet extends HttpServlet {
             //niet vergeten om alles te sluiten :)
             preparedStatement.close();
             connect.close();
-
-            RequestDispatcher rd = null;
-            HttpSession session = request.getSession(true);
 
             processRequest(request, response);
 

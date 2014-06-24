@@ -30,6 +30,7 @@ public class RightsControl {
         if(session.getAttribute("groupID") != null) {
             userGroupId = Integer.parseInt(session.getAttribute("groupID").toString());
         }
+        
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT atd.rechten.rechten_id as id_default, atd.rechten.rechten_key as recht_naam, atd.rechten.rechten_type as recht_type, atd.rechten.rechten_value as value_default, atd.rechten_groepen.rechten_id as id_group, atd.rechten_groepen.rechten_groepen_value as value_group FROM atd.rechten LEFT OUTER JOIN atd.rechten_groepen ON atd.rechten.rechten_id = atd.rechten_groepen.rechten_id AND atd.rechten_groepen.groepen_id = ? WHERE atd.rechten.rechten_key = ? AND atd.rechten.rechten_type = 'boolean' ORDER BY atd.rechten.rechten_key ASC;");
@@ -51,6 +52,8 @@ public class RightsControl {
                 preparedStatement.close();
                 connect.close();
 
+                System.out.println(rights.id + "-" + rights.naam + "-" + rights.type + "-" + rights.defaultValue + "-" + rights.value);
+                
                 String selected = rights.defaultValue;
                 if(rights.value != null) {
                     selected = rights.value;
@@ -98,6 +101,8 @@ public class RightsControl {
                 preparedStatement.close();
                 connect.close();
 
+                System.out.println(rights.id + "-" + rights.naam + "-" + rights.type + "-" + rights.defaultValue + "-" + rights.value);
+
                 String selected = rights.defaultValue;
                 if(rights.value != null) {
                     selected = rights.value;
@@ -144,6 +149,8 @@ public class RightsControl {
                 rights.value = resultSet.getString("value_group");
                 preparedStatement.close();
                 connect.close();
+
+                System.out.println(rights.id + "-" + rights.naam + "-" + rights.type + "-" + rights.defaultValue + "-" + rights.value);
 
                 returnCode = rights.defaultValue;
                 if(rights.value != null) {

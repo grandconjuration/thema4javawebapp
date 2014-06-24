@@ -97,6 +97,13 @@ public class MaintenancesAddServlet extends HttpServlet {
 	   Session hibernateSession = factory.openSession();
 	   Transaction tx = null;
 	   Integer onderhoudID = null;
+           HttpSession session = request.getSession(true);
+            RequestDispatcher rd = null;
+            if(!RightsControl.checkBoolean("maintenances_add", "true", session)) {
+                rd = request.getRequestDispatcher("error/403error.jsp");
+                rd.forward(request, response);
+                return;
+            }
 	   try {
 		  tx = hibernateSession.beginTransaction();
 		  Onderhoud onderhoud = new Onderhoud();
@@ -122,9 +129,6 @@ public class MaintenancesAddServlet extends HttpServlet {
 		  hibernateSession.close();
 		  factory.close();
 	   }
-
-	   RequestDispatcher rd = null;
-	   HttpSession session = request.getSession(true);
 
 	   rd = request.getRequestDispatcher("maintenances/add.jsp");
 

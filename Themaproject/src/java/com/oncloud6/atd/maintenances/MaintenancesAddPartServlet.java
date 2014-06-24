@@ -8,6 +8,7 @@ package com.oncloud6.atd.maintenances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import com.oncloud6.atd.rights.GroupsEditServlet;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,6 +42,13 @@ public class MaintenancesAddPartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         MySQLConnection DBConnection = new MySQLConnection();
+        HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("maintenances_edit_part", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud WHERE onderhoud_id = ?");
@@ -74,9 +82,6 @@ public class MaintenancesAddPartServlet extends HttpServlet {
                 request.setAttribute("partlist", values);
                 preparedStatement.close();
                 connect.close();
-                
-                RequestDispatcher rd = null;
-                HttpSession session = request.getSession(true);
 
                 rd = request.getRequestDispatcher("maintenances/addpart.jsp");
                 rd.forward(request, response);
@@ -99,6 +104,13 @@ public class MaintenancesAddPartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         MySQLConnection DBConnection = new MySQLConnection();
+        HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("maintenances_edit_part", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM atd.onderhoud WHERE onderhoud_id = ?");

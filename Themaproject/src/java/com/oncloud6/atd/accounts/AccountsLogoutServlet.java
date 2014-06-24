@@ -41,7 +41,7 @@ public class AccountsLogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
-        if(!RightsControl.checkBoolean("acconts_logout", "true", session)) {
+        if(!RightsControl.checkBoolean("accounts_logout", "true", session)) {
             rd = request.getRequestDispatcher("error/403error.jsp");
             rd.forward(request, response);
             return;

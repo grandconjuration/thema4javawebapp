@@ -18,26 +18,31 @@
 </div>
 
 <div class="container">
-    <div class="row">
-        <form action="" method="get">
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">#</span>
-            <select name="cid" class="form-control">
-                <%  
-                // retrieve your list from the request, with casting 
-                ArrayList<DropdownValues> values = (ArrayList<DropdownValues>) request.getAttribute("klantlist");
-                // print the information about every category of the list
-                for(DropdownValues dlist : values) {
-                    %>
-                    <option value="<%=dlist.key %>"<% if(dlist.selected) { out.println(" selected=\"true\"");} %>><%=dlist.value %></option>
-                    <%
-                }
-                %> 
-            </select>
+    <%
+        String right = (String)request.getAttribute("right");
+        if(right.equals("other")) {
+        %>
+        <div class="row">
+            <form action="" method="get">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">#</span>
+                <select name="cid" class="form-control">
+                    <%  
+                    // retrieve your list from the request, with casting 
+                    ArrayList<DropdownValues> values = (ArrayList<DropdownValues>) request.getAttribute("klantlist");
+                    // print the information about every category of the list
+                    for(DropdownValues dlist : values) {
+                        %>
+                        <option value="<%=dlist.key %>"<% if(dlist.selected) { out.println(" selected=\"true\"");} %>><%=dlist.value %></option>
+                        <%
+                    }
+                    %> 
+                </select>
+            </div>
+               <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
+            </form>
         </div>
-           <br/> <input type="submit"  class="btn btn-default" value="Voltooien" />
-        </form>
-    </div>
+    <% } %>
     <div class="row">
         <table class="table">
             <thead>
