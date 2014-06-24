@@ -6,6 +6,7 @@
 package com.oncloud6.atd.schedules;
 
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -39,7 +40,13 @@ public class SchedulesIndexServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("schedules_index", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
@@ -56,9 +63,6 @@ public class SchedulesIndexServlet extends HttpServlet {
         } finally {
             hibernateSession.close();
         }
-
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
 
         request.setAttribute("planningList", planningList);
 

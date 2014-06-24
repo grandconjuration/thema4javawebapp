@@ -9,6 +9,7 @@ import com.oncloud6.atd.domain.Monteur;
 import com.oncloud6.atd.domain.Onderhoud;
 import com.oncloud6.atd.domain.Planning;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,7 +47,13 @@ public class SchedulesAddServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("schedules_add", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
@@ -67,9 +74,6 @@ public class SchedulesAddServlet extends HttpServlet {
             hibernateSession.close();
         }
 
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
-
         request.setAttribute("onderhoudList", onderhoudList);
         request.setAttribute("monteurList", monteurList);
 
@@ -88,7 +92,13 @@ public class SchedulesAddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("schedules_add", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
@@ -123,9 +133,6 @@ public class SchedulesAddServlet extends HttpServlet {
             hibernateSession.close();
             factory.close();
         }
-
-        RequestDispatcher rd = null;
-        HttpSession session = request.getSession(true);
 
         doGet(request, response);
 
