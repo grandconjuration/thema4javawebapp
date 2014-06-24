@@ -25,7 +25,7 @@
             <% if(right.equals("other")) { // retrieve your list from the request, with casting %>
             <div class="input-group input-group-lg">
                 
-                <select name="cid" class="form-control"><%
+                <select name="customerselect" class="form-control"><%
                     ArrayList<DropdownValues> values = (ArrayList<DropdownValues>) request.getAttribute("klantlist");
                     // print the information about every category of the list
                     for(DropdownValues dlist : values) {

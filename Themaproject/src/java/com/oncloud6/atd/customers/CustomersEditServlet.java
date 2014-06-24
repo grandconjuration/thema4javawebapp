@@ -225,11 +225,11 @@ public class CustomersEditServlet extends HttpServlet {
             id = klantTijdelijk.getId();
         }
         if(right.equals("other")) {
-            if (request.getParameter("id") != null) {
-                id = Integer.parseInt(request.getParameter("id").toString());
-            }
-        }
-        if(right.equals("other")) {
+            if(request.getParameter("customerselect") != null && request.getParameter("customerselect") != "") {
+                response.sendRedirect("customersedit?id="+request.getParameter("customerselect"));
+                return;
+            } 
+            
             if (request.getParameter("id") != null) {
                 id = Integer.parseInt(request.getParameter("id").toString());
             }
