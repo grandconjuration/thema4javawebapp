@@ -238,6 +238,27 @@ public class CustomersEditServlet extends HttpServlet {
             if (request.getParameter("id") != null) {
                 id = Integer.parseInt(request.getParameter("id").toString());
             }
+            
+                        List<Klant> klantenList = null;
+        ArrayList<DropdownValues> values = null;
+        klantenList = hibernateSession.createQuery("FROM Klant").list();
+            values = new ArrayList<DropdownValues>();
+             DropdownValues value;
+
+             value = new DropdownValues();
+             value.key = "";
+             value.value = "";
+             value.selected = false;
+             values.add(value);
+             // Klantlist doorlopen en voor elke klant in de list het klantId als key zetten en de naam als value, en deze values toevoegen aan de dropdownvalues
+             for (Klant klant : klantenList) {
+             value = new DropdownValues();
+             value.key = Integer.toString(klant.getId());
+             value.value = klant.getKlantNaam();
+             value.selected = false;
+             values.add(value);
+             }
+        request.setAttribute("klantlist", values);
         }
             
             // "Nieuwe" klant aanmaken.
@@ -332,7 +353,7 @@ public class CustomersEditServlet extends HttpServlet {
             }
             // Klant opslaan
             hibernateSession.update(klant);
-             
+             request.setAttribute("message", "Gegevens zijn aangepast!");
             rd.forward(request, response); 
             
             
