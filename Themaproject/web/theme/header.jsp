@@ -57,7 +57,8 @@
                             <% if(!RightsControl.GetRightGroup("customers_edit", session).equals("false")) { %><li><a href='customersedit'>Gegevens</a></li><% } %>
                             <% if(RightsControl.checkBoolean("customers_add", "true", session)) { %><li><a href='customersadd'>Klant toevoegen</a></li><% } %>
                             <% if(!RightsControl.GetRightGroup("maintenances_index", session).equals("false")) { %><li><a href='maintenances'>Onderhoud</a></li><% } %>
-                            <% if(RightsControl.checkBoolean("groups_index", "true", session)) { %><li><a href='customersadd'>Groepen</a></li><% } %>
+                            <% if(RightsControl.checkBoolean("schedules_index", "true", session)) { %><li><a href='schedules'>planning</a></li><% } %>
+                            <% if(RightsControl.checkBoolean("groups_index", "true", session)) { %><li><a href='groups'>Groepen</a></li><% } %>
                         </ul>
                     </div>
                     <% } else { %>
