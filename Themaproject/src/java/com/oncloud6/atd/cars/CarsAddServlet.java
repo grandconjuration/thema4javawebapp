@@ -36,7 +36,7 @@ import org.hibernate.Transaction;
  *
  * @author Niels
  */
-@WebServlet(name = "CarsAddServlet", urlPatterns = {"/carsaddcar"})
+@WebServlet(name = "CarsAddServlet", urlPatterns = {"/carsadd"})
 public class CarsAddServlet extends HttpServlet {
 
     /**

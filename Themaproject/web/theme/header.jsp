@@ -52,7 +52,7 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">Opties<span class="caret"></span></button>
                         <ul class="dropdown-menu" role="menu">
-                            <% if(RightsControl.checkBoolean("cars_add", "true", session)) { %><li><a href='carsaddcar'>Auto Toevoegen</a></li><% } %>
+                            <% if(RightsControl.checkBoolean("cars_add", "true", session)) { %><li><a href='carsadd'>Auto Toevoegen</a></li><% } %>
                             <% if(!RightsControl.GetRightGroup("invoices_index", session).equals("false")) { %><li><a href='invoices'>Facturen</a></li><% } %>
                             <% if(!RightsControl.GetRightGroup("customers_edit", session).equals("false")) { %><li><a href='customersedit'>Gegevens</a></li><% } %>
                             <% if(RightsControl.checkBoolean("customers_add", "true", session)) { %><li><a href='customersadd'>Klant toevoegen</a></li><% } %>
