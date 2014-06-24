@@ -284,7 +284,10 @@ public class CustomersEditServlet extends HttpServlet {
             // "Nieuwe" waarden aan de klant geven
             klant.setKlantNaam(customerName);
             klant.setKlantAdres(customerAddress);
-            klant.setKorting(Double.parseDouble(customerDiscount));
+             if(right.equals("other")) {
+                   klant.setKorting(Double.parseDouble(customerDiscount));
+            }
+         
           Date dateofBirth = new SimpleDateFormat("dd-MM-yyyy").parse(customerDateofBirth);
                  klant.setWoonplaats(customerPlace);
             klant.setGeboorteDatum(dateofBirth);
