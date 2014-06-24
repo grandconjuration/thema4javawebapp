@@ -67,7 +67,7 @@ public class CarsAddServlet extends HttpServlet {
             return;
         }
 
-        rd = request.getRequestDispatcher("cars/addcar.jsp");
+        rd = request.getRequestDispatcher("cars/add.jsp");
         rd.forward(request, response);
     }
 
@@ -128,7 +128,7 @@ public class CarsAddServlet extends HttpServlet {
         }
 
         // forward naar zichzelf, pagina waarop je je al bevindt
-        rd = request.getRequestDispatcher("cars/addcar.jsp");
+        rd = request.getRequestDispatcher("cars/add.jsp");
         rd.forward(request, response);
 
     }
