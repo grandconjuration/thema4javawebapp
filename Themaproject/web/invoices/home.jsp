@@ -34,7 +34,7 @@
                     %>
                     <tr>
                         <td><% String date = new SimpleDateFormat("dd-MM-yyyy").format(fac.getFactuurDatum());
-                out.print(date);%> uur</td>
+                out.print(date);%></td>
                         <td><%= fac.getKlantNaam() %></td> 
                         <td>€<%= fac.getTotaalBedrag() %></td>           
                         <td><a href="invoicesshow?id=<%= fac.getId() %>">Bekijk</a></td>
