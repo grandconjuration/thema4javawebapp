@@ -9,18 +9,12 @@ import com.oncloud6.atd.domain.Auto;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.domain.Onderhoud;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 
-import com.oncloud6.atd.mysql.MySQLConnection;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,23 +59,56 @@ public class MaintenancesIndexServlet extends HttpServlet {
         List onderhoudList = null;
         List<Klant> klantList = null;
         ArrayList<DropdownValues> values = null;
-
-        // Controleren of het Customer id veld is ingevuld
-        boolean idSet = false;
-        if (request.getParameter("cid") == null || request.getParameter("cid").equals("")) {
-            idSet = false;
-        } else {
-            idSet = true;
-
-        }
         // Connecten met hibernate
         SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
 
-        
+        // Controleren of het Customer id veld is ingevuld
+        boolean idSet = false;
+        int customerId = 0;
         try {
             tx = hibernateSession.beginTransaction();
+            
+            if(session.getAttribute("userID") == null) {
+                rd = request.getRequestDispatcher("error/403error.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            List klantListTemp = (List<Klant>)hibernateSession.createQuery(""
+                                        + "FROM Klant AS klant "
+                                        + "WHERE klant.deGebruiker.id = :id")
+                                        .setParameter("id", Integer.parseInt(session.getAttribute("userID").toString()))
+                                        .list();
+            Iterator iteTemp = klantListTemp.iterator();
+            if(iteTemp.hasNext()) {
+                Klant klantTijdelijk = (Klant) iteTemp.next();
+
+                customerId = klantTijdelijk.getId();
+            }
+            
+            String right = RightsControl.GetRightGroup("maintenances_index", session);
+            
+            request.setAttribute("right", right);
+            
+            if(right.equals("false")) {
+                rd = request.getRequestDispatcher("error/403error.jsp");
+                rd.forward(request, response);
+                return;
+            }
+            
+            if(right.equals("other")) {
+                if (request.getParameter("cid") == null || request.getParameter("cid").equals("")) {
+                    idSet = false;
+                } else {
+                    customerId = Integer.parseInt(request.getParameter("cid"));
+                    idSet = true;
+                }
+            }else{
+                idSet = true;
+            }
+            
             // Als er geen klant is geselecteerd krijgt onderhoudsList alle auto's in de tabel onderhoud mee
             if (!idSet) {
                 onderhoudList = (List<Onderhoud>) hibernateSession.createQuery("FROM Onderhoud").list();
@@ -96,7 +123,6 @@ public class MaintenancesIndexServlet extends HttpServlet {
 
             } else {
                 // Als er wel een klant geselecteerd is, krijgt de onderhoudsList alle auto's in de tabel van die klant mee
-                int customerId = Integer.parseInt(request.getParameter("cid"));
                 onderhoudList = (List) hibernateSession.createQuery(""
                         + "FROM Onderhoud AS onderhoud "
                         + "INNER JOIN onderhoud.deAuto AS auto "
