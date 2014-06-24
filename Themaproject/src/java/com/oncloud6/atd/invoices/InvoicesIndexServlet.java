@@ -7,9 +7,12 @@ package com.oncloud6.atd.invoices;
 
 import com.oncloud6.atd.domain.Factuur;
 import com.oncloud6.atd.domain.Gebruiker;
+import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,9 +51,51 @@ public class InvoicesIndexServlet extends HttpServlet {
         SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
+        boolean idSet = false;
+        int customerId = 0;
         try {
             tx = hibernateSession.beginTransaction();
-            List<Factuur> factuurList = (List<Factuur>) hibernateSession.createQuery("FROM Factuur fac ORDER BY fac.factuurDatum DESC").list();
+            
+            if(session.getAttribute("userID") == null) {
+                rd = request.getRequestDispatcher("error/403error.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            List klantListTemp = (List<Klant>)hibernateSession.createQuery(""
+                                        + "FROM Klant AS klant "
+                                        + "WHERE klant.deGebruiker.id = :id")
+                                        .setParameter("id", Integer.parseInt(session.getAttribute("userID").toString()))
+                                        .list();
+            Iterator iteTemp = klantListTemp.iterator();
+            if(iteTemp.hasNext()) {
+                Klant klantTijdelijk = (Klant) iteTemp.next();
+
+                customerId = klantTijdelijk.getId();
+            }
+            
+            String right = RightsControl.GetRightGroup("maintenances_index", session);
+            
+            request.setAttribute("right", right);
+            
+            if(right.equals("false")) {
+                rd = request.getRequestDispatcher("error/403error.jsp");
+                rd.forward(request, response);
+                return;
+            }
+            
+            if(right.equals("other")) {
+                idSet = false;
+            }else{
+                idSet = true;
+            }
+            
+            List<Factuur> factuurList = null;
+            if (!idSet) {
+                factuurList = (List<Factuur>) hibernateSession.createQuery("FROM Factuur fac ORDER BY fac.factuurDatum DESC").list();
+            }else{
+                factuurList = (List<Factuur>) hibernateSession.createQuery("FROM Factuur fac WHERE fac.klant.id = :klantid ORDER BY fac.factuurDatum DESC").setParameter("klantid", customerId).list();
+            }
             request.setAttribute("factuurList", factuurList);
             
             tx.commit();

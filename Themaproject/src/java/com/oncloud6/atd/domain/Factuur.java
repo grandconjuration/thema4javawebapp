@@ -89,6 +89,10 @@ public class Factuur implements Serializable {
 
     }
     
+    public int getId() {
+        return id;
+    }
+    
     public void setSecret(String s){
         secret = s;
     }

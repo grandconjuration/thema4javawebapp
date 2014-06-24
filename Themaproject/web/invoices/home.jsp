@@ -37,7 +37,7 @@
                 out.print(date);%> uur</td>
                         <td><%= fac.getKlantNaam() %></td> 
                         <td>€<%= fac.getTotaalBedrag() %></td>           
-                        <td></td>
+                        <td><a href="invoicesshow?id=<%= fac.getId() %>">Bekijk</a></td>
                     </tr>
                     <%
                 }
