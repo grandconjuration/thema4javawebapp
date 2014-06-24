@@ -4,6 +4,8 @@
     Author     : Laura
 --%>
 
+<%@page import="com.oncloud6.atd.customers.DropdownValues"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="../theme/header.jsp" />
 <div class="jumbotron">
@@ -20,6 +22,20 @@
             out.println("<div class=\"alert alert-fail\">" + msg + "</div>");
         }%>
         <form action="" method="post">
+            <% if(right.equals("other")) { // retrieve your list from the request, with casting %>
+            <div class="input-group input-group-lg">
+                
+                <select name="cid" class="form-control"><%
+                    ArrayList<DropdownValues> values = (ArrayList<DropdownValues>) request.getAttribute("klantlist");
+                    // print the information about every category of the list
+                    for(DropdownValues dlist : values) {
+                    %>
+                        <option value="<%=dlist.key %>"<% if(dlist.selected) { out.println(" selected=\"true\"");} %>><%=dlist.value %>
+            </div>
+                        <%
+            }%></option>
+                        </select><%}%>
+                        
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
             <input type="text" class="form-control" placeholder="Volledige naam" name="customername" value="<% out.println(request.getAttribute("klant_naam")); %>">

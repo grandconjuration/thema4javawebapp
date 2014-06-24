@@ -20,6 +20,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +39,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import static sun.misc.MessageUtils.where;
+import com.oncloud6.atd.customers.DropdownValues;
 
 /**
  *
@@ -101,6 +103,26 @@ public class CustomersEditServlet extends HttpServlet {
             if (request.getParameter("id") != null) {
                 id = Integer.parseInt(request.getParameter("id").toString());
             }
+            List<Klant> klantenList = null;
+        ArrayList<DropdownValues> values = null;
+        klantenList = hibernateSession.createQuery("FROM Klant").list();
+            values = new ArrayList<DropdownValues>();
+             DropdownValues value;
+
+             value = new DropdownValues();
+             value.key = "";
+             value.value = "";
+             value.selected = false;
+             values.add(value);
+             // Klantlist doorlopen en voor elke klant in de list het klantId als key zetten en de naam als value, en deze values toevoegen aan de dropdownvalues
+             for (Klant klant : klantenList) {
+             value = new DropdownValues();
+             value.key = Integer.toString(klant.getId());
+             value.value = klant.getKlantNaam();
+             value.selected = false;
+             values.add(value);
+             }
+        request.setAttribute("klantlist", values);
         }
         
         // Controleren of er wel een customer is om te editen
