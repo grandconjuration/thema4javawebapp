@@ -60,7 +60,7 @@
         <% } %>
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>
-            <input type="date" class="form-control" placeholder="Geboortedatum" name="dateofbirth" value="<% out.println(request.getAttribute("klant_geboortedatum")); %>">
+            <input type="text" class="form-control" placeholder="Geboortedatum" name="dateofbirth" value="<% out.println(request.getAttribute("klant_geboortedatum")); %>">
         </div>  
         <div class="input-group input-group-lg">
             <span class="input-group-addon">#</span>

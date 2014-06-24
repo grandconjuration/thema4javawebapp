@@ -34,12 +34,12 @@
                 </select>
             </div>
             <div class="input-group input-group-lg">
-                <span class="input-group-addon">Datum start</span>
-                <input type="date" class="form-control" placeholder="Start datum" name="datum_start">
+                <span class="input-group-addon">Datum start (format: dd-MM-yyyy HH:mm)</span>
+                <input type="text" class="form-control" placeholder="Start datum" name="datum_start">
             </div>
             <div class="input-group input-group-lg">
-                <span class="input-group-addon">Datum einde</span>
-                <input type="date" class="form-control" placeholder="Eind datum" name="datum_einde">
+                <span class="input-group-addon">Datum start (format: dd-MM-yyyy HH:mm)</span>
+                <input type="text" class="form-control" placeholder="Eind datum" name="datum_einde">
             </div>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon">Kies monteur</span>

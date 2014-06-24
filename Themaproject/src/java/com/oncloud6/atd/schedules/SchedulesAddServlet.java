@@ -104,8 +104,8 @@ public class SchedulesAddServlet extends HttpServlet {
             hibernateSession.load(monteur, Integer.parseInt(request.getParameter("monteur")));
             planning.setMonteur(monteur);
 
-            Date dateStart = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("datum_start"));
-            Date dateEinde = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("datum_einde"));
+            Date dateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(request.getParameter("datum_start"));
+            Date dateEinde = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(request.getParameter("datum_einde"));
 
             planning.setDatumStart(dateStart);
             planning.setDatumEind(dateEinde);
