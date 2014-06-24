@@ -5,6 +5,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="javax.servlet.http.HttpSession" %>
+<%@page import="com.oncloud6.atd.rights.RightsControl" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -51,9 +52,12 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">Opties<span class="caret"></span></button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href='carsaddcar'>Auto Toevoegen</a></li>
-                            <li><a href='invoicesindex'>Facturen</a></li>
-                            <li><a href='customersedit'>Gegevens</a></li>
+                            <% if(RightsControl.checkBoolean("cars_add", "true", session)) { %><li><a href='carsadd'>Auto Toevoegen</a></li><% } %>
+                            <% if(!RightsControl.GetRightGroup("invoices_index", session).equals("false")) { %><li><a href='invoices'>Facturen</a></li><% } %>
+                            <% if(!RightsControl.GetRightGroup("customers_edit", session).equals("false")) { %><li><a href='customersedit'>Gegevens</a></li><% } %>
+                            <% if(RightsControl.checkBoolean("customers_add", "true", session)) { %><li><a href='customersadd'>Klant toevoegen</a></li><% } %>
+                            <% if(!RightsControl.GetRightGroup("maintenances_index", session).equals("false")) { %><li><a href='maintenances'>Onderhoud</a></li><% } %>
+                            <% if(RightsControl.checkBoolean("groups_index", "true", session)) { %><li><a href='customersadd'>Groepen</a></li><% } %>
                         </ul>
                     </div>
                     <% } else { %>

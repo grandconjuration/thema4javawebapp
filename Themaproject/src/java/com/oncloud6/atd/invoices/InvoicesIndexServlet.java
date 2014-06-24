@@ -27,7 +27,7 @@ import org.hibernate.Transaction;
  *
  * @author Niels
  */
-@WebServlet(name = "InvoicesIndexServlet", urlPatterns = {"/invoicesindex"})
+@WebServlet(name = "InvoicesIndexServlet", urlPatterns = {"/invoices"})
 public class InvoicesIndexServlet extends HttpServlet {
 
     /**
