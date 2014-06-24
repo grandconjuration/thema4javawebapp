@@ -78,6 +78,12 @@ public class CustomersEditServlet extends HttpServlet {
         Session hibernateSession = factory.openSession();
         Transaction tx = null;
         
+        if(session.getAttribute("userID") == null) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
+        
         List klantList = (List<Klant>)hibernateSession.createQuery(""
 				    + "FROM Klant AS klant "
 				    + "WHERE klant.deGebruiker.id = :id")
@@ -168,6 +174,12 @@ public class CustomersEditServlet extends HttpServlet {
           HttpSession session = request.getSession(true);
         RequestDispatcher rd = null;
            rd = request.getRequestDispatcher("customers/edit.jsp");
+        
+        if(session.getAttribute("userID") == null) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
       
         // Connecten met hibernate
           SessionFactory factory = new HibernateConnector().getSessionFactory();
