@@ -56,6 +56,10 @@ public class Planning implements Serializable {
         datumEind = dE;
 
     }
+    
+    public int getId() {
+        return id;
+    }
 
     public Onderhoud getOnderhoud() {
         return hetOnderhoud;

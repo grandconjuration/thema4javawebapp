@@ -34,11 +34,11 @@
                 </select>
             </div>
             <div class="input-group input-group-lg">
-                <span class="input-group-addon">Datum start (format: dd-MM-yyyy HH:mm)</span>
+                <span class="input-group-addon">Datum start (format: dd-MM-yyyy HH:mm:ss)</span>
                 <input type="text" class="form-control" placeholder="Start datum" name="datum_start">
             </div>
             <div class="input-group input-group-lg">
-                <span class="input-group-addon">Datum start (format: dd-MM-yyyy HH:mm)</span>
+                <span class="input-group-addon">Datum start (format: dd-MM-yyyy HH:mm:ss)</span>
                 <input type="text" class="form-control" placeholder="Eind datum" name="datum_einde">
             </div>
             <div class="input-group input-group-lg">
