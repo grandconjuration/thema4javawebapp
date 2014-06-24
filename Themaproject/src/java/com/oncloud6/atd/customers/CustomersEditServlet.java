@@ -98,6 +98,11 @@ public class CustomersEditServlet extends HttpServlet {
         
             id = klantTijdelijk.getId();
         }
+            if(!RightsControl.checkGroup("customers_edit", "own", session, id)) {
+                rd = request.getRequestDispatcher("error/403error.jsp");
+                rd.forward(request, response);
+                return;
+            }
         
         if(right.equals("other")) {
             if (request.getParameter("id") != null) {
@@ -137,11 +142,6 @@ public class CustomersEditServlet extends HttpServlet {
             klant = (Klant)hibernateSession.get(Klant.class, id);
             if(klant == null) {
                 rd = request.getRequestDispatcher("error/404error.jsp");
-                rd.forward(request, response);
-                return;
-            }
-            if(!RightsControl.checkGroup("customers_edit", "own", session, klant.getGebruiker().getId())) {
-                rd = request.getRequestDispatcher("error/403error.jsp");
                 rd.forward(request, response);
                 return;
             }
@@ -224,6 +224,11 @@ public class CustomersEditServlet extends HttpServlet {
         
             id = klantTijdelijk.getId();
         }
+            if(!RightsControl.checkGroup("customers_edit", "own", session, id)) {
+                rd = request.getRequestDispatcher("error/403error.jsp");
+                rd.forward(request, response);
+                return;
+            }
         if(right.equals("other")) {
             if(request.getParameter("customerselect") != null && request.getParameter("customerselect") != "") {
                 response.sendRedirect("customersedit?id="+request.getParameter("customerselect"));
@@ -241,11 +246,6 @@ public class CustomersEditServlet extends HttpServlet {
             klant = (Klant)hibernateSession.get(Klant.class, id);
             if(klant == null) {
                 rd = request.getRequestDispatcher("error/404error.jsp");
-                rd.forward(request, response);
-                return;
-            }
-            if(!RightsControl.checkGroup("customers_edit", "own", session, klant.getGebruiker().getId())) {
-                rd = request.getRequestDispatcher("error/403error.jsp");
                 rd.forward(request, response);
                 return;
             }
