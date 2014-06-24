@@ -50,7 +50,7 @@ public class InvoicesIndexServlet extends HttpServlet {
         Transaction tx = null;
         try {
             tx = hibernateSession.beginTransaction();
-            List<Factuur> factuurList = (List<Factuur>) hibernateSession.createQuery("FROM Factuur").list();
+            List<Factuur> factuurList = (List<Factuur>) hibernateSession.createQuery("FROM Factuur fac ORDER BY fac.factuurDatum DESC").list();
             request.setAttribute("factuurList", factuurList);
             
             tx.commit();
