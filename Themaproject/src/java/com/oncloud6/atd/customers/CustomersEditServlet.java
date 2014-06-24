@@ -105,7 +105,7 @@ public class CustomersEditServlet extends HttpServlet {
             }
         
         if(right.equals("other")) {
-            if (request.getParameter("id") != null) {
+             if (request.getParameter("id") != null && !request.getParameter("id").equals("")) {
                 id = Integer.parseInt(request.getParameter("id").toString());
             }
             List<Klant> klantenList = null;
@@ -230,7 +230,7 @@ public class CustomersEditServlet extends HttpServlet {
                 return;
             }
         if(right.equals("other")) {
-            if(request.getParameter("customerselect") != null && request.getParameter("customerselect") != "") {
+            if(request.getParameter("customerselect") != null && !request.getParameter("customerselect").equals("")) {
                 response.sendRedirect("customersedit?id="+request.getParameter("customerselect"));
                 return;
             } 
