@@ -10,6 +10,7 @@ import com.oncloud6.atd.domain.Gebruiker;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.hibernate.HibernateConnector;
 import com.oncloud6.atd.mysql.MySQLConnection;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -58,8 +59,13 @@ public class CarsAddServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("cars_add", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
 
         rd = request.getRequestDispatcher("cars/addcar.jsp");
         rd.forward(request, response);
@@ -77,6 +83,12 @@ public class CarsAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("cars_add", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
 
         SessionFactory factory = new HibernateConnector().getSessionFactory();
         Session hibernateSession = factory.openSession();
@@ -115,7 +127,6 @@ public class CarsAddServlet extends HttpServlet {
             hibernateSession.close();
         }
 
-        RequestDispatcher rd = null;
         // forward naar zichzelf, pagina waarop je je al bevindt
         rd = request.getRequestDispatcher("cars/addcar.jsp");
         rd.forward(request, response);

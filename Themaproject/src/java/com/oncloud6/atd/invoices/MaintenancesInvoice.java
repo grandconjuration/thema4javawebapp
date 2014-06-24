@@ -36,8 +36,8 @@ import org.hibernate.Transaction;
  *
  * @author Simon Whiteley
  */
-@WebServlet(name = "MaintenanceInvoice", urlPatterns = {"/maintenanceinvoice"})
-public class MaintenanceInvoice extends HttpServlet {
+@WebServlet(name = "MaintenancesInvoice", urlPatterns = {"/maintenancesinvoice"})
+public class MaintenancesInvoice extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.

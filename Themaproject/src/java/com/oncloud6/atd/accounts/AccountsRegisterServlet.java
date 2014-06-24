@@ -9,6 +9,7 @@ import com.oncloud6.atd.domain.Gebruiker;
 import com.oncloud6.atd.domain.Groep;
 import com.oncloud6.atd.domain.Klant;
 import com.oncloud6.atd.hibernate.HibernateConnector;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,8 +45,13 @@ public class AccountsRegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("accounts_register", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         rd = request.getRequestDispatcher("accounts/register.jsp");
         rd.forward(request, response);
     }

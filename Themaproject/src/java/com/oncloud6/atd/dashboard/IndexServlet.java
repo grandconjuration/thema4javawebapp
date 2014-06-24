@@ -5,6 +5,7 @@
  */
 package com.oncloud6.atd.dashboard;
 
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -42,9 +43,15 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
-
+        RequestDispatcher rd = null;
+        boolean login = false;
+        if(RightsControl.checkBoolean("dashboard_index", "true", session)) {
+            login = true;
+        }
+        
+        request.setAttribute("login", login);
+        
         rd = request.getRequestDispatcher("home.jsp");
         rd.forward(request, response);
         /*

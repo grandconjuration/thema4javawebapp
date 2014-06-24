@@ -6,6 +6,7 @@
 package com.oncloud6.atd.customers;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -51,8 +52,13 @@ public class CustomersAddServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = null;
         HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("customers_add", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
 
         rd = request.getRequestDispatcher("customers/add.jsp");
         rd.forward(request, response);

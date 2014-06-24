@@ -9,6 +9,7 @@ import com.oncloud6.atd.domain.Gebruiker;
 import com.oncloud6.atd.domain.Groep;
 import com.oncloud6.atd.hibernate.HibernateConnector;
 import com.oncloud6.atd.mysql.MySQLConnection;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -84,7 +85,17 @@ public class AccountsLoginServlet extends HttpServlet {
                         session.setAttribute("userID", GebruikerID);
                         session.setAttribute("userName", username);
                         session.setAttribute("groupID", GroupID.getGroepId());
-
+                        
+                        RequestDispatcher rd = null;
+                        if(!RightsControl.checkBoolean("accounts_login", "true", session)) {
+                            session.removeAttribute("userID");
+                            session.removeAttribute("userName");
+                            session.removeAttribute("groupID");
+                            session.invalidate();
+                            rd = request.getRequestDispatcher("error/403error.jsp");
+                            rd.forward(request, response);
+                            return;
+                        }
                         hibernateSession.save(gekozenGebruiker);
                         response.sendRedirect("");
 
