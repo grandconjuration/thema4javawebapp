@@ -101,6 +101,8 @@ public class RightsControl {
                 preparedStatement.close();
                 connect.close();
 
+                System.out.println(rights.id + "-" + rights.naam + "-" + rights.type + "-" + rights.defaultValue + "-" + rights.value);
+
                 String selected = rights.defaultValue;
                 if(rights.value != null) {
                     selected = rights.value;
@@ -147,6 +149,8 @@ public class RightsControl {
                 rights.value = resultSet.getString("value_group");
                 preparedStatement.close();
                 connect.close();
+
+                System.out.println(rights.id + "-" + rights.naam + "-" + rights.type + "-" + rights.defaultValue + "-" + rights.value);
 
                 returnCode = rights.defaultValue;
                 if(rights.value != null) {
