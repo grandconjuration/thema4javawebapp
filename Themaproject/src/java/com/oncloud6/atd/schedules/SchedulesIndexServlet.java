@@ -25,7 +25,7 @@ import org.hibernate.Transaction;
  *
  * @author Simon Whiteley <simonwhiteley@hotmail.com>
  */
-@WebServlet(name = "SchedulesIndexServlet", urlPatterns = {"/schedulesindex"})
+@WebServlet(name = "SchedulesIndexServlet", urlPatterns = {"/schedules"})
 public class SchedulesIndexServlet extends HttpServlet {
 
     /**
@@ -62,7 +62,7 @@ public class SchedulesIndexServlet extends HttpServlet {
 
         request.setAttribute("planningList", planningList);
 
-        rd = request.getRequestDispatcher("schedule/index.jsp");
+        rd = request.getRequestDispatcher("schedule/home.jsp");
         rd.forward(request, response);
     }
 }
