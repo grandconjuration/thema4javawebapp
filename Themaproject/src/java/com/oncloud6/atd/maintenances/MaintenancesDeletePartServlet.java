@@ -8,6 +8,7 @@ package com.oncloud6.atd.maintenances;
 
 import com.oncloud6.atd.mysql.MySQLConnection;
 import com.oncloud6.atd.rights.GroupsRightsRestoreServlet;
+import com.oncloud6.atd.rights.RightsControl;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,7 +39,13 @@ public class MaintenancesDeletePartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MySQLConnection DBConnection = new MySQLConnection();
+        MySQLConnection DBConnection = new MySQLConnection();HttpSession session = request.getSession(true);
+        RequestDispatcher rd = null;
+        if(!RightsControl.checkBoolean("maintenances_delete", "true", session)) {
+            rd = request.getRequestDispatcher("error/403error.jsp");
+            rd.forward(request, response);
+            return;
+        }
         try {
             Connection connect = DBConnection.getConnection();
             PreparedStatement preparedStatement = connect.prepareStatement("DELETE FROM atd.onderhoud_onderdeel WHERE onderdeel_id = ? AND onderhoud_id = ?");
@@ -53,9 +60,6 @@ public class MaintenancesDeletePartServlet extends HttpServlet {
             //niet vergeten om alles te sluiten :)
             preparedStatement.close();
             connect.close();
-
-            RequestDispatcher rd = null;
-            HttpSession session = request.getSession(true);
 
             response.sendRedirect("maintenancesedit?id=" + mid);
 
